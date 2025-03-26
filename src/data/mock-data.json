@@ -1,0 +1,659 @@
+{
+  "dashboard": {
+    "stats": {
+      "totalProjects": 42,
+      "totalProjectsChange": 12,
+      "activeProjects": 18,
+      "activeProjectsChange": 5,
+      "teamMembers": 24,
+      "teamMembersChange": 2,
+      "completionRate": 86,
+      "completionRateChange": 4
+    },
+    "projectStatus": [
+      { "month": "Jan", "completed": 12, "inProgress": 7 },
+      { "month": "Feb", "completed": 19, "inProgress": 11 },
+      { "month": "Mar", "completed": 8, "inProgress": 5 },
+      { "month": "Apr", "completed": 15, "inProgress": 8 },
+      { "month": "May", "completed": 12, "inProgress": 3 },
+      { "month": "Jun", "completed": 18, "inProgress": 14 }
+    ],
+    "tasksOverview": [
+      { "name": "Completed", "value": 40 },
+      { "name": "In Progress", "value": 20 },
+      { "name": "Upcoming", "value": 25 },
+      { "name": "Delayed", "value": 15 }
+    ]
+  },
+  "sprints": {
+    "velocity": [
+      { "sprint": "Sprint 1", "planned": 35, "completed": 28 },
+      { "sprint": "Sprint 2", "planned": 42, "completed": 36 },
+      { "sprint": "Sprint 3", "planned": 38, "completed": 34 },
+      { "sprint": "Sprint 4", "planned": 45, "completed": 43 },
+      { "sprint": "Sprint 5", "planned": 50, "completed": 46 },
+      { "sprint": "Sprint 6", "planned": 48, "completed": 45 },
+      { "sprint": "Sprint 7", "planned": 52, "completed": 48 },
+      { "sprint": "Sprint 8", "planned": 55, "completed": 49 }
+    ]
+  },
+  "releases": {
+    "items": [
+      {
+        "id": "rel-001",
+        "version": "v2.4.0",
+        "name": "June 2023 Release",
+        "status": "completed",
+        "releaseDate": "2023-06-15",
+        "completedDate": "2023-06-15",
+        "developmentTime": 18,
+        "features": 12,
+        "bugfixes": 8,
+        "commits": 156,
+        "contributors": ["user-001", "user-003", "user-005", "user-007"],
+        "manager": "user-008",
+        "description": "Major feature update including improved AI model accuracy and UI enhancements",
+        "changes": [
+          { "type": "feature", "title": "Image recognition model v2", "scope": "core" },
+          { "type": "feature", "title": "Dark mode support", "scope": "ui" },
+          { "type": "bugfix", "title": "Fixed memory leak in data processing", "scope": "core" },
+          { "type": "improvement", "title": "Faster API response times", "scope": "api" }
+        ]
+      },
+      {
+        "id": "rel-002",
+        "version": "v2.3.1",
+        "name": "May 2023 Patch",
+        "status": "completed",
+        "releaseDate": "2023-05-22",
+        "completedDate": "2023-05-22",
+        "developmentTime": 7,
+        "features": 0,
+        "bugfixes": 15,
+        "commits": 42,
+        "contributors": ["user-002", "user-003", "user-007"],
+        "manager": "user-008",
+        "description": "Patch release focusing on bug fixes and stability improvements",
+        "changes": [
+          { "type": "bugfix", "title": "Fixed incorrect data in analytics dashboard", "scope": "ui" },
+          { "type": "bugfix", "title": "Resolved authentication issue with API", "scope": "api" },
+          { "type": "improvement", "title": "Optimized database queries", "scope": "backend" }
+        ]
+      },
+      {
+        "id": "rel-003",
+        "version": "v2.3.0",
+        "name": "April 2023 Release",
+        "status": "completed",
+        "releaseDate": "2023-04-10",
+        "completedDate": "2023-04-10",
+        "developmentTime": 21,
+        "features": 8,
+        "bugfixes": 6,
+        "commits": 113,
+        "contributors": ["user-001", "user-002", "user-004", "user-006"],
+        "manager": "user-008",
+        "description": "Feature release adding customer segmentation tools and recommendation engine",
+        "changes": [
+          { "type": "feature", "title": "Customer segmentation dashboard", "scope": "ui" },
+          { "type": "feature", "title": "Enhanced recommendation engine", "scope": "core" },
+          { "type": "bugfix", "title": "Fixed data export functionality", "scope": "backend" }
+        ]
+      },
+      {
+        "id": "rel-004",
+        "version": "v2.2.1",
+        "name": "March 2023 Patch",
+        "status": "completed",
+        "releaseDate": "2023-03-15",
+        "completedDate": "2023-03-15",
+        "developmentTime": 5,
+        "features": 0,
+        "bugfixes": 12,
+        "commits": 37,
+        "contributors": ["user-003", "user-005", "user-007"],
+        "manager": "user-008",
+        "description": "Security and performance patch",
+        "changes": [
+          { "type": "bugfix", "title": "Security vulnerability fix in auth system", "scope": "security" },
+          { "type": "improvement", "title": "Performance optimizations", "scope": "core" }
+        ]
+      },
+      {
+        "id": "rel-005",
+        "version": "v2.2.0",
+        "name": "February 2023 Release",
+        "status": "completed",
+        "releaseDate": "2023-02-20",
+        "completedDate": "2023-02-20",
+        "developmentTime": 24,
+        "features": 14,
+        "bugfixes": 9,
+        "commits": 187,
+        "contributors": ["user-001", "user-002", "user-003", "user-004", "user-005", "user-006"],
+        "manager": "user-008",
+        "description": "Major update with ML model improvements and new data analytics tools",
+        "changes": [
+          { "type": "feature", "title": "Advanced data visualization tools", "scope": "ui" },
+          { "type": "feature", "title": "ML model training improvements", "scope": "core" },
+          { "type": "feature", "title": "Custom report builder", "scope": "reports" }
+        ]
+      },
+      {
+        "id": "rel-006",
+        "version": "v2.5.0",
+        "name": "July 2023 Release",
+        "status": "in-progress",
+        "releaseDate": "2023-07-15",
+        "completedDate": null,
+        "developmentTime": 12,
+        "features": 10,
+        "bugfixes": 5,
+        "commits": 98,
+        "contributors": ["user-001", "user-002", "user-004", "user-006", "user-007"],
+        "manager": "user-008",
+        "description": "Upcoming release with NLP features and UI overhaul",
+        "changes": [
+          { "type": "feature", "title": "Sentiment analysis API", "scope": "api" },
+          { "type": "feature", "title": "Redesigned project dashboard", "scope": "ui" },
+          { "type": "improvement", "title": "CI/CD pipeline upgrades", "scope": "devops" }
+        ]
+      },
+      {
+        "id": "rel-007",
+        "version": "v2.6.0",
+        "name": "August 2023 Release",
+        "status": "planned",
+        "releaseDate": "2023-08-20",
+        "completedDate": null,
+        "developmentTime": 0,
+        "features": 8,
+        "bugfixes": 0,
+        "commits": 0,
+        "contributors": [],
+        "manager": "user-008",
+        "description": "Planned release for scalability improvements and new integration features",
+        "changes": [
+          { "type": "feature", "title": "Third-party integrations", "scope": "api" },
+          { "type": "feature", "title": "Horizontal scaling for ML processing", "scope": "infrastructure" }
+        ]
+      }
+    ],
+    "metrics": {
+      "releaseFrequency": {
+        "monthly": 1.5,
+        "quarterly": 4.5,
+        "changeFromLastQuarter": 12.5
+      },
+      "releaseQuality": {
+        "defectRate": 0.05,
+        "rollbackRate": 0.02,
+        "changeFromLastQuarter": -15.0
+      },
+      "developmentEfficiency": {
+        "averageCycleTime": 15.2,
+        "averageFeatureCount": 8.5,
+        "changeFromLastQuarter": 8.0
+      }
+    }
+  },
+  "tasks": [
+    {
+      "id": "task-001",
+      "title": "Implement AI feature detection algorithm",
+      "description": "Develop and implement machine learning algorithm for detecting objects in images",
+      "status": "in-progress",
+      "projectId": "proj-001",
+      "assignedTo": "user-001",
+      "priority": "high",
+      "dueDate": "2023-07-05",
+      "completionPercentage": 65,
+      "tags": ["ML", "Algorithm", "Core"],
+      "comments": 8,
+      "createdAt": "2023-06-10",
+      "updatedAt": "2023-06-28"
+    },
+    {
+      "id": "task-002",
+      "title": "Optimize database queries for analytics module",
+      "description": "Refactor database queries to improve performance in the analytics dashboard",
+      "status": "completed",
+      "projectId": "proj-004",
+      "assignedTo": "user-003",
+      "priority": "medium",
+      "dueDate": "2023-06-25",
+      "completionPercentage": 100,
+      "tags": ["Database", "Optimization", "Performance"],
+      "comments": 5,
+      "createdAt": "2023-06-05",
+      "updatedAt": "2023-06-24"
+    },
+    {
+      "id": "task-003",
+      "title": "Design user interface for customer segmentation",
+      "description": "Create UI mockups for the customer segmentation tool dashboard",
+      "status": "in-progress",
+      "projectId": "proj-002",
+      "assignedTo": "user-006",
+      "priority": "medium",
+      "dueDate": "2023-07-10",
+      "completionPercentage": 40,
+      "tags": ["UI", "Design", "Mockup"],
+      "comments": 12,
+      "createdAt": "2023-06-15",
+      "updatedAt": "2023-06-27"
+    },
+    {
+      "id": "task-004",
+      "title": "Write documentation for API endpoints",
+      "description": "Create comprehensive documentation for all RESTful API endpoints",
+      "status": "todo",
+      "projectId": "proj-004",
+      "assignedTo": "user-003",
+      "priority": "low",
+      "dueDate": "2023-07-15",
+      "completionPercentage": 0,
+      "tags": ["Documentation", "API"],
+      "comments": 2,
+      "createdAt": "2023-06-20",
+      "updatedAt": "2023-06-20"
+    },
+    {
+      "id": "task-005",
+      "title": "Implement real-time data processing pipeline",
+      "description": "Build data pipeline for processing streaming data in real-time",
+      "status": "in-progress",
+      "projectId": "proj-006",
+      "assignedTo": "user-007",
+      "priority": "high",
+      "dueDate": "2023-07-20",
+      "completionPercentage": 30,
+      "tags": ["Data", "Pipeline", "Real-time"],
+      "comments": 7,
+      "createdAt": "2023-06-12",
+      "updatedAt": "2023-06-26"
+    },
+    {
+      "id": "task-006",
+      "title": "Fix image recognition model accuracy issues",
+      "description": "Investigate and resolve accuracy problems in the image recognition model",
+      "status": "completed",
+      "projectId": "proj-003",
+      "assignedTo": "user-005",
+      "priority": "high",
+      "dueDate": "2023-06-22",
+      "completionPercentage": 100,
+      "tags": ["Bug", "ML", "Image Recognition"],
+      "comments": 15,
+      "createdAt": "2023-06-05",
+      "updatedAt": "2023-06-22"
+    },
+    {
+      "id": "task-007",
+      "title": "Create integration tests for recommendation engine",
+      "description": "Develop comprehensive integration tests for the new recommendation algorithm",
+      "status": "in-progress",
+      "projectId": "proj-006",
+      "assignedTo": "user-004",
+      "priority": "medium",
+      "dueDate": "2023-07-08",
+      "completionPercentage": 75,
+      "tags": ["Testing", "Integration", "Recommendation"],
+      "comments": 4,
+      "createdAt": "2023-06-18",
+      "updatedAt": "2023-06-29"
+    },
+    {
+      "id": "task-008",
+      "title": "Conduct user interviews for requirements gathering",
+      "description": "Plan and execute user interviews to gather requirements for NLP feature",
+      "status": "todo",
+      "projectId": "proj-005",
+      "assignedTo": "user-002",
+      "priority": "high",
+      "dueDate": "2023-07-12",
+      "completionPercentage": 0,
+      "tags": ["Research", "User Interviews", "Requirements"],
+      "comments": 3,
+      "createdAt": "2023-06-25",
+      "updatedAt": "2023-06-25"
+    },
+    {
+      "id": "task-009",
+      "title": "Configure CI/CD pipeline for machine learning models",
+      "description": "Set up automated deployment pipeline for ML models in production",
+      "status": "todo",
+      "projectId": "proj-001",
+      "assignedTo": "user-007",
+      "priority": "medium",
+      "dueDate": "2023-07-18",
+      "completionPercentage": 0,
+      "tags": ["DevOps", "CI/CD", "Automation"],
+      "comments": 1,
+      "createdAt": "2023-06-26",
+      "updatedAt": "2023-06-26"
+    },
+    {
+      "id": "task-010",
+      "title": "Prepare presentation for stakeholder review",
+      "description": "Create slides and materials for quarterly stakeholder review meeting",
+      "status": "in-progress",
+      "projectId": "proj-004",
+      "assignedTo": "user-008",
+      "priority": "high",
+      "dueDate": "2023-07-01",
+      "completionPercentage": 85,
+      "tags": ["Presentation", "Stakeholder"],
+      "comments": 6,
+      "createdAt": "2023-06-20",
+      "updatedAt": "2023-06-29"
+    },
+    {
+      "id": "task-011",
+      "title": "Research new NLP techniques for sentiment analysis",
+      "description": "Investigate state-of-the-art NLP techniques to improve sentiment analysis accuracy",
+      "status": "in-progress",
+      "projectId": "proj-005",
+      "assignedTo": "user-005",
+      "priority": "medium",
+      "dueDate": "2023-07-14",
+      "completionPercentage": 50,
+      "tags": ["Research", "NLP", "Sentiment Analysis"],
+      "comments": 2,
+      "createdAt": "2023-06-19",
+      "updatedAt": "2023-06-28"
+    },
+    {
+      "id": "task-012",
+      "title": "Update dependencies for security vulnerabilities",
+      "description": "Audit and update all project dependencies to resolve security issues",
+      "status": "completed",
+      "projectId": "proj-002",
+      "assignedTo": "user-003",
+      "priority": "high",
+      "dueDate": "2023-06-28",
+      "completionPercentage": 100,
+      "tags": ["Security", "Maintenance"],
+      "comments": 3,
+      "createdAt": "2023-06-22",
+      "updatedAt": "2023-06-27"
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-001",
+      "name": "AI-Driven Market Analysis",
+      "status": "active",
+      "progress": 65,
+      "deadline": "2023-07-15",
+      "assignedTo": ["user-001", "user-003", "user-005"],
+      "description": "Developing a machine learning model for market trend analysis and prediction.",
+      "tasks": {
+        "total": 24,
+        "completed": 16,
+        "inProgress": 5,
+        "pending": 3
+      },
+      "priority": "high",
+      "category": "Machine Learning",
+      "createdAt": "2023-03-10",
+      "updatedAt": "2023-06-05"
+    },
+    {
+      "id": "proj-002",
+      "name": "Customer Segmentation Tool",
+      "status": "active",
+      "progress": 32,
+      "deadline": "2023-09-30",
+      "assignedTo": ["user-002", "user-004"],
+      "description": "Creating a tool to segment customers based on behavior and preferences.",
+      "tasks": {
+        "total": 18,
+        "completed": 6,
+        "inProgress": 4,
+        "pending": 8
+      },
+      "priority": "medium",
+      "category": "Data Analytics",
+      "createdAt": "2023-05-15",
+      "updatedAt": "2023-06-01"
+    },
+    {
+      "id": "proj-003",
+      "name": "Neural Network for Image Recognition",
+      "status": "completed",
+      "progress": 100,
+      "deadline": "2023-04-20",
+      "assignedTo": ["user-001", "user-006"],
+      "description": "Implementing a neural network model for advanced image recognition.",
+      "tasks": {
+        "total": 16,
+        "completed": 16,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "priority": "high",
+      "category": "Computer Vision",
+      "createdAt": "2023-01-05",
+      "updatedAt": "2023-04-18"
+    },
+    {
+      "id": "proj-004",
+      "name": "Predictive Maintenance System",
+      "status": "active",
+      "progress": 78,
+      "deadline": "2023-08-10",
+      "assignedTo": ["user-003", "user-007", "user-008"],
+      "description": "Building a system to predict equipment failures before they occur.",
+      "tasks": {
+        "total": 22,
+        "completed": 17,
+        "inProgress": 3,
+        "pending": 2
+      },
+      "priority": "high",
+      "category": "Predictive Analytics",
+      "createdAt": "2023-02-20",
+      "updatedAt": "2023-06-02"
+    },
+    {
+      "id": "proj-005",
+      "name": "NLP for Customer Support",
+      "status": "planned",
+      "progress": 0,
+      "deadline": "2023-10-15",
+      "assignedTo": ["user-002", "user-005"],
+      "description": "Implementing natural language processing to improve customer support interactions.",
+      "tasks": {
+        "total": 20,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 20
+      },
+      "priority": "medium",
+      "category": "NLP",
+      "createdAt": "2023-06-01",
+      "updatedAt": "2023-06-01"
+    },
+    {
+      "id": "proj-006",
+      "name": "Recommendation Engine Upgrade",
+      "status": "active",
+      "progress": 45,
+      "deadline": "2023-08-30",
+      "assignedTo": ["user-001", "user-004", "user-007"],
+      "description": "Enhancing the existing recommendation engine with new algorithms.",
+      "tasks": {
+        "total": 15,
+        "completed": 7,
+        "inProgress": 3,
+        "pending": 5
+      },
+      "priority": "medium",
+      "category": "Recommendation Systems",
+      "createdAt": "2023-04-10",
+      "updatedAt": "2023-05-28"
+    }
+  ],
+  "users": [
+    {
+      "id": "user-001",
+      "name": "Alex Johnson",
+      "email": "alex.johnson@example.com",
+      "role": "Data Scientist",
+      "department": "AI Research",
+      "avatar": "/avatars/alex-johnson.jpg",
+      "joinDate": "2021-03-15",
+      "projects": ["proj-001", "proj-003", "proj-006"],
+      "skills": ["Python", "TensorFlow", "PyTorch", "Data Analysis"]
+    },
+    {
+      "id": "user-002",
+      "name": "Samantha Lee",
+      "email": "samantha.lee@example.com",
+      "role": "ML Engineer",
+      "department": "Machine Learning",
+      "avatar": "/avatars/samantha-lee.jpg",
+      "joinDate": "2022-01-10",
+      "projects": ["proj-002", "proj-005"],
+      "skills": ["Python", "Keras", "SQL", "Cloud ML"]
+    },
+    {
+      "id": "user-003",
+      "name": "David Chen",
+      "email": "david.chen@example.com",
+      "role": "Backend Developer",
+      "department": "Engineering",
+      "avatar": "/avatars/david-chen.jpg",
+      "joinDate": "2020-11-05",
+      "projects": ["proj-001", "proj-004"],
+      "skills": ["Node.js", "Python", "MongoDB", "RESTful APIs"]
+    },
+    {
+      "id": "user-004",
+      "name": "Emily Rodriguez",
+      "email": "emily.rodriguez@example.com",
+      "role": "Data Analyst",
+      "department": "Analytics",
+      "avatar": "/avatars/emily-rodriguez.jpg",
+      "joinDate": "2022-05-20",
+      "projects": ["proj-002", "proj-006"],
+      "skills": ["R", "SQL", "Tableau", "Power BI"]
+    },
+    {
+      "id": "user-005",
+      "name": "Michael Kim",
+      "email": "michael.kim@example.com",
+      "role": "AI Researcher",
+      "department": "AI Research",
+      "avatar": "/avatars/michael-kim.jpg",
+      "joinDate": "2021-07-15",
+      "projects": ["proj-001", "proj-005"],
+      "skills": ["Deep Learning", "NLP", "Computer Vision", "Research"]
+    },
+    {
+      "id": "user-006",
+      "name": "Lisa Wang",
+      "email": "lisa.wang@example.com",
+      "role": "Frontend Developer",
+      "department": "Engineering",
+      "avatar": "/avatars/lisa-wang.jpg",
+      "joinDate": "2022-02-28",
+      "projects": ["proj-003"],
+      "skills": ["React", "TypeScript", "CSS", "UI/UX"]
+    },
+    {
+      "id": "user-007",
+      "name": "James Martinez",
+      "email": "james.martinez@example.com",
+      "role": "DevOps Engineer",
+      "department": "Engineering",
+      "avatar": "/avatars/james-martinez.jpg",
+      "joinDate": "2021-09-10",
+      "projects": ["proj-004", "proj-006"],
+      "skills": ["Docker", "Kubernetes", "CI/CD", "AWS"]
+    },
+    {
+      "id": "user-008",
+      "name": "Karen Thompson",
+      "email": "karen.thompson@example.com",
+      "role": "Project Manager",
+      "department": "Product",
+      "avatar": "/avatars/karen-thompson.jpg",
+      "joinDate": "2020-08-15",
+      "projects": ["proj-004"],
+      "skills": ["Project Management", "Agile", "Scrum", "Leadership"]
+    }
+  ],
+  "analytics": {
+    "projectPerformance": [
+      { "month": "Jan", "successRate": 78, "delayRate": 22 },
+      { "month": "Feb", "successRate": 82, "delayRate": 18 },
+      { "month": "Mar", "successRate": 85, "delayRate": 15 },
+      { "month": "Apr", "successRate": 81, "delayRate": 19 },
+      { "month": "May", "successRate": 88, "delayRate": 12 },
+      { "month": "Jun", "successRate": 86, "delayRate": 14 }
+    ],
+    "teamPerformance": [
+      { "team": "AI Research", "performance": 92, "projects": 5 },
+      { "team": "Machine Learning", "performance": 87, "projects": 6 },
+      { "team": "Data Analytics", "performance": 84, "projects": 4 },
+      { "team": "Engineering", "performance": 90, "projects": 8 }
+    ],
+    "resourceUtilization": [
+      { "resource": "Compute", "used": 78, "available": 22 },
+      { "resource": "Storage", "used": 65, "available": 35 },
+      { "resource": "API Calls", "used": 82, "available": 18 },
+      { "resource": "Bandwidth", "used": 58, "available": 42 }
+    ],
+    "modelAccuracy": [
+      { "model": "Image Recognition", "accuracy": 94.5, "dataset": "ImageNet" },
+      { "model": "Text Classification", "accuracy": 88.2, "dataset": "Reuters" },
+      { "model": "Sentiment Analysis", "accuracy": 91.7, "dataset": "IMDB" },
+      { "model": "Recommendation", "accuracy": 87.3, "dataset": "MovieLens" }
+    ]
+  },
+  "settings": {
+    "notifications": {
+      "email": true,
+      "push": true,
+      "desktop": false,
+      "projectUpdates": true,
+      "taskAssignments": true,
+      "deadlineReminders": true
+    },
+    "display": {
+      "theme": "light",
+      "dashboardLayout": "grid",
+      "showCompleted": true,
+      "defaultView": "kanban"
+    },
+    "privacy": {
+      "shareAnalytics": true,
+      "publicProfile": false,
+      "showActiveStatus": true
+    },
+    "integrations": [
+      {
+        "name": "GitHub",
+        "isConnected": true,
+        "lastSynced": "2023-06-01T12:30:45Z"
+      },
+      {
+        "name": "Slack",
+        "isConnected": true,
+        "lastSynced": "2023-06-02T09:15:20Z"
+      },
+      {
+        "name": "Google Drive",
+        "isConnected": false,
+        "lastSynced": null
+      },
+      {
+        "name": "Jira",
+        "isConnected": true,
+        "lastSynced": "2023-05-28T16:40:10Z"
+      }
+    ]
+  }
+} 
