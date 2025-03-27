@@ -1,0 +1,19 @@
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "eslint.rules.customizations": [
+    {
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": "off"
+    }
+  ]
+}

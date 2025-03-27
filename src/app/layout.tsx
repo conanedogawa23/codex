@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Project UI",
-  description: "UI based on Figma design with shadcn components",
+  title: "Codex",
+  description: "AI based project management tool",
 };
 
 export default function RootLayout({
