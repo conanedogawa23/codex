@@ -42,6 +42,7 @@ import {
 } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
+import { formatDate } from "@/lib/utils"
 
 // Import mock data
 import mockData from "@/data/mock-data.json"
@@ -143,11 +144,18 @@ export default function TasksPage() {
     }
   };
 
-  // Format date to human-readable
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  };
+  // Format date specifically for task dates (Month Day, Year)
+  function formatTaskDate(date: Date | string | number): string {
+    const dateObj = typeof date === 'string' || typeof date === 'number'
+      ? new Date(date)
+      : date
+
+    return dateObj.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    })
+  }
 
   // Check if date is past due
   const isPastDue = (dateString: string) => {
@@ -463,7 +471,7 @@ export default function TasksPage() {
                             </div>
                             <div className="col-span-2">
                               <span className="text-xs text-muted-foreground">Due Date</span>
-                              <div className={`font-medium ${isPastDue(task.dueDate) ? 'text-red-600' : ''}`}>{formatDate(task.dueDate)}</div>
+                              <div className={`font-medium ${isPastDue(task.dueDate) ? 'text-red-600' : ''}`}>{formatTaskDate(task.dueDate)}</div>
                             </div>
                           </div>
                         </div>
@@ -495,7 +503,7 @@ export default function TasksPage() {
                             </div>
                           </div>
                           <div className="col-span-1">
-                            <span className={`text-sm ${isPastDue(task.dueDate) ? 'text-red-600 font-medium' : ''}`}>{formatDate(task.dueDate)}</span>
+                            <span className={`text-sm ${isPastDue(task.dueDate) ? 'text-red-600 font-medium' : ''}`}>{formatTaskDate(task.dueDate)}</span>
                           </div>
                           <div className="col-span-1 text-right">
                             <DropdownMenu>

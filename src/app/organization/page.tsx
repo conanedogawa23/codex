@@ -36,6 +36,7 @@ import {
     ShieldCheck,
     Lock
 } from "lucide-react"
+import { formatDate } from "@/lib/utils"
 
 // Import mock data - we'll adapt this for organizations
 import mockData from "@/data/mock-data.json"
@@ -670,7 +671,7 @@ export default function OrganizationPage() {
                                                     <h4 className="font-medium text-base">{integration.name}</h4>
                                                     <p className="text-sm text-muted-foreground mt-1">
                                                         {(integration.isConnected && integration.lastSynced)
-                                                            ? `Connected on ${new Date(integration.lastSynced).toLocaleDateString()}`
+                                                            ? `Connected on ${formatDate(integration.lastSynced)}`
                                                             : "Not connected"
                                                         }
                                                     </p>

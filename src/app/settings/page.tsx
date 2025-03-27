@@ -33,6 +33,7 @@ import {
   ScreenShare,
   Plus
 } from "lucide-react"
+import { formatDate } from "@/lib/utils"
 
 // Import mock data
 import mockData from "@/data/mock-data.json"
@@ -639,7 +640,7 @@ export default function SettingsPage() {
                           <p className="text-sm text-muted-foreground mt-1">
                             {(('description' in integration && integration.description as string) ||
                               (integration.isConnected && integration.lastSynced
-                                ? `Connected on ${new Date(integration.lastSynced).toLocaleDateString()}`
+                                ? `Connected on ${formatDate(integration.lastSynced)}`
                                 : "Not connected")
                             )}
                           </p>

@@ -11,6 +11,7 @@ import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
+import { formatDate } from "@/lib/utils"
 import {
   Popover,
   PopoverContent,
@@ -323,7 +324,7 @@ export default function ProjectsPage() {
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-muted-foreground">Deadline:</span>
-                        <span className="font-medium">{new Date(project.deadline).toLocaleDateString()}</span>
+                        <span className="font-medium">{formatDate(project.deadline)}</span>
                       </div>
                     </div>
                   </div>

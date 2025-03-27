@@ -11,6 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { formatDate } from "@/lib/utils"
 
 // Import mock data
 import mockData from "@/data/mock-data.json"
@@ -42,9 +43,9 @@ export default function UsersPage() {
         <div className="flex items-center gap-4">
           <div className="relative">
             <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input 
-              placeholder="Search users..." 
-              className="pl-8 w-[250px]" 
+            <Input
+              placeholder="Search users..."
+              className="pl-8 w-[250px]"
             />
           </div>
           <Button>
@@ -91,7 +92,7 @@ export default function UsersPage() {
                   </div>
                   <div className="space-y-1">
                     <p className="text-muted-foreground">Joined</p>
-                    <p className="font-medium">{new Date(user.joinDate).toLocaleDateString()}</p>
+                    <p className="font-medium">{formatDate(user.joinDate)}</p>
                   </div>
                 </div>
                 <div className="space-y-2">

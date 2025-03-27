@@ -39,6 +39,7 @@ import { Separator } from "@/components/ui/separator"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
+import { formatDate } from "@/lib/utils"
 
 // Import mock data
 import mockData from "@/data/mock-data.json"
@@ -81,12 +82,18 @@ export default function ReleasesReportPage() {
     return true
   })
 
-  // Format date to human-readable
-  const formatDate = (dateString: string) => {
-    if (!dateString) return "Not set";
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  };
+  // Format date specifically for release dates (Month Day, Year)
+  function formatReleaseDate(date: Date | string | number): string {
+    const dateObj = typeof date === 'string' || typeof date === 'number'
+      ? new Date(date)
+      : date
+
+    return dateObj.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    })
+  }
 
   // Helper to get user by ID
   const getUserById = (userId: string) => {
@@ -460,7 +467,7 @@ export default function ReleasesReportPage() {
                             <div className="flex items-center mb-1">
                               <div className="mr-8">
                                 <span className="text-xs text-muted-foreground block">Release Date</span>
-                                <span className="font-medium">{formatDate(release.releaseDate)}</span>
+                                <span className="font-medium">{formatReleaseDate(release.releaseDate)}</span>
                               </div>
 
                               <div>
