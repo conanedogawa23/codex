@@ -47,6 +47,11 @@
           "dropdown": true,
           "items": [
             {
+              "id": "reports-progress",
+              "label": "Project Progress",
+              "href": "/reports/progress"
+            },
+            {
               "id": "reports-releases",
               "label": "Releases",
               "href": "/reports/releases"
@@ -310,7 +315,10 @@
       },
       "project": "Website Redesign",
       "dueDate": "2023-07-20",
-      "tags": ["design", "wireframe"]
+      "tags": [
+        "design",
+        "wireframe"
+      ]
     },
     {
       "id": "task-2",
@@ -324,7 +332,10 @@
       },
       "project": "Mobile App Development",
       "dueDate": "2023-08-05",
-      "tags": ["development", "security"]
+      "tags": [
+        "development",
+        "security"
+      ]
     },
     {
       "id": "task-3",
@@ -338,7 +349,10 @@
       },
       "project": "Marketing Campaign",
       "dueDate": "2023-08-10",
-      "tags": ["marketing", "design"]
+      "tags": [
+        "marketing",
+        "design"
+      ]
     },
     {
       "id": "task-4",
@@ -352,7 +366,10 @@
       },
       "project": "Database Migration",
       "dueDate": "2023-07-05",
-      "tags": ["database", "performance"]
+      "tags": [
+        "database",
+        "performance"
+      ]
     },
     {
       "id": "task-5",
@@ -366,7 +383,10 @@
       },
       "project": "Website Redesign",
       "dueDate": "2023-08-12",
-      "tags": ["testing", "user experience"]
+      "tags": [
+        "testing",
+        "user experience"
+      ]
     }
   ],
   "users": [
@@ -433,13 +453,29 @@
         "features": 15,
         "bugfixes": 8,
         "commits": 124,
-        "contributors": ["user-1", "user-2", "user-3"],
+        "contributors": [
+          "user-1",
+          "user-2",
+          "user-3"
+        ],
         "developmentTime": 45,
         "manager": "user-1",
         "changes": [
-          { "type": "feature", "title": "User authentication", "scope": "core" },
-          { "type": "feature", "title": "Dashboard layout", "scope": "UI" },
-          { "type": "bugfix", "title": "Login page redirect", "scope": "auth" }
+          {
+            "type": "feature",
+            "title": "User authentication",
+            "scope": "core"
+          },
+          {
+            "type": "feature",
+            "title": "Dashboard layout",
+            "scope": "UI"
+          },
+          {
+            "type": "bugfix",
+            "title": "Login page redirect",
+            "scope": "auth"
+          }
         ]
       },
       {
@@ -452,13 +488,28 @@
         "features": 12,
         "bugfixes": 14,
         "commits": 98,
-        "contributors": ["user-1", "user-4"],
+        "contributors": [
+          "user-1",
+          "user-4"
+        ],
         "developmentTime": 32,
         "manager": "user-4",
         "changes": [
-          { "type": "feature", "title": "Advanced filtering", "scope": "data" },
-          { "type": "improvement", "title": "Performance optimizations", "scope": "backend" },
-          { "type": "bugfix", "title": "Chart rendering issues", "scope": "UI" }
+          {
+            "type": "feature",
+            "title": "Advanced filtering",
+            "scope": "data"
+          },
+          {
+            "type": "improvement",
+            "title": "Performance optimizations",
+            "scope": "backend"
+          },
+          {
+            "type": "bugfix",
+            "title": "Chart rendering issues",
+            "scope": "UI"
+          }
         ]
       },
       {
@@ -471,13 +522,29 @@
         "features": 8,
         "bugfixes": 11,
         "commits": 76,
-        "contributors": ["user-1", "user-2", "user-5"],
+        "contributors": [
+          "user-1",
+          "user-2",
+          "user-5"
+        ],
         "developmentTime": 28,
         "manager": "user-1",
         "changes": [
-          { "type": "feature", "title": "Export to multiple formats", "scope": "data" },
-          { "type": "improvement", "title": "Mobile responsiveness", "scope": "UI" },
-          { "type": "bugfix", "title": "Date formatting issues", "scope": "core" }
+          {
+            "type": "feature",
+            "title": "Export to multiple formats",
+            "scope": "data"
+          },
+          {
+            "type": "improvement",
+            "title": "Mobile responsiveness",
+            "scope": "UI"
+          },
+          {
+            "type": "bugfix",
+            "title": "Date formatting issues",
+            "scope": "core"
+          }
         ]
       },
       {
@@ -490,13 +557,30 @@
         "features": 20,
         "bugfixes": 16,
         "commits": 112,
-        "contributors": ["user-1", "user-3", "user-4", "user-5"],
+        "contributors": [
+          "user-1",
+          "user-3",
+          "user-4",
+          "user-5"
+        ],
         "developmentTime": 40,
         "manager": "user-1",
         "changes": [
-          { "type": "feature", "title": "Theme customization", "scope": "UI" },
-          { "type": "feature", "title": "API version 2", "scope": "backend" },
-          { "type": "improvement", "title": "Security enhancements", "scope": "core" }
+          {
+            "type": "feature",
+            "title": "Theme customization",
+            "scope": "UI"
+          },
+          {
+            "type": "feature",
+            "title": "API version 2",
+            "scope": "backend"
+          },
+          {
+            "type": "improvement",
+            "title": "Security enhancements",
+            "scope": "core"
+          }
         ]
       }
     ],
@@ -573,12 +657,30 @@
   "analytics": {
     "overview": {
       "projectCompletion": [
-        { "month": "Jan", "value": 65 },
-        { "month": "Feb", "value": 72 },
-        { "month": "Mar", "value": 78 },
-        { "month": "Apr", "value": 74 },
-        { "month": "May", "value": 85 },
-        { "month": "Jun", "value": 82 }
+        {
+          "month": "Jan",
+          "value": 65
+        },
+        {
+          "month": "Feb",
+          "value": 72
+        },
+        {
+          "month": "Mar",
+          "value": 78
+        },
+        {
+          "month": "Apr",
+          "value": 74
+        },
+        {
+          "month": "May",
+          "value": 85
+        },
+        {
+          "month": "Jun",
+          "value": 82
+        }
       ],
       "taskDistribution": {
         "development": 35,
@@ -588,10 +690,26 @@
         "other": 15
       },
       "teamPerformance": [
-        { "name": "Engineering", "tasks": 120, "completed": 95 },
-        { "name": "Design", "tasks": 84, "completed": 72 },
-        { "name": "Marketing", "tasks": 56, "completed": 48 },
-        { "name": "Product", "tasks": 65, "completed": 60 }
+        {
+          "name": "Engineering",
+          "tasks": 120,
+          "completed": 95
+        },
+        {
+          "name": "Design",
+          "tasks": 84,
+          "completed": 72
+        },
+        {
+          "name": "Marketing",
+          "tasks": 56,
+          "completed": 48
+        },
+        {
+          "name": "Product",
+          "tasks": 65,
+          "completed": 60
+        }
       ],
       "timeTracking": {
         "development": 450,
@@ -736,4 +854,4 @@
       }
     ]
   }
-} 
+}
