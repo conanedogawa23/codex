@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { SidebarLayout } from "@/components/layout/sidebar-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Label } from "@/components/ui/label"
@@ -36,10 +35,12 @@ import {
     ShieldCheck,
     Lock
 } from "lucide-react"
-import { formatDate } from "@/lib/utils"
+import { formatDate } from "@/lib/date-utils"
+import { PageLayout } from "@/components/layout/page-layout"
+import { BreadcrumbIcons } from "@/components/ui/custom-breadcrumb"
 
-// Import mock data - we'll adapt this for organizations
-import mockData from "@/data/mock-data.json"
+// Import mock data
+import mockData from "@/lib/mock-data.json"
 
 // Organization type (would typically come from an API)
 type Organization = {
@@ -67,20 +68,20 @@ type Organization = {
     website?: string;
 };
 
-// Mock organizations data
+// Create mock organizations data based on projects from mock data
 const organizations: Organization[] = [
     {
         id: "org-001",
-        name: "Acme Inc.",
+        name: mockData.app?.name || "Acme Inc.",
         domain: "acme.com",
         plan: "Enterprise",
         status: "active",
         createdAt: "2021-06-15",
-        members: 48,
+        members: mockData.users.length,
         usedStorage: 75,
         totalStorage: 100,
         billingCycle: "yearly",
-        nextBillingDate: "2023-06-15",
+        nextBillingDate: "2023-12-15",
         address: {
             street: "123 Main St",
             city: "San Francisco",
@@ -88,9 +89,9 @@ const organizations: Organization[] = [
             zip: "94105",
             country: "USA"
         },
-        contactEmail: "admin@acme.com",
+        contactEmail: mockData.app?.user?.email || "admin@acme.com",
         contactPhone: "+1 (555) 123-4567",
-        website: "https://acme.com"
+        website: "https://codex.io"
     },
     {
         id: "org-002",
@@ -117,14 +118,15 @@ const organizations: Organization[] = [
     }
 ];
 
-// Mock members data
-const members = [
-    { id: 1, name: "John Doe", email: "john@acme.com", role: "Admin", status: "active", lastActive: "Today" },
-    { id: 2, name: "Jane Smith", email: "jane@acme.com", role: "Member", status: "active", lastActive: "Yesterday" },
-    { id: 3, name: "Robert Johnson", email: "robert@acme.com", role: "Member", status: "active", lastActive: "3 days ago" },
-    { id: 4, name: "Emily Davis", email: "emily@acme.com", role: "Owner", status: "active", lastActive: "Today" },
-    { id: 5, name: "Michael Brown", email: "michael@acme.com", role: "Member", status: "inactive", lastActive: "2 weeks ago" }
-];
+// Use real team members from mock data
+const members = mockData.users.map(user => ({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role === "Administrator" ? "Admin" : user.role === "Product Manager" ? "Owner" : "Member",
+    status: user.status,
+    lastActive: user.status === "active" ? "Today" : "2 weeks ago"
+}));
 
 // Billing history mock data
 const billingHistory = [
@@ -149,13 +151,24 @@ export default function OrganizationPage() {
     };
 
     return (
-        <SidebarLayout>
-            <div className="flex flex-col space-y-6 p-4 sm:p-6 md:p-8">
+        <PageLayout
+            title="Organization Settings"
+            breadcrumbs={[
+                {
+                    icon: BreadcrumbIcons.Dashboard,
+                    label: "Dashboard",
+                    href: "/"
+                },
+                {
+                    icon: BreadcrumbIcons.Users,
+                    label: "Organization",
+                    isActive: true
+                }
+            ]}
+        >
+            <div className="flex flex-col space-y-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <div>
-                        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Organization Settings</h1>
-                        <p className="text-muted-foreground mt-1">Manage your organization&apos;s settings and members</p>
-                    </div>
+                    <p className="text-muted-foreground mt-1">Manage your organization&apos;s settings and members</p>
                     <div className="flex items-center gap-3">
                         <Select
                             defaultValue={currentOrg.id}
@@ -804,6 +817,6 @@ export default function OrganizationPage() {
                     </TabsContent>
                 </Tabs>
             </div>
-        </SidebarLayout>
+        </PageLayout>
     )
 } 

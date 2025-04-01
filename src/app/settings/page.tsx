@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { SidebarLayout } from "@/components/layout/sidebar-layout"
+import { PageLayout } from "@/components/layout/page-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Label } from "@/components/ui/label"
@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Slider } from "@/components/ui/slider"
+import { BreadcrumbIcons } from "@/components/ui/custom-breadcrumb"
 import {
   Sun,
   Moon,
@@ -33,13 +34,59 @@ import {
   ScreenShare,
   Plus
 } from "lucide-react"
-import { formatDate } from "@/lib/utils"
+import { formatDate } from "@/lib/date-utils"
 
 // Import mock data
-import mockData from "@/data/mock-data.json"
+import mockData from "@/lib/mock-data.json"
+
+// Create mock settings data
+const mockSettings = {
+  notifications: {
+    email: true,
+    push: true,
+    inApp: true,
+    marketing: false,
+    updates: true,
+    teamActivity: true,
+    mentions: true,
+    reminders: true,
+    projectUpdates: true,
+    taskAssignments: true,
+    deadlineReminders: true,
+    desktop: true
+  },
+  display: {
+    theme: "system",
+    density: "comfortable",
+    iconSize: "medium",
+    animations: true,
+    sounds: true,
+    showHelp: true,
+    dashboardLayout: "grid",
+    showCompleted: true
+  },
+  privacy: {
+    showOnlineStatus: true,
+    showActivity: true,
+    allowDataCollection: true,
+    shareUsageData: false,
+    showEmail: true,
+    publicProfile: true,
+    showActiveStatus: true,
+    shareAnalytics: false
+  },
+  integrations: [
+    { name: "Slack", connected: true, icon: "slack", isConnected: true, lastSynced: "2023-06-15" },
+    { name: "GitHub", connected: true, icon: "github", isConnected: true, lastSynced: "2023-06-20" },
+    { name: "Figma", connected: false, icon: "figma", isConnected: false, lastSynced: null },
+    { name: "Zoom", connected: true, icon: "zoom", isConnected: true, lastSynced: "2023-06-18" },
+    { name: "Google Suite", connected: true, icon: "gsuite", isConnected: true, lastSynced: "2023-06-10" }
+  ]
+};
 
 export default function SettingsPage() {
-  const { settings } = mockData;
+  const { app } = mockData;
+  const settings = mockSettings;
   const { notifications, display, privacy, integrations } = settings;
 
   const [activeTheme, setActiveTheme] = useState(display.theme)
@@ -66,13 +113,24 @@ export default function SettingsPage() {
   }
 
   return (
-    <SidebarLayout>
-      <div className="flex flex-col space-y-6 p-4 sm:p-6 md:p-8">
+    <PageLayout
+      title="Settings"
+      breadcrumbs={[
+        {
+          icon: BreadcrumbIcons.Dashboard,
+          label: "Dashboard",
+          href: "/"
+        },
+        {
+          icon: BreadcrumbIcons.Users,
+          label: "Settings",
+          isActive: true
+        }
+      ]}
+    >
+      <div className="flex flex-col space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Settings</h1>
-            <p className="text-muted-foreground mt-1">Manage your account settings and preferences</p>
-          </div>
+          <p className="text-muted-foreground">Manage your account settings and preferences</p>
           <Button
             className="gap-2"
             disabled={!unsavedChanges}
@@ -147,11 +205,11 @@ export default function SettingsPage() {
                 <CardContent className="space-y-4">
                   <div className="grid gap-2">
                     <Label htmlFor="name">Full Name</Label>
-                    <Input id="name" defaultValue="John Doe" />
+                    <Input id="name" defaultValue={app?.user?.name || "John Doe"} />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" defaultValue="john@acme.com" />
+                    <Input id="email" type="email" defaultValue={app?.user?.email || "john@example.com"} />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="role">Role</Label>
@@ -683,6 +741,6 @@ export default function SettingsPage() {
           </TabsContent>
         </Tabs>
       </div>
-    </SidebarLayout>
+    </PageLayout>
   )
 } 

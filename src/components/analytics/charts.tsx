@@ -132,7 +132,7 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
               className="h-[250px] xs:h-[300px] sm:h-[400px] w-full max-w-full overflow-hidden"
               config={{
                 value: {
-                  theme: { light: "hsl(var(--chart-1))", dark: "hsl(var(--chart-1))" }
+                  theme: { light: "#5856D6", dark: "#5856D6" }
                 }
               }}
             >
@@ -147,6 +147,8 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
                   type="monotone"
                   dataKey="value"
                   name="Completion Rate (%)"
+                  stroke="#5856D6"
+                  fill="#5856D6"
                   strokeWidth={2}
                 />
               </LineChart>
@@ -166,10 +168,10 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
               className="h-[250px] xs:h-[300px] sm:h-[400px] w-full max-w-full overflow-hidden"
               config={{
                 tasks: {
-                  theme: { light: "hsl(var(--chart-1))", dark: "hsl(var(--chart-1))" }
+                  theme: { light: "#5856D6", dark: "#5856D6" }
                 },
                 completed: {
-                  theme: { light: "hsl(var(--chart-2))", dark: "hsl(var(--chart-2))" }
+                  theme: { light: "#FF6B6B", dark: "#FF6B6B" }
                 }
               }}
             >
@@ -183,11 +185,13 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
                 <Bar
                   dataKey="tasks"
                   name="Total Tasks"
+                  fill="#5856D6"
                   barSize={30}
                 />
                 <Bar
                   dataKey="completed"
                   name="Completed Tasks"
+                  fill="#FF6B6B"
                   barSize={30}
                 />
               </BarChart>
@@ -207,11 +211,11 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
               <ChartContainer
                 className="h-[250px] xs:h-[300px] sm:h-[400px] w-full max-w-full overflow-hidden"
                 config={{
-                  "0": { theme: { light: "hsl(var(--chart-1))", dark: "hsl(var(--chart-1))" } },
-                  "1": { theme: { light: "hsl(var(--chart-2))", dark: "hsl(var(--chart-2))" } },
-                  "2": { theme: { light: "hsl(var(--chart-3))", dark: "hsl(var(--chart-3))" } },
-                  "3": { theme: { light: "hsl(var(--chart-4))", dark: "hsl(var(--chart-4))" } },
-                  "4": { theme: { light: "hsl(var(--chart-5))", dark: "hsl(var(--chart-5))" } }
+                  "0": { theme: { light: "#5856D6", dark: "#5856D6" } },
+                  "1": { theme: { light: "#FF6B6B", dark: "#FF6B6B" } },
+                  "2": { theme: { light: "#4CAF50", dark: "#4CAF50" } },
+                  "3": { theme: { light: "#FF9800", dark: "#FF9800" } },
+                  "4": { theme: { light: "#2196F3", dark: "#2196F3" } }
                 }}
               >
                 { }
@@ -227,9 +231,10 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
                     label={({ name, percent }: PieChartLabelProps) => `${name}: ${(percent * 100).toFixed(0)}%`}
                     labelLine={false}
                   >
-                    {taskDistributionData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={`var(--color-${index})`} />
-                    ))}
+                    {taskDistributionData.map((entry, index) => {
+                      const colors = ["#5856D6", "#FF6B6B", "#4CAF50", "#FF9800", "#2196F3"];
+                      return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />;
+                    })}
                   </Pie>
                   <Tooltip />
                   <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
@@ -283,11 +288,11 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
               <ChartContainer
                 className="h-[250px] xs:h-[300px] sm:h-[400px] w-full max-w-full overflow-hidden"
                 config={{
-                  "0": { theme: { light: "hsl(var(--chart-1))", dark: "hsl(var(--chart-1))" } },
-                  "1": { theme: { light: "hsl(var(--chart-2))", dark: "hsl(var(--chart-2))" } },
-                  "2": { theme: { light: "hsl(var(--chart-3))", dark: "hsl(var(--chart-3))" } },
-                  "3": { theme: { light: "hsl(var(--chart-4))", dark: "hsl(var(--chart-4))" } },
-                  "4": { theme: { light: "hsl(var(--chart-5))", dark: "hsl(var(--chart-5))" } }
+                  "0": { theme: { light: "#5856D6", dark: "#5856D6" } },
+                  "1": { theme: { light: "#FF6B6B", dark: "#FF6B6B" } },
+                  "2": { theme: { light: "#4CAF50", dark: "#4CAF50" } },
+                  "3": { theme: { light: "#FF9800", dark: "#FF9800" } },
+                  "4": { theme: { light: "#2196F3", dark: "#2196F3" } }
                 }}
               >
                 <BarChart
