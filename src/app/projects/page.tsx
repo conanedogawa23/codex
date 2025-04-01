@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { SidebarLayout } from "@/components/layout/sidebar-layout"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { PlusIcon, SearchIcon, Filter, ChevronDown, Calendar } from "lucide-react"
@@ -24,6 +23,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { PageLayout } from "@/components/layout/page-layout"
+import { BreadcrumbIcons } from "@/components/ui/custom-breadcrumb"
 
 // Import mock data
 import mockData from "@/lib/mock-data.json"
@@ -94,13 +95,24 @@ export default function ProjectsPage() {
   }
 
   return (
-    <SidebarLayout>
-      <div className="flex flex-col space-y-6 p-4 sm:p-6 md:p-8">
+    <PageLayout
+      title="Projects"
+      breadcrumbs={[
+        {
+          icon: BreadcrumbIcons.Dashboard,
+          label: "Dashboard",
+          href: "/"
+        },
+        {
+          icon: BreadcrumbIcons.Project,
+          label: "Projects",
+          isActive: true
+        }
+      ]}
+    >
+      <div className="flex flex-col space-y-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Projects</h1>
-            <p className="text-muted-foreground mt-1 hidden sm:block">Manage and track your project portfolio</p>
-          </div>
+          <p className="text-muted-foreground mt-1 hidden sm:block">Manage and track your project portfolio</p>
 
           <div className="flex flex-wrap items-center gap-2">
             <Popover>
@@ -343,6 +355,6 @@ export default function ProjectsPage() {
           </div>
         )}
       </div>
-    </SidebarLayout>
+    </PageLayout>
   )
 } 

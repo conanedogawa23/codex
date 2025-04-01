@@ -14,7 +14,8 @@ import {
   Edit,
   AlertCircle,
   Calendar,
-  ChevronDown
+  ChevronDown,
+  CheckSquare
 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -42,7 +43,9 @@ import {
 } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
-import { formatDate } from "@/lib/utils"
+import { formatDate, formatDateWithOptions } from "@/lib/utils"
+import { PageLayout } from "@/components/layout/page-layout"
+import { BreadcrumbIcons } from "@/components/ui/custom-breadcrumb"
 
 // Import mock data
 import mockData from "@/lib/mock-data.json"
@@ -85,7 +88,7 @@ export default function TasksPage() {
 
   // Function to get user info by ID
   const getUserById = (userId: string) => {
-    return users.find(user => user.id === userId);
+    return users.find(user => user.name === userId);
   };
 
   // Function to get project info by ID
@@ -146,15 +149,11 @@ export default function TasksPage() {
 
   // Format date specifically for task dates (Month Day, Year)
   function formatTaskDate(date: Date | string | number): string {
-    const dateObj = typeof date === 'string' || typeof date === 'number'
-      ? new Date(date)
-      : date
-
-    return dateObj.toLocaleDateString('en-US', {
+    return formatDateWithOptions(date, {
       month: 'short',
       day: 'numeric',
       year: 'numeric'
-    })
+    });
   }
 
   // Check if date is past due
@@ -165,13 +164,24 @@ export default function TasksPage() {
   };
 
   return (
-    <SidebarLayout>
-      <div className="flex flex-col space-y-6 p-4 sm:p-6 md:p-8">
+    <PageLayout
+      title="Tasks"
+      breadcrumbs={[
+        {
+          icon: BreadcrumbIcons.Dashboard,
+          label: "Dashboard",
+          href: "/"
+        },
+        {
+          icon: BreadcrumbIcons.Project,
+          label: "Tasks",
+          isActive: true
+        }
+      ]}
+    >
+      <div className="flex flex-col space-y-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Tasks</h1>
-            <p className="text-muted-foreground mt-1 hidden sm:block">Manage and track your tasks and assignments</p>
-          </div>
+          <p className="text-muted-foreground mt-1 hidden sm:block">Manage and track your tasks and assignments</p>
 
           <div className="flex flex-wrap items-center gap-2">
             <Popover>
@@ -422,86 +432,80 @@ export default function TasksPage() {
               <div>
                 {tasks.length > 0 ? (
                   tasks.map((task, index) => {
-                    const assignedUser = getUserById(task.assignee.id);
+                    const assignedUser = getUserById(task.assignee.name);
                     const project = getProjectById(task.project);
 
                     return (
                       <div
                         key={task.id}
                         className={`
-                          p-4 border-b last:border-b-0 hover:bg-muted/40 transition-colors
+                          p-4 md:p-5 border-b last:border-b-0 hover:bg-muted/40 transition-colors
                           ${index % 2 === 0 ? 'bg-background' : 'bg-muted/20'}
                         `}
                       >
-                        <div className="flex items-start gap-4">
-                          {/* Task Status Icon */}
-                          <div className="mt-1">
-                            {getStatusIcon(task.status)}
-                          </div>
-
-                          {/* Task Content */}
-                          <div className="flex-1 min-w-0">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
-                              <h3 className="font-medium truncate">{task.title}</h3>
-                              <div className="flex items-center gap-2">
-                                <Badge className={getStatusColor(task.status)}>
-                                  {task.status === 'completed' ? 'Completed' :
-                                    task.status === 'in-progress' ? 'In Progress' : 'To Do'}
-                                </Badge>
-                                <Badge className={getPriorityColor(task.priority)}>
-                                  {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
-                                </Badge>
-                              </div>
+                        <div className="md:grid md:grid-cols-12 md:gap-4 flex flex-col gap-3">
+                          {/* Task Title and Status - Col span 5 */}
+                          <div className="md:col-span-5 flex items-start gap-3">
+                            <div className="mt-0.5 flex-shrink-0">
+                              {getStatusIcon(task.status)}
                             </div>
+                            <div className="min-w-0 flex-1">
+                              <h3 className="font-medium truncate text-[15px]">{task.title}</h3>
+                              <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                                {task.description}
+                              </p>
 
-                            <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                              {task.description}
-                            </p>
-
-                            <div className="flex flex-wrap items-center gap-3 mt-3">
-                              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                                <span>Project:</span>
-                                <span className="font-medium">{task.project}</span>
-                              </div>
-                              {task.dueDate && (
-                                <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                                  <span>Due:</span>
-                                  <span className={`font-medium ${isPastDue(task.dueDate) ? 'text-red-600' : ''}`}>
-                                    {formatTaskDate(task.dueDate)}
-                                  </span>
+                              {/* Task Tags - Mobile Only */}
+                              {task.tags && task.tags.length > 0 && (
+                                <div className="flex flex-wrap gap-1 mt-2 md:hidden">
+                                  {task.tags.map(tag => (
+                                    <Badge key={tag} variant="outline" className="px-2 py-0 h-5 text-[10px] bg-muted/50">
+                                      {tag}
+                                    </Badge>
+                                  ))}
                                 </div>
                               )}
-                              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                                <span>Assignee:</span>
-                                <div className="flex items-center gap-1">
-                                  <Avatar className="h-5 w-5">
-                                    <AvatarFallback className="text-[10px]">
-                                      {task.assignee.avatar}
-                                    </AvatarFallback>
-                                  </Avatar>
-                                  <span className="font-medium">{task.assignee.name}</span>
-                                </div>
-                              </div>
                             </div>
+                          </div>
 
-                            {/* Task Tags */}
-                            {task.tags && task.tags.length > 0 && (
-                              <div className="flex flex-wrap gap-1 mt-3">
-                                {task.tags.map(tag => (
-                                  <Badge
-                                    key={tag}
-                                    variant="outline"
-                                    className="bg-background/80 text-xs py-0 h-5"
-                                  >
-                                    {tag}
-                                  </Badge>
-                                ))}
-                              </div>
+                          {/* Project - Col span 2 */}
+                          <div className="md:col-span-2 flex items-center">
+                            <div className="text-sm">
+                              <span className="md:hidden text-xs text-muted-foreground mr-2">Project:</span>
+                              <span className="font-medium">{task.project}</span>
+                            </div>
+                          </div>
+
+                          {/* Priority - Col span 1 */}
+                          <div className="md:col-span-1 flex items-center">
+                            <Badge className={getPriorityColor(task.priority)}>
+                              {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
+                            </Badge>
+                          </div>
+
+                          {/* Assignee - Col span 2 */}
+                          <div className="md:col-span-2 flex items-center">
+                            <div className="flex items-center gap-2">
+                              <Avatar className="h-6 w-6 flex-shrink-0">
+                                <AvatarFallback className="text-[11px] bg-primary/10 text-primary">
+                                  {task.assignee.avatar}
+                                </AvatarFallback>
+                              </Avatar>
+                              <span className="text-sm truncate">{task.assignee.name}</span>
+                            </div>
+                          </div>
+
+                          {/* Due Date - Col span 1 */}
+                          <div className="md:col-span-1 flex items-center">
+                            {task.dueDate && (
+                              <span className={`text-sm ${isPastDue(task.dueDate) ? 'text-red-600 font-medium' : ''}`}>
+                                {formatDate(task.dueDate)}
+                              </span>
                             )}
                           </div>
 
-                          {/* Actions */}
-                          <div>
+                          {/* Actions - Col span 1 */}
+                          <div className="md:col-span-1 flex items-center justify-end">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -515,11 +519,7 @@ export default function TasksPage() {
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
                                   <CheckCircle2 className="h-4 w-4 mr-2" />
-                                  Mark as Completed
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                  <Clock className="h-4 w-4 mr-2" />
-                                  Set as In Progress
+                                  Mark as Complete
                                 </DropdownMenuItem>
                                 <DropdownMenuItem className="text-destructive">
                                   <Trash2 className="h-4 w-4 mr-2" />
@@ -529,14 +529,35 @@ export default function TasksPage() {
                             </DropdownMenu>
                           </div>
                         </div>
+
+                        {/* Task Tags - Desktop Only */}
+                        {task.tags && task.tags.length > 0 && (
+                          <div className="hidden md:flex flex-wrap gap-1 mt-3 md:ml-10">
+                            {task.tags.map(tag => (
+                              <Badge key={tag} variant="outline" className="px-2 py-0 h-5 text-[10px] bg-muted/50">
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )
                   })
                 ) : (
-                  <div className="text-center py-12 border-t">
-                    <AlertCircle className="h-12 w-12 mx-auto text-muted-foreground opacity-50 mb-4" />
-                    <h3 className="text-lg font-medium mb-2">No tasks found</h3>
-                    <p className="text-muted-foreground">Try adjusting your filters or create a new task</p>
+                  <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+                    <div className="rounded-full bg-muted/50 p-3 mb-4">
+                      <CheckSquare className="h-6 w-6 text-muted-foreground" />
+                    </div>
+                    <h3 className="text-lg font-medium mb-1">No tasks found</h3>
+                    <p className="text-muted-foreground max-w-sm">
+                      {searchQuery || statusFilter !== "all" || priorityFilter !== "all" || projectFilter !== "all" || assigneeFilter !== "all"
+                        ? "Try adjusting your filters to find what you're looking for."
+                        : "Get started by creating your first task."}
+                    </p>
+                    <Button className="mt-4 gap-1.5">
+                      <Plus className="h-4 w-4" />
+                      <span>Add Task</span>
+                    </Button>
                   </div>
                 )}
               </div>
@@ -578,6 +599,6 @@ export default function TasksPage() {
           </TabsContent>
         </Tabs>
       </div>
-    </SidebarLayout>
+    </PageLayout>
   )
 } 

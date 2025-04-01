@@ -1,13 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { SidebarLayout } from "@/components/layout/sidebar-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Search, ChevronLeft } from "lucide-react"
-import { Separator } from "@/components/ui/separator"
+import { Search, ChevronLeft, ChevronRight } from "lucide-react"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
+import { ChartContainer } from "@/components/ui/chart"
 import {
     BarChart,
     Bar,
@@ -17,117 +16,12 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from "recharts"
+import { BreadcrumbIcons } from "@/components/ui/custom-breadcrumb"
+import { PageLayout } from "@/components/layout/page-layout"
+import { formatDate } from "@/lib/date-utils"
 
-// Sample data for the charts
-const projectCompletionData = [
-    { name: "Milestone 1", percentage: 20 },
-    { name: "Milestone 2", percentage: 25 },
-    { name: "Milestone 3", percentage: 34 },
-    { name: "Milestone 4", percentage: 45 },
-    { name: "Milestone 5", percentage: 50 },
-]
-
-const timeComparisonData = [
-    { name: "Task 1", estimated: 20, actual: 25 },
-    { name: "Task 2", estimated: 15, actual: 22 },
-    { name: "Task 3", estimated: 25, actual: 20 },
-    { name: "Task 4", estimated: 18, actual: 26 },
-    { name: "Task 5", estimated: 15, actual: 10 },
-]
-
-// Sample data for the table
-const projectTableData = [
-    {
-        name: "Casheer",
-        dates: "12/09/2024\n31/12/2024",
-        completion: "43%",
-        milestones: "4/12",
-        tasks: "5",
-        members: "12",
-        timeComparison: "4/12"
-    },
-    {
-        name: "PlatfromX",
-        dates: "12/09/2024\n31/12/2024",
-        completion: "43%",
-        milestones: "4/12",
-        tasks: "5",
-        members: "12",
-        timeComparison: "4/12"
-    },
-    {
-        name: "Platform Payment",
-        dates: "12/09/2024\n31/12/2024",
-        completion: "43%",
-        milestones: "4/12",
-        tasks: "5",
-        members: "12",
-        timeComparison: "4/12"
-    },
-    {
-        name: "Platform Voucher",
-        dates: "12/09/2024\n31/12/2024",
-        completion: "43%",
-        milestones: "4/12",
-        tasks: "5",
-        members: "12",
-        timeComparison: "4/12"
-    },
-    {
-        name: "ConnectX",
-        dates: "12/09/2024\n31/12/2024",
-        completion: "43%",
-        milestones: "4/12",
-        tasks: "5",
-        members: "12",
-        timeComparison: "4/12"
-    },
-    {
-        name: "Digimenu",
-        dates: "12/09/2024\n31/12/2024",
-        completion: "43%",
-        milestones: "4/12",
-        tasks: "5",
-        members: "12",
-        timeComparison: "4/12"
-    },
-    {
-        name: "Marketing",
-        dates: "12/09/2024\n31/12/2024",
-        completion: "43%",
-        milestones: "4/12",
-        tasks: "5",
-        members: "12",
-        timeComparison: "4/12"
-    },
-    {
-        name: "HR",
-        dates: "12/09/2024\n31/12/2024",
-        completion: "43%",
-        milestones: "4/12",
-        tasks: "5",
-        members: "12",
-        timeComparison: "4/12"
-    },
-    {
-        name: "Legal Services",
-        dates: "12/09/2024\n31/12/2024",
-        completion: "43%",
-        milestones: "4/12",
-        tasks: "5",
-        members: "12",
-        timeComparison: "4/12"
-    },
-    {
-        name: "Apolo",
-        dates: "12/09/2024\n31/12/2024",
-        completion: "43%",
-        milestones: "4/12",
-        tasks: "5",
-        members: "12",
-        timeComparison: "4/12"
-    },
-]
+// Import mock data
+import mockData from "@/lib/mock-data.json"
 
 // Custom components for the charts
 const MilestoneIndicator = ({ milestones, completion }: { milestones: string, completion: string }) => (
@@ -136,199 +30,364 @@ const MilestoneIndicator = ({ milestones, completion }: { milestones: string, co
             <div className="absolute inset-0 rounded-full bg-[#D8D8E4]"></div>
             <div className="absolute inset-0 rounded-full border-2 border-[#5856D6]"></div>
         </div>
-        <span>{milestones}</span>
+        <span className="text-xs sm:text-sm">{milestones}</span>
     </div>
 )
 
 export default function ProjectProgressPage() {
     const [searchQuery, setSearchQuery] = useState("")
+    const [currentPage, setCurrentPage] = useState(1)
+    const [rowsPerPage, setRowsPerPage] = useState(10)
+
+    // Get projects from mock data
+    const projects = mockData.projects || []
+
+    // Generate project completion data from mock projects
+    const projectCompletionData = projects
+        .filter(project => project.status !== "completed")
+        .slice(0, 5)
+        .map(project => ({
+            name: project.name.length > 10 ? project.name.substring(0, 10) + '...' : project.name,
+            percentage: project.progress
+        }))
+
+    // Generate time comparison data from tasks
+    const timeComparisonData = mockData.tasks
+        .slice(0, 5)
+        .map(task => ({
+            name: task.title.length > 15 ? task.title.substring(0, 15) + '...' : task.title,
+            estimated: 20, // Using a placeholder since mock data doesn't have estimated time
+            actual: Math.floor(Math.random() * 30) + 5 // Using random values for demonstration
+        }))
+
+    // Generate project table data from mock projects
+    const projectTableData = projects.map(project => {
+        const projectTasks = mockData.tasks.filter(task => task.project === project.name)
+        return {
+            id: project.id,
+            name: project.name,
+            dates: `${formatDate(project.deadline)}`,
+            completion: `${project.progress}%`,
+            milestones: `${project.tasks.completed}/${project.tasks.total}`,
+            tasks: projectTasks.length.toString(),
+            members: "3", // Placeholder as mock data doesn't specify project members
+            timeComparison: `${project.tasks.completed}/${project.tasks.total}`
+        }
+    })
 
     // Filter projects based on search
     const filteredProjects = projectTableData.filter(project =>
         project.name.toLowerCase().includes(searchQuery.toLowerCase())
     )
 
+    // Pagination calculation
+    const totalPages = Math.ceil(filteredProjects.length / rowsPerPage)
+    const startIndex = (currentPage - 1) * rowsPerPage
+    const endIndex = startIndex + rowsPerPage
+    const currentProjects = filteredProjects.slice(startIndex, endIndex)
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) setCurrentPage(currentPage - 1)
+    }
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) setCurrentPage(currentPage + 1)
+    }
+
     return (
-        <SidebarLayout>
-            <div className="flex flex-col space-y-6 p-4 sm:p-6 md:p-8">
-                <div>
-                    <h1 className="text-2xl font-medium tracking-tight mb-6">Project Progress Report</h1>
+        <PageLayout
+            title="Project Progress Report"
+            breadcrumbs={[
+                {
+                    icon: BreadcrumbIcons.Dashboard,
+                    label: "Dashboard",
+                    href: "/"
+                },
+                {
+                    icon: BreadcrumbIcons.Reports,
+                    label: "Reports",
+                    href: "/reports"
+                },
+                {
+                    icon: BreadcrumbIcons.Project,
+                    label: "Project Progress",
+                    isActive: true
+                }
+            ]}
+        >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                {/* Project Completion Progress Chart */}
+                <Card className="w-full border border-[rgba(3,0,49,0.12)] shadow-sm bg-white overflow-hidden">
+                    <CardHeader className="pb-0 pt-5 px-6 border-b border-[rgba(3,0,49,0.08)]">
+                        <CardTitle className="text-base font-medium flex items-center text-[rgba(3,0,41,0.9)]">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2 text-[#5856D6]">
+                                <path d="M18 20V10M12 20V4M6 20V14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            Project Completion Progress
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-4 px-6">
+                        <ChartContainer
+                            className="h-[220px] sm:h-[300px] w-full"
+                            config={{
+                                percentage: {
+                                    theme: { light: "#5856D6", dark: "#5856D6" }
+                                }
+                            }}
+                        >
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart
+                                    data={projectCompletionData}
+                                    margin={{
+                                        top: 20,
+                                        right: 10,
+                                        left: 0,
+                                        bottom: 30
+                                    }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(3, 0, 49, 0.1)" />
+                                    <XAxis
+                                        dataKey="name"
+                                        axisLine={false}
+                                        tickLine={false}
+                                        tick={{ fontSize: 10, width: 50 }}
+                                        dy={10}
+                                        height={50}
+                                        interval={0}
+                                        tickFormatter={(value) => {
+                                            return window.innerWidth < 640 && value.length > 10
+                                                ? value.substring(0, 8) + '...'
+                                                : value
+                                        }}
+                                    />
+                                    <YAxis
+                                        axisLine={false}
+                                        tickLine={false}
+                                        tick={{ fontSize: 10 }}
+                                        domain={[0, 100]}
+                                        tickCount={5}
+                                        tickFormatter={(value) => `${value}`}
+                                        label={{
+                                            value: 'Completion %',
+                                            angle: -90,
+                                            position: 'insideLeft',
+                                            offset: 0,
+                                            style: {
+                                                textAnchor: 'middle',
+                                                fontSize: '10px',
+                                                fill: 'rgba(3, 0, 41, 0.8)'
+                                            }
+                                        }}
+                                    />
+                                    <Tooltip formatter={(value) => [`${value}%`, 'Completion']} />
+                                    <Bar
+                                        dataKey="percentage"
+                                        fill="#5856D6"
+                                        radius={[4, 4, 0, 0]}
+                                        barSize={30}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </ChartContainer>
+                    </CardContent>
+                </Card>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        {/* Project Completion Progress Chart */}
-                        <Card className="w-full">
-                            <CardHeader className="pb-0">
-                                <CardTitle className="text-base font-medium">Project Completion Progress</CardTitle>
-                            </CardHeader>
-                            <CardContent className="pb-4">
-                                <div className="h-[300px] mt-4">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <BarChart
-                                            data={projectCompletionData}
-                                            margin={{ top: 20, right: 30, left: 20, bottom: 50 }}
-                                        >
-                                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                            <XAxis
-                                                dataKey="name"
-                                                axisLine={false}
-                                                tickLine={false}
-                                                tick={{ fontSize: 12 }}
-                                                dy={10}
-                                            />
-                                            <YAxis
-                                                axisLine={false}
-                                                tickLine={false}
-                                                tick={{ fontSize: 12 }}
-                                                domain={[0, 100]}
-                                                tickCount={11}
-                                                tickFormatter={(value) => `${value}`}
-                                                label={{ value: 'Completion Percentage (%)', angle: -90, position: 'insideLeft', offset: 0, style: { textAnchor: 'middle', fontSize: '12px', fill: 'rgba(3, 0, 41, 0.8)' } }}
-                                            />
-                                            <Tooltip
-                                                contentStyle={{
-                                                    backgroundColor: 'white',
-                                                    border: '1px solid rgba(3, 0, 49, 0.12)',
-                                                    borderRadius: '6px',
-                                                    fontSize: '12px'
-                                                }}
-                                                formatter={(value) => [`${value}%`, 'Completion']}
-                                            />
-                                            <Bar dataKey="percentage" fill="#5856D6" radius={[4, 4, 0, 0]} />
-                                        </BarChart>
-                                    </ResponsiveContainer>
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                        {/* Estimated vs. Actual Time Chart */}
-                        <Card className="w-full">
-                            <CardHeader className="pb-0">
-                                <CardTitle className="text-base font-medium">Estimated Vs. Actual Time</CardTitle>
-                            </CardHeader>
-                            <CardContent className="pb-4">
-                                <div className="h-[300px] mt-4">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <BarChart
-                                            data={timeComparisonData}
-                                            margin={{ top: 20, right: 30, left: 20, bottom: 50 }}
-                                        >
-                                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                            <XAxis
-                                                dataKey="name"
-                                                axisLine={false}
-                                                tickLine={false}
-                                                tick={{ fontSize: 12 }}
-                                                dy={10}
-                                            />
-                                            <YAxis
-                                                axisLine={false}
-                                                tickLine={false}
-                                                tick={{ fontSize: 12 }}
-                                                label={{ value: 'Time (Hours)', angle: -90, position: 'insideLeft', offset: 0, style: { textAnchor: 'middle', fontSize: '12px', fill: 'rgba(3, 0, 49, 0.8)' } }}
-                                            />
-                                            <Tooltip
-                                                contentStyle={{
-                                                    backgroundColor: 'white',
-                                                    border: '1px solid rgba(3, 0, 49, 0.12)',
-                                                    borderRadius: '6px',
-                                                    fontSize: '12px'
-                                                }}
-                                                formatter={(value) => [`${value} hours`, '']}
-                                            />
-                                            <Bar dataKey="estimated" name="Estimated Time" fill="#5856D6" radius={[4, 4, 0, 0]} />
-                                            <Bar dataKey="actual" name="Actual Time" fill="#3835B9" radius={[4, 4, 0, 0]} />
-                                        </BarChart>
-                                    </ResponsiveContainer>
-                                </div>
-                                <div className="flex items-center justify-center gap-6 mt-2 bg-white border border-gray-200 p-2 rounded-md">
-                                    <div className="flex items-center gap-2">
-                                        <div className="h-3 w-3 bg-[#5856D6] rounded-full"></div>
-                                        <span className="text-xs text-gray-700">Estimated Time</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <div className="h-3 w-3 bg-[#3835B9] rounded-full"></div>
-                                        <span className="text-xs text-gray-700">Actual Time</span>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </div>
-
-                    {/* Project Progress Table */}
-                    <Card className="w-full bg-[#F4F8FD]">
-                        <div className="flex items-center justify-between p-4 md:p-6">
-                            <div className="relative max-w-sm">
-                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                <Input
-                                    placeholder="Search"
-                                    className="pl-9 h-9 bg-white w-[220px]"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                />
+                {/* Time Comparison Chart */}
+                <Card className="w-full border border-[rgba(3,0,49,0.12)] shadow-sm bg-white overflow-hidden">
+                    <CardHeader className="pb-0 pt-5 px-6 border-b border-[rgba(3,0,49,0.08)]">
+                        <CardTitle className="text-base font-medium flex items-center text-[rgba(3,0,41,0.9)]">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2 text-[#5856D6]">
+                                <path d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            Estimated vs. Actual Time
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-4 px-6">
+                        <ChartContainer
+                            className="h-[220px] sm:h-[300px] w-full"
+                            config={{
+                                estimated: {
+                                    theme: { light: "#5856D6", dark: "#5856D6" }
+                                },
+                                actual: {
+                                    theme: { light: "#FF9500", dark: "#FF9500" }
+                                }
+                            }}
+                        >
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart
+                                    data={timeComparisonData}
+                                    margin={{
+                                        top: 20,
+                                        right: 10,
+                                        left: 0,
+                                        bottom: 30
+                                    }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(3, 0, 49, 0.1)" />
+                                    <XAxis
+                                        dataKey="name"
+                                        axisLine={false}
+                                        tickLine={false}
+                                        tick={{ fontSize: 10, width: 50 }}
+                                        dy={10}
+                                        height={50}
+                                        interval={0}
+                                        tickFormatter={(value) => {
+                                            return window.innerWidth < 640 && value.length > 10
+                                                ? value.substring(0, 8) + '...'
+                                                : value
+                                        }}
+                                    />
+                                    <YAxis
+                                        axisLine={false}
+                                        tickLine={false}
+                                        tick={{ fontSize: 10 }}
+                                        tickFormatter={(value) => `${value}h`}
+                                        label={{
+                                            value: 'Hours',
+                                            angle: -90,
+                                            position: 'insideLeft',
+                                            offset: 0,
+                                            style: {
+                                                textAnchor: 'middle',
+                                                fontSize: '10px',
+                                                fill: 'rgba(3, 0, 41, 0.8)'
+                                            }
+                                        }}
+                                    />
+                                    <Tooltip formatter={(value) => [`${value} hours`, '']} />
+                                    <Bar
+                                        dataKey="estimated"
+                                        fill="#5856D6"
+                                        name="Estimated Time"
+                                        barSize={15}
+                                        radius={[4, 4, 0, 0]}
+                                    />
+                                    <Bar
+                                        dataKey="actual"
+                                        fill="#FF9500"
+                                        name="Actual Time"
+                                        barSize={15}
+                                        radius={[4, 4, 0, 0]}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </ChartContainer>
+                        <div className="flex items-center justify-center gap-6 mt-6">
+                            <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 bg-[#5856D6] rounded-sm"></div>
+                                <span className="text-sm text-muted-foreground">Estimated</span>
                             </div>
-                            <Button variant="outline" size="icon" className="h-9 w-9">
-                                <ChevronLeft className="h-4 w-4" />
-                            </Button>
+                            <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 bg-[#FF9500] rounded-sm"></div>
+                                <span className="text-sm text-muted-foreground">Actual</span>
+                            </div>
                         </div>
-                        <Separator className="bg-[#E7E8EC]" />
+                    </CardContent>
+                </Card>
+            </div>
 
-                        <div className="overflow-x-auto">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow className="bg-white border-b border-[rgba(3,0,49,0.12)]">
-                                        <TableHead className="font-bold">Project Name</TableHead>
-                                        <TableHead className="font-bold">Start date and end date</TableHead>
-                                        <TableHead className="font-bold">Completion percentage</TableHead>
-                                        <TableHead className="font-bold">Milestones achieved</TableHead>
-                                        <TableHead className="font-bold">Remaining tasks</TableHead>
-                                        <TableHead className="font-bold">Assigned team member</TableHead>
-                                        <TableHead className="font-bold">Estimated vs. actual time</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {filteredProjects.map((project, index) => (
-                                        <TableRow key={index} className="border-b border-[rgba(3,0,49,0.12)]">
-                                            <TableCell className="font-normal">{project.name}</TableCell>
-                                            <TableCell className="font-normal whitespace-pre-line">{project.dates}</TableCell>
-                                            <TableCell className="font-normal">{project.completion}</TableCell>
-                                            <TableCell>
-                                                <MilestoneIndicator
-                                                    milestones={project.milestones}
-                                                    completion={project.completion}
-                                                />
+            {/* Projects table */}
+            <Card className="w-full border border-[rgba(3,0,49,0.12)] shadow-sm bg-white overflow-hidden">
+                <CardHeader className="pb-0 pt-5 px-6 border-b border-[rgba(3,0,49,0.08)]">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                        <CardTitle className="text-base font-medium flex items-center text-[rgba(3,0,41,0.9)]">
+                            Projects
+                        </CardTitle>
+                        <div className="relative w-full sm:w-64">
+                            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                            <Input
+                                placeholder="Search projects..."
+                                className="pl-8"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                </CardHeader>
+                <CardContent className="p-0">
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader>
+                                <TableRow className="bg-[rgba(3,0,49,0.02)] border-y border-[rgba(3,0,49,0.08)]">
+                                    <TableHead className="py-2 px-4 text-xs font-medium text-[rgba(3,0,41,0.6)]">Project</TableHead>
+                                    <TableHead className="py-2 px-4 text-xs font-medium text-[rgba(3,0,41,0.6)]">Deadline</TableHead>
+                                    <TableHead className="py-2 px-4 text-xs font-medium text-[rgba(3,0,41,0.6)]">Completion</TableHead>
+                                    <TableHead className="py-2 px-4 text-xs font-medium text-[rgba(3,0,41,0.6)]">Tasks</TableHead>
+                                    <TableHead className="py-2 px-4 text-xs font-medium text-[rgba(3,0,41,0.6)]">Team</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {currentProjects.length > 0 ? (
+                                    currentProjects.map((project) => (
+                                        <TableRow key={project.id} className="border-b border-[rgba(3,0,49,0.08)] hover:bg-[rgba(3,0,49,0.02)]">
+                                            <TableCell className="py-3 px-4 font-medium text-sm text-[rgba(3,0,41,0.9)]">
+                                                {project.name}
                                             </TableCell>
-                                            <TableCell className="font-normal">{project.tasks}</TableCell>
-                                            <TableCell className="font-normal">{project.members}</TableCell>
-                                            <TableCell>
-                                                <MilestoneIndicator
-                                                    milestones={project.timeComparison}
-                                                    completion={project.completion}
-                                                />
+                                            <TableCell className="py-3 px-4 text-sm text-[rgba(3,0,41,0.6)]">
+                                                {project.dates}
+                                            </TableCell>
+                                            <TableCell className="py-3 px-4 text-sm">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="h-1.5 w-24 bg-[#D8D8E4] rounded-full overflow-hidden">
+                                                        <div
+                                                            className="h-full bg-[#5856D6] rounded-full"
+                                                            style={{ width: project.completion }}
+                                                        ></div>
+                                                    </div>
+                                                    <span className="text-xs font-medium text-[rgba(3,0,41,0.6)]">
+                                                        {project.completion}
+                                                    </span>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="py-3 px-4 text-sm">
+                                                <MilestoneIndicator milestones={project.milestones} completion={project.completion} />
+                                            </TableCell>
+                                            <TableCell className="py-3 px-4 text-sm text-[rgba(3,0,41,0.6)]">
+                                                {project.members}
                                             </TableCell>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
+                                    ))
+                                ) : (
+                                    <TableRow>
+                                        <TableCell colSpan={5} className="h-24 text-center">
+                                            No projects found.
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </div>
 
-                        <div className="p-4 md:p-6 flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <span className="text-sm">Show row:</span>
-                                <Input className="w-12 h-8" value="10" />
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Button variant="outline" size="icon" className="h-8 w-8">
-                                    <ChevronLeft className="h-4 w-4" />
-                                </Button>
-                                <span className="text-sm">1-10 of 23</span>
-                                <Button variant="outline" size="icon" className="h-8 w-8 rotate-180">
-                                    <ChevronLeft className="h-4 w-4" />
-                                </Button>
-                            </div>
+                    {/* Pagination */}
+                    <div className="flex items-center justify-between px-4 py-4 border-t border-[rgba(3,0,49,0.08)]">
+                        <div className="text-sm text-[rgba(3,0,41,0.6)]">
+                            Showing <span className="font-medium">{startIndex + 1}</span> to <span className="font-medium">{Math.min(endIndex, filteredProjects.length)}</span> of <span className="font-medium">{filteredProjects.length}</span> projects
                         </div>
-                    </Card>
-                </div>
-            </div>
-        </SidebarLayout>
+                        <div className="flex gap-1">
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={handlePrevPage}
+                                disabled={currentPage === 1}
+                                className="h-8 w-8"
+                            >
+                                <ChevronLeft className="h-4 w-4" />
+                            </Button>
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={handleNextPage}
+                                disabled={currentPage === totalPages}
+                                className="h-8 w-8"
+                            >
+                                <ChevronRight className="h-4 w-4" />
+                            </Button>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+        </PageLayout>
     )
 } 

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import Image from 'next/image'
 import {
   Home,
   BarChart,
@@ -62,7 +63,7 @@ const getIconByName = (iconName: string) => {
     Building2: <Building2 className="h-4 w-4" />,
     Settings: <Settings className="h-4 w-4" />,
     LogOut: <LogOut className="h-4 w-4" />,
-    User: <User className="h-4 w-4" />,
+    User: <Users className="h-4 w-4" />,
     FileText: <FileText className="h-4 w-4" />,
     HelpCircle: <HelpCircle className="h-4 w-4" />,
     Activity: <Activity className="h-5 w-5" />,
@@ -72,6 +73,25 @@ const getIconByName = (iconName: string) => {
   }
 
   return icons[iconName] || <div className="h-4 w-4" />
+}
+
+// Notification item component
+interface NotificationItemProps {
+  title: string
+  description: string
+  time: string
+}
+
+function NotificationItem({ title, description, time }: NotificationItemProps) {
+  return (
+    <div className="px-4 py-3 hover:bg-muted cursor-pointer transition-colors">
+      <div className="flex justify-between items-start">
+        <p className="font-medium text-sm">{title}</p>
+        <p className="text-xs text-muted-foreground ml-2">{time}</p>
+      </div>
+      <p className="text-xs text-muted-foreground mt-1">{description}</p>
+    </div>
+  )
 }
 
 export function SidebarLayout({ children }: { children: React.ReactNode }) {
@@ -162,31 +182,40 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
     <div className="flex h-screen w-full overflow-hidden bg-background">
       {/* Overlay for mobile */}
       {isMobileView && sidebarOpen && (
-        <div className="fixed inset-0 bg-black/40 z-40 md:hidden" />
+        <div
+          className="fixed inset-0 bg-black/40 z-40 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
       )}
 
       {/* Simplified Header */}
       <header className="fixed top-0 left-0 right-0 h-16 bg-background border-b z-50 flex items-center px-4 md:px-6">
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-4">
-            {isMobileView && (
-              <Button
-                id="sidebar-toggle"
-                variant="ghost"
-                size="icon"
-                onClick={toggleSidebar}
-                className="md:hidden"
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
-            )}
+            {/* Mobile menu toggle button with higher z-index */}
+            <Button
+              id="sidebar-toggle"
+              variant="ghost"
+              size="icon"
+              onClick={toggleSidebar}
+              className="md:hidden z-50"
+              aria-label="Toggle menu"
+            >
+              {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
 
             {/* Logo */}
             <div className="flex items-center gap-2">
-              <div className={`w-8 h-8 bg-gradient-to-br from-${app.logo.gradientFrom} to-${app.logo.gradientTo} rounded-md shadow-md flex items-center justify-center text-white`}>
-                <span className="font-bold">{app.logo.symbol}</span>
-              </div>
-              <span className="font-bold text-lg tracking-tight">{app.name}</span>
+              <Link href="/">
+                <Image
+                  src="/images/innovation-logo.svg"
+                  alt="INNOVATION EN"
+                  width={150}
+                  height={36}
+                  className="h-8 w-auto"
+                />
+              </Link>
             </div>
           </div>
 
@@ -264,6 +293,12 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
                     </DropdownMenuItem>
                   )
                 ))}
+                <DropdownMenuSeparator />
+                <Link href="/auth/login">
+                  <DropdownMenuItem className="text-destructive">
+                    <LogOut className="h-4 w-4" /> <span className="ml-2">Logout</span>
+                  </DropdownMenuItem>
+                </Link>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -274,13 +309,18 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
       <aside
         id="mobile-sidebar"
         className={`
-          fixed left-0 top-0 bottom-0 bg-background border-r z-40
+          fixed left-0 top-0 bottom-0 bg-background border-r 
           pt-16 transition-all duration-300 ease-in-out
-          ${isMobileView ? (sidebarOpen ? 'translate-x-0' : '-translate-x-full') : 'translate-x-0'}
+          ${isMobileView ? (sidebarOpen ? 'translate-x-0 z-50' : '-translate-x-full z-40') : 'translate-x-0 z-10'}
           ${sidebarCollapsed ? 'md:w-20' : 'md:w-64'}
           md:translate-x-0 md:z-0 md:pt-16
+          shadow-lg
         `}
-        style={{ width: isMobileView ? '280px' : sidebarCollapsed ? '80px' : '256px' }}
+        style={{
+          width: isMobileView ? '280px' : sidebarCollapsed ? '80px' : '256px',
+          overflowY: 'auto',
+          height: '100vh'
+        }}
       >
         <div className={`flex flex-col h-full overflow-y-auto ${sidebarCollapsed ? 'px-2' : 'px-4'} py-4`}>
           {/* Search bar on mobile */}
@@ -294,7 +334,7 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
             </div>
           )}
 
-          <nav className="space-y-1">
+          <nav className="space-y-1 overflow-y-auto">
             {/* Main Menu */}
             <div className={`mb-3 ${sidebarCollapsed ? 'pl-0 text-center' : 'pl-3'}`}>
               {!sidebarCollapsed && <p className="text-xs uppercase tracking-wider font-semibold text-muted-foreground mb-2">{navigation.mainMenu.title}</p>}
@@ -503,17 +543,6 @@ function EnhancedNavItem({
     </Link>
   )
 }
-
-// Supporting components for dropdown items
-const NotificationItem = ({ title, description, time }: { title: string, description: string, time: string }) => (
-  <div className="px-4 py-2 hover:bg-muted/50 cursor-pointer">
-    <div className="flex justify-between items-start mb-1">
-      <p className="font-medium text-sm">{title}</p>
-      <span className="text-xs text-muted-foreground">{time}</span>
-    </div>
-    <p className="text-xs text-muted-foreground">{description}</p>
-  </div>
-)
 
 // User icon for the dropdown
 function User(props: React.SVGProps<SVGSVGElement>) {
