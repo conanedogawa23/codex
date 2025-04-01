@@ -14,44 +14,17 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
 
+// Import mock data
+import mockData from '@/lib/mock-data.json'
+
 // Import Charts component with dynamic import to avoid SSR issues
 const Charts = dynamic(() => import('@/components/analytics/charts'), {
   ssr: false,
   loading: () => <ChartSkeleton />
 })
 
-// Mock data for analytics
-const analyticsData = {
-  projectPerformance: [
-    { month: "Jan", successRate: 85, delayRate: 15 },
-    { month: "Feb", successRate: 88, delayRate: 12 },
-    { month: "Mar", successRate: 90, delayRate: 10 },
-    { month: "Apr", successRate: 92, delayRate: 8 },
-    { month: "May", successRate: 94, delayRate: 6 },
-    { month: "Jun", successRate: 96, delayRate: 4 }
-  ],
-  teamPerformance: [
-    { team: "Design", performance: 86, projects: 12 },
-    { team: "Engineering", performance: 90, projects: 18 },
-    { team: "Marketing", performance: 84, projects: 8 },
-    { team: "Product", performance: 92, projects: 15 }
-  ],
-  resourceUtilization: [
-    { resource: "Compute", used: 78, available: 22 },
-    { resource: "Storage", used: 65, available: 35 },
-    { resource: "Network", used: 82, available: 18 },
-    { resource: "Memory", used: 55, available: 45 }
-  ],
-  modelAccuracy: [
-    { model: "Model A", accuracy: 92 },
-    { model: "Model B", accuracy: 89 },
-    { model: "Model C", accuracy: 94 },
-    { model: "Model D", accuracy: 87 },
-    { model: "Model E", accuracy: 91 }
-  ]
-}
-
 export default function AnalyticsPage() {
+  const { analytics } = mockData
   const [timeRange, setTimeRange] = useState("6months")
   const [dataFilter, setDataFilter] = useState("all")
   const [activeTab, setActiveTab] = useState("performance")
@@ -202,7 +175,7 @@ export default function AnalyticsPage() {
           <div className="pt-6">
             <Suspense fallback={<ChartSkeleton />}>
               <Card className="p-6 border rounded-lg">
-                <Charts analyticsData={analyticsData} />
+                <Charts analyticsData={analytics.overview} />
               </Card>
             </Suspense>
           </div>

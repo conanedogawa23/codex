@@ -7,25 +7,29 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer } from "@/components/ui/chart"
 
 type AnalyticsData = {
-  projectPerformance: {
+  projectCompletion: {
     month: string;
-    successRate: number;
-    delayRate: number;
+    value: number;
   }[];
+  taskDistribution: {
+    development: number;
+    design: number;
+    marketing: number;
+    research: number;
+    other: number;
+  };
   teamPerformance: {
-    team: string;
-    performance: number;
-    projects: number;
+    name: string;
+    tasks: number;
+    completed: number;
   }[];
-  resourceUtilization: {
-    resource: string;
-    used: number;
-    available: number;
-  }[];
-  modelAccuracy: {
-    model: string;
-    accuracy: number;
-  }[];
+  timeTracking: {
+    development: number;
+    meetings: number;
+    planning: number;
+    research: number;
+    other: number;
+  };
 }
 
 // Interface for pie chart label
@@ -94,7 +98,6 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
   }
 
   // Create destructured variables for easier use
-
   const {
     LineChart, BarChart, PieChart, RadarChart,
     Line, Bar, Pie, Radar,
@@ -102,12 +105,19 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
     PolarGrid, PolarAngleAxis, PolarRadiusAxis
   } = ChartsComponents!;
 
-  const { projectPerformance, teamPerformance, resourceUtilization, modelAccuracy } = analyticsData;
+  const { projectCompletion, teamPerformance, taskDistribution, timeTracking } = analyticsData;
 
-  // Create data for resource utilization pie chart
-  const resourceUtilizationData = resourceUtilization.map(item => ({
-    name: item.resource,
-    value: item.used
+  // Convert taskDistribution object to array for pie chart
+  const taskDistributionData = Object.entries(taskDistribution).map(([name, value]) => ({
+    name: name.charAt(0).toUpperCase() + name.slice(1),
+    value
+  }));
+
+  // Convert timeTracking object to array for resource utilization chart
+  const timeTrackingData = Object.entries(timeTracking).map(([name, value]) => ({
+    resource: name.charAt(0).toUpperCase() + name.slice(1),
+    used: value,
+    available: 100 - value
   }));
 
   return (
@@ -115,22 +125,19 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
       <TabsContent value="performance" className="pt-3 sm:pt-4">
         <Card>
           <CardHeader className="pb-1 sm:pb-2">
-            <CardTitle className="text-lg sm:text-xl">Project Performance Over Time</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Project Completion Rate Over Time</CardTitle>
           </CardHeader>
           <CardContent className="pt-0 sm:pt-2">
             <ChartContainer
               className="h-[250px] xs:h-[300px] sm:h-[400px] w-full max-w-full overflow-hidden"
               config={{
-                successRate: {
+                value: {
                   theme: { light: "hsl(var(--chart-1))", dark: "hsl(var(--chart-1))" }
-                },
-                delayRate: {
-                  theme: { light: "hsl(var(--chart-2))", dark: "hsl(var(--chart-2))" }
                 }
               }}
             >
               { }
-              <LineChart data={projectPerformance} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+              <LineChart data={projectCompletion} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
@@ -138,14 +145,8 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
                 <Legend wrapperStyle={{ fontSize: '12px' }} />
                 <Line
                   type="monotone"
-                  dataKey="successRate"
-                  name="Success Rate (%)"
-                  strokeWidth={2}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="delayRate"
-                  name="Delay Rate (%)"
+                  dataKey="value"
+                  name="Completion Rate (%)"
                   strokeWidth={2}
                 />
               </LineChart>
@@ -164,22 +165,30 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
             <ChartContainer
               className="h-[250px] xs:h-[300px] sm:h-[400px] w-full max-w-full overflow-hidden"
               config={{
-                performance: {
+                tasks: {
                   theme: { light: "hsl(var(--chart-1))", dark: "hsl(var(--chart-1))" }
+                },
+                completed: {
+                  theme: { light: "hsl(var(--chart-2))", dark: "hsl(var(--chart-2))" }
                 }
               }}
             >
               { }
               <BarChart data={teamPerformance} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="team" tick={{ fontSize: 12 }} />
+                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip />
                 <Legend wrapperStyle={{ fontSize: '12px' }} />
                 <Bar
-                  dataKey="performance"
-                  name="Performance Score"
-                  barSize={50}
+                  dataKey="tasks"
+                  name="Total Tasks"
+                  barSize={30}
+                />
+                <Bar
+                  dataKey="completed"
+                  name="Completed Tasks"
+                  barSize={30}
                 />
               </BarChart>
               { }
@@ -191,7 +200,7 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
       <TabsContent value="resources" className="pt-3 sm:pt-4">
         <Card>
           <CardHeader className="pb-1 sm:pb-2">
-            <CardTitle className="text-lg sm:text-xl">Resource Utilization</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Task Distribution</CardTitle>
           </CardHeader>
           <CardContent className="pt-0 sm:pt-2">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
@@ -201,13 +210,14 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
                   "0": { theme: { light: "hsl(var(--chart-1))", dark: "hsl(var(--chart-1))" } },
                   "1": { theme: { light: "hsl(var(--chart-2))", dark: "hsl(var(--chart-2))" } },
                   "2": { theme: { light: "hsl(var(--chart-3))", dark: "hsl(var(--chart-3))" } },
-                  "3": { theme: { light: "hsl(var(--chart-4))", dark: "hsl(var(--chart-4))" } }
+                  "3": { theme: { light: "hsl(var(--chart-4))", dark: "hsl(var(--chart-4))" } },
+                  "4": { theme: { light: "hsl(var(--chart-5))", dark: "hsl(var(--chart-5))" } }
                 }}
               >
                 { }
                 <PieChart margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
                   <Pie
-                    data={resourceUtilizationData}
+                    data={taskDistributionData}
                     cx="50%"
                     cy="50%"
                     outerRadius={90}
@@ -217,7 +227,7 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
                     label={({ name, percent }: PieChartLabelProps) => `${name}: ${(percent * 100).toFixed(0)}%`}
                     labelLine={false}
                   >
-                    {resourceUtilizationData.map((entry, index) => (
+                    {taskDistributionData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={`var(--color-${index})`} />
                     ))}
                   </Pie>
@@ -227,16 +237,16 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
                 { }
               </ChartContainer>
               <div className="flex flex-col justify-center p-2 sm:p-4">
-                {resourceUtilization.map((item, index) => (
+                {taskDistributionData.map((item, index) => (
                   <div key={index} className="mb-3 sm:mb-4">
                     <div className="flex justify-between mb-1">
-                      <span className="text-sm sm:text-base">{item.resource}</span>
-                      <span className="text-sm sm:text-base font-medium">{item.used}% Used</span>
+                      <span className="text-sm sm:text-base">{item.name}</span>
+                      <span className="text-sm sm:text-base font-medium">{item.value}%</span>
                     </div>
                     <div className="w-full bg-secondary h-2 sm:h-3 rounded-full overflow-hidden">
                       <div
                         className="bg-primary h-full"
-                        style={{ width: `${item.used}%` }}
+                        style={{ width: `${item.value}%` }}
                       />
                     </div>
                   </div>
@@ -250,34 +260,50 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
       <TabsContent value="models" className="pt-3 sm:pt-4">
         <Card>
           <CardHeader className="pb-1 sm:pb-2">
-            <CardTitle className="text-lg sm:text-xl">Model Accuracy</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Time Tracking</CardTitle>
           </CardHeader>
           <CardContent className="pt-0 sm:pt-2">
-            <ChartContainer
-              className="h-[250px] xs:h-[300px] sm:h-[400px] w-full max-w-full overflow-hidden"
-              config={{
-                accuracy: {
-                  theme: { light: "hsl(var(--chart-1))", dark: "hsl(var(--chart-1))" }
-                }
-              }}
-            >
-              { }
-              <RadarChart outerRadius={100} data={modelAccuracy} margin={{ top: 10, right: 30, left: 30, bottom: 10 }}>
-                <PolarGrid />
-                <PolarAngleAxis dataKey="model" tick={{ fontSize: 12 }} />
-                <PolarRadiusAxis angle={90} domain={[75, 100]} tick={{ fontSize: 12 }} />
-                <Radar
-                  name="Accuracy (%)"
-                  dataKey="accuracy"
-                  stroke="var(--color-accuracy)"
-                  fill="var(--color-accuracy)"
-                  fillOpacity={0.6}
-                />
-                <Legend wrapperStyle={{ fontSize: '12px' }} />
-                <Tooltip />
-              </RadarChart>
-              { }
-            </ChartContainer>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+              <div className="flex flex-col justify-center p-2 sm:p-4">
+                {timeTrackingData.map((item, index) => (
+                  <div key={index} className="mb-3 sm:mb-4">
+                    <div className="flex justify-between mb-1">
+                      <span className="text-sm sm:text-base">{item.resource}</span>
+                      <span className="text-sm sm:text-base font-medium">{item.used} hours</span>
+                    </div>
+                    <div className="w-full bg-secondary h-2 sm:h-3 rounded-full overflow-hidden">
+                      <div
+                        className="bg-primary h-full"
+                        style={{ width: `${(item.used / Math.max(...timeTrackingData.map(d => d.used))) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <ChartContainer
+                className="h-[250px] xs:h-[300px] sm:h-[400px] w-full max-w-full overflow-hidden"
+                config={{
+                  "0": { theme: { light: "hsl(var(--chart-1))", dark: "hsl(var(--chart-1))" } },
+                  "1": { theme: { light: "hsl(var(--chart-2))", dark: "hsl(var(--chart-2))" } },
+                  "2": { theme: { light: "hsl(var(--chart-3))", dark: "hsl(var(--chart-3))" } },
+                  "3": { theme: { light: "hsl(var(--chart-4))", dark: "hsl(var(--chart-4))" } },
+                  "4": { theme: { light: "hsl(var(--chart-5))", dark: "hsl(var(--chart-5))" } }
+                }}
+              >
+                <BarChart
+                  data={timeTrackingData}
+                  margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
+                  layout="vertical"
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis type="number" />
+                  <YAxis dataKey="resource" type="category" tick={{ fontSize: 12 }} />
+                  <Tooltip />
+                  <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
+                  <Bar dataKey="used" name="Hours Spent" fill="var(--color-0)" />
+                </BarChart>
+              </ChartContainer>
+            </div>
           </CardContent>
         </Card>
       </TabsContent>

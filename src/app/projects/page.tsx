@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/select"
 
 // Import mock data
-import mockData from "@/data/mock-data.json"
+import mockData from "@/lib/mock-data.json"
 
 export default function ProjectsPage() {
   const { projects: allProjects } = mockData

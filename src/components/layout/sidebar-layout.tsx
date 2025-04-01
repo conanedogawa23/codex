@@ -47,6 +47,33 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
+// Import mock data
+import mockData from '@/lib/mock-data.json'
+
+// Helper to get icon by name
+const getIconByName = (iconName: string) => {
+  const icons: Record<string, React.ReactNode> = {
+    Home: <Home className="h-4 w-4" />,
+    CheckSquare: <CheckSquare className="h-4 w-4" />,
+    FolderOpen: <FolderOpen className="h-4 w-4" />,
+    FileCode: <FileCode className="h-4 w-4" />,
+    BarChart: <BarChart className="h-4 w-4" />,
+    Users: <Users className="h-4 w-4" />,
+    Building2: <Building2 className="h-4 w-4" />,
+    Settings: <Settings className="h-4 w-4" />,
+    LogOut: <LogOut className="h-4 w-4" />,
+    User: <User className="h-4 w-4" />,
+    FileText: <FileText className="h-4 w-4" />,
+    HelpCircle: <HelpCircle className="h-4 w-4" />,
+    Activity: <Activity className="h-5 w-5" />,
+    GitBranch: <GitBranch className="h-4 w-4" />,
+    Layers: <Layers className="h-4 w-4" />,
+    Bell: <Bell className="h-4 w-4" />
+  }
+
+  return icons[iconName] || <div className="h-4 w-4" />
+}
+
 export function SidebarLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [isMobileView, setIsMobileView] = useState(false)
@@ -129,6 +156,8 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
     }
   }, [pathname, isMobileView])
 
+  const { app, navigation, notifications, userMenu, usage } = mockData
+
   return (
     <div className="flex h-screen w-full overflow-hidden bg-background">
       {/* Overlay for mobile */}
@@ -154,10 +183,10 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
 
             {/* Logo */}
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-700 rounded-md shadow-md flex items-center justify-center text-white">
-                <span className="font-bold">C</span>
+              <div className={`w-8 h-8 bg-gradient-to-br from-${app.logo.gradientFrom} to-${app.logo.gradientTo} rounded-md shadow-md flex items-center justify-center text-white`}>
+                <span className="font-bold">{app.logo.symbol}</span>
               </div>
-              <span className="font-bold text-lg tracking-tight">Codex</span>
+              <span className="font-bold text-lg tracking-tight">{app.name}</span>
             </div>
           </div>
 
@@ -182,28 +211,21 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
                   className="relative h-9 w-9"
                 >
                   <Bell className="h-4 w-4" />
-                  <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-[10px]">3</Badge>
+                  <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-[10px]">{notifications.count}</Badge>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-80">
                 <DropdownMenuLabel>Notifications</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <div className="max-h-80 overflow-y-auto">
-                  <NotificationItem
-                    title="New task assigned"
-                    description="You have been assigned a new task: Design Updates"
-                    time="10 min ago"
-                  />
-                  <NotificationItem
-                    title="Meeting reminder"
-                    description="Team standup in 30 minutes"
-                    time="25 min ago"
-                  />
-                  <NotificationItem
-                    title="Project deadline approaching"
-                    description="Dashboard redesign due in 2 days"
-                    time="Yesterday"
-                  />
+                  {notifications.items.map((notification) => (
+                    <NotificationItem
+                      key={notification.id}
+                      title={notification.title}
+                      description={notification.description}
+                      time={notification.time}
+                    />
+                  ))}
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="justify-center text-primary cursor-pointer">
@@ -219,32 +241,29 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="h-9 rounded-full" size="sm">
                   <Avatar className="h-7 w-7 mr-2">
-                    <AvatarFallback className="bg-primary/10 text-primary font-medium">JD</AvatarFallback>
+                    <AvatarFallback className="bg-primary/10 text-primary font-medium">{app.user.avatar.initials}</AvatarFallback>
                   </Avatar>
-                  <span className="text-sm mr-1 hidden md:inline-block">John Doe</span>
+                  <span className="text-sm mr-1 hidden md:inline-block">{app.user.name}</span>
                   <ChevronDown className="h-4 w-4 text-muted-foreground" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>{userMenu.title}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <User className="h-4 w-4 mr-2" /> Profile
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="h-4 w-4 mr-2" /> Settings
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <FileText className="h-4 w-4 mr-2" /> Activity Log
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <HelpCircle className="h-4 w-4 mr-2" /> Help & Support
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-destructive">
-                  <LogOut className="h-4 w-4 mr-2" /> Log out
-                </DropdownMenuItem>
+                {userMenu.items.map((item) => (
+                  item.destructive ? (
+                    <React.Fragment key={item.id}>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem className="text-destructive">
+                        {getIconByName(item.icon)} <span className="ml-2">{item.label}</span>
+                      </DropdownMenuItem>
+                    </React.Fragment>
+                  ) : (
+                    <DropdownMenuItem key={item.id}>
+                      {getIconByName(item.icon)} <span className="ml-2">{item.label}</span>
+                    </DropdownMenuItem>
+                  )
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -278,122 +297,84 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
           <nav className="space-y-1">
             {/* Main Menu */}
             <div className={`mb-3 ${sidebarCollapsed ? 'pl-0 text-center' : 'pl-3'}`}>
-              {!sidebarCollapsed && <p className="text-xs uppercase tracking-wider font-semibold text-muted-foreground mb-2">Main Menu</p>}
+              {!sidebarCollapsed && <p className="text-xs uppercase tracking-wider font-semibold text-muted-foreground mb-2">{navigation.mainMenu.title}</p>}
               {sidebarCollapsed && <div className="h-5"></div>}
             </div>
 
-            <EnhancedNavItem
-              href="/"
-              icon={<Home className="h-4 w-4" />}
-              label="Dashboard"
-              isActive={pathname === '/'}
-              collapsed={sidebarCollapsed}
-            />
-
-            <EnhancedNavItem
-              href="/tasks"
-              icon={<CheckSquare className="h-4 w-4" />}
-              label="Tasks"
-              isActive={pathname === '/tasks'}
-              badge="12"
-              collapsed={sidebarCollapsed}
-            />
-
-            <EnhancedNavItem
-              href="/projects"
-              icon={<FolderOpen className="h-4 w-4" />}
-              label="Projects"
-              isActive={pathname === '/projects'}
-              collapsed={sidebarCollapsed}
-            />
-
-            {/* Reports Dropdown */}
-            <div>
-              <button
-                onClick={() => toggleDropdown('reports')}
-                className={`
-                  flex items-center w-full gap-3 px-3 py-2.5 rounded-md text-sm font-medium
-                  ${pathname?.startsWith('/reports') ? 'text-primary' : 'text-muted-foreground'} 
-                  hover:bg-muted hover:text-foreground transition-colors
-                  ${sidebarCollapsed ? 'justify-center' : 'justify-between'}
-                `}
-              >
-                <div className="flex items-center gap-3">
-                  <span className="flex-shrink-0">
-                    <FileCode className="h-4 w-4" />
-                  </span>
-                  {!sidebarCollapsed && <span>Reports</span>}
-                </div>
-                {!sidebarCollapsed && (
-                  <ChevronDown
-                    className={`h-4 w-4 transition-transform ${activeDropdown === 'reports' ? 'rotate-180' : ''}`}
-                  />
-                )}
-              </button>
-
-              {activeDropdown === 'reports' && !sidebarCollapsed && (
-                <div className="mt-1 ml-10 space-y-1">
-                  <Link
-                    href="/reports/releases"
+            {/* Render main menu items */}
+            {navigation.mainMenu.items.map((item) => (
+              item.dropdown ? (
+                <div key={item.id}>
+                  <button
+                    onClick={() => toggleDropdown(item.id)}
                     className={`
-                      flex items-center gap-3 px-3 py-2 rounded-md text-sm
-                      ${pathname === '/reports/releases' ? 'text-primary font-medium' : 'text-muted-foreground'}
+                      flex items-center w-full gap-3 px-3 py-2.5 rounded-md text-sm font-medium
+                      ${pathname?.startsWith(item.href) ? 'text-primary' : 'text-muted-foreground'} 
                       hover:bg-muted hover:text-foreground transition-colors
+                      ${sidebarCollapsed ? 'justify-center' : 'justify-between'}
                     `}
                   >
-                    <span>Releases</span>
-                  </Link>
-                  <Link
-                    href="/reports/velocity"
-                    className={`
-                      flex items-center gap-3 px-3 py-2 rounded-md text-sm
-                      ${pathname === '/reports/velocity' ? 'text-primary font-medium' : 'text-muted-foreground'}
-                      hover:bg-muted hover:text-foreground transition-colors
-                    `}
-                  >
-                    <span>Velocity</span>
-                  </Link>
-                </div>
-              )}
-            </div>
+                    <div className="flex items-center gap-3">
+                      <span className="flex-shrink-0">
+                        {getIconByName(item.icon)}
+                      </span>
+                      {!sidebarCollapsed && <span>{item.label}</span>}
+                    </div>
+                    {!sidebarCollapsed && (
+                      <ChevronDown
+                        className={`h-4 w-4 transition-transform ${activeDropdown === item.id ? 'rotate-180' : ''}`}
+                      />
+                    )}
+                  </button>
 
-            <EnhancedNavItem
-              href="/analytics"
-              icon={<BarChart className="h-4 w-4" />}
-              label="Analytics"
-              isActive={pathname === '/analytics'}
-              collapsed={sidebarCollapsed}
-            />
+                  {activeDropdown === item.id && !sidebarCollapsed && item.items && (
+                    <div className="mt-1 ml-10 space-y-1">
+                      {item.items.map((subItem) => (
+                        <Link
+                          key={subItem.id}
+                          href={subItem.href}
+                          className={`
+                            flex items-center gap-3 px-3 py-2 rounded-md text-sm
+                            ${pathname === subItem.href ? 'text-primary font-medium' : 'text-muted-foreground'}
+                            hover:bg-muted hover:text-foreground transition-colors
+                          `}
+                        >
+                          <span>{subItem.label}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <EnhancedNavItem
+                  key={item.id}
+                  href={item.href}
+                  icon={getIconByName(item.icon)}
+                  label={item.label}
+                  isActive={pathname === item.href}
+                  badge={item.badge}
+                  collapsed={sidebarCollapsed}
+                />
+              )
+            ))}
 
             {/* Management Section */}
             <div className={`mt-6 mb-3 ${sidebarCollapsed ? 'pl-0 text-center' : 'pl-3'}`}>
-              {!sidebarCollapsed && <p className="text-xs uppercase tracking-wider font-semibold text-muted-foreground mb-2">Management</p>}
+              {!sidebarCollapsed && <p className="text-xs uppercase tracking-wider font-semibold text-muted-foreground mb-2">{navigation.managementMenu.title}</p>}
               {sidebarCollapsed && <div className="border-t mb-6 mt-6"></div>}
             </div>
 
-            <EnhancedNavItem
-              href="/users"
-              icon={<Users className="h-4 w-4" />}
-              label="Users"
-              isActive={pathname === '/users'}
-              collapsed={sidebarCollapsed}
-            />
-
-            <EnhancedNavItem
-              href="/organization"
-              icon={<Building2 className="h-4 w-4" />}
-              label="Organization"
-              isActive={pathname === '/organization'}
-              collapsed={sidebarCollapsed}
-            />
-
-            <EnhancedNavItem
-              href="/settings"
-              icon={<Settings className="h-4 w-4" />}
-              label="Settings"
-              isActive={pathname === '/settings'}
-              collapsed={sidebarCollapsed}
-            />
+            {/* Render management menu items */}
+            {navigation.managementMenu.items.map((item) => (
+              <EnhancedNavItem
+                key={item.id}
+                href={item.href}
+                icon={getIconByName(item.icon)}
+                label={item.label}
+                isActive={pathname === item.href}
+                collapsed={sidebarCollapsed}
+              />
+            ))}
           </nav>
 
           {/* Footer */}
@@ -403,28 +384,22 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
                 <div className="bg-muted/50 rounded-lg p-3">
                   <div className="flex items-center gap-3 mb-2">
                     <Activity className="h-5 w-5 text-primary" />
-                    <span className="font-medium">Usage</span>
+                    <span className="font-medium">{usage.title}</span>
                   </div>
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="bg-primary h-full w-3/4 rounded-full"></div>
+                    <div
+                      className="bg-primary h-full rounded-full"
+                      style={{ width: `${usage.percentage}%` }}
+                    ></div>
                   </div>
                   <div className="mt-2 text-xs text-muted-foreground">
-                    75% of your usage for July
+                    {usage.percentage}% of your usage for {usage.period}
                   </div>
                 </div>
               </div>
             )}
 
-            <div className="flex items-center justify-between px-3 mb-2">
-              <button className={`
-                flex items-center gap-2 py-2.5 rounded-md text-sm text-muted-foreground 
-                hover:bg-destructive/10 hover:text-destructive transition-colors
-                ${sidebarCollapsed ? 'justify-center w-full' : 'px-3'}
-              `}>
-                <LogOut className="h-4 w-4" />
-                {!sidebarCollapsed && <span>Log out</span>}
-              </button>
-
+            <div className="flex items-center justify-end px-3 mb-2">
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -432,7 +407,7 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
                       variant="ghost"
                       size="icon"
                       onClick={toggleSidebarCollapse}
-                      className={`h-9 w-9 ${sidebarCollapsed ? 'w-full flex justify-center mt-2' : ''}`}
+                      className="h-9 w-9"
                     >
                       <PanelLeft className={`h-4 w-4 ${sidebarCollapsed ? 'rotate-180' : ''}`} />
                     </Button>

@@ -1,0 +1,739 @@
+{
+  "app": {
+    "name": "Codex",
+    "version": "1.0.0",
+    "logo": {
+      "symbol": "C",
+      "gradientFrom": "indigo-600",
+      "gradientTo": "purple-700"
+    },
+    "user": {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "avatar": {
+        "initials": "JD",
+        "image": "/images/avatar.jpg"
+      }
+    }
+  },
+  "navigation": {
+    "mainMenu": {
+      "title": "Main Menu",
+      "items": [
+        {
+          "id": "dashboard",
+          "label": "Dashboard",
+          "href": "/",
+          "icon": "Home"
+        },
+        {
+          "id": "tasks",
+          "label": "Tasks",
+          "href": "/tasks",
+          "icon": "CheckSquare",
+          "badge": "12"
+        },
+        {
+          "id": "projects",
+          "label": "Projects",
+          "href": "/projects",
+          "icon": "FolderOpen"
+        },
+        {
+          "id": "reports",
+          "label": "Reports",
+          "href": "/reports",
+          "icon": "FileCode",
+          "dropdown": true,
+          "items": [
+            {
+              "id": "reports-releases",
+              "label": "Releases",
+              "href": "/reports/releases"
+            },
+            {
+              "id": "reports-velocity",
+              "label": "Velocity",
+              "href": "/reports/velocity"
+            }
+          ]
+        },
+        {
+          "id": "analytics",
+          "label": "Analytics",
+          "href": "/analytics",
+          "icon": "BarChart"
+        }
+      ]
+    },
+    "managementMenu": {
+      "title": "Management",
+      "items": [
+        {
+          "id": "users",
+          "label": "Users",
+          "href": "/users",
+          "icon": "Users"
+        },
+        {
+          "id": "organization",
+          "label": "Organization",
+          "href": "/organization",
+          "icon": "Building2"
+        },
+        {
+          "id": "settings",
+          "label": "Settings",
+          "href": "/settings",
+          "icon": "Settings"
+        }
+      ]
+    }
+  },
+  "notifications": {
+    "count": 3,
+    "items": [
+      {
+        "id": "notification-1",
+        "title": "New task assigned",
+        "description": "You have been assigned a new task: Design Updates",
+        "time": "10 min ago"
+      },
+      {
+        "id": "notification-2",
+        "title": "Meeting reminder",
+        "description": "Team standup in 30 minutes",
+        "time": "25 min ago"
+      },
+      {
+        "id": "notification-3",
+        "title": "Project deadline approaching",
+        "description": "Dashboard redesign due in 2 days",
+        "time": "Yesterday"
+      }
+    ]
+  },
+  "userMenu": {
+    "title": "My Account",
+    "items": [
+      {
+        "id": "profile",
+        "label": "Profile",
+        "icon": "User"
+      },
+      {
+        "id": "settings",
+        "label": "Settings",
+        "icon": "Settings"
+      },
+      {
+        "id": "activity",
+        "label": "Activity Log",
+        "icon": "FileText"
+      },
+      {
+        "id": "help",
+        "label": "Help & Support",
+        "icon": "HelpCircle"
+      },
+      {
+        "id": "logout",
+        "label": "Log out",
+        "icon": "LogOut",
+        "destructive": true
+      }
+    ]
+  },
+  "usage": {
+    "percentage": 75,
+    "period": "July",
+    "title": "Usage"
+  },
+  "dashboard": {
+    "stats": {
+      "totalProjects": 24,
+      "totalProjectsChange": 12,
+      "activeProjects": 8,
+      "activeProjectsChange": 25,
+      "teamMembers": 16,
+      "teamMembersChange": 3,
+      "completionRate": 68,
+      "completionRateChange": 10
+    },
+    "projectStatus": [
+      {
+        "month": "Jan",
+        "completed": 5,
+        "inProgress": 8
+      },
+      {
+        "month": "Feb",
+        "completed": 8,
+        "inProgress": 10
+      },
+      {
+        "month": "Mar",
+        "completed": 12,
+        "inProgress": 7
+      },
+      {
+        "month": "Apr",
+        "completed": 10,
+        "inProgress": 9
+      },
+      {
+        "month": "May",
+        "completed": 15,
+        "inProgress": 5
+      },
+      {
+        "month": "Jun",
+        "completed": 18,
+        "inProgress": 10
+      }
+    ],
+    "tasksOverview": [
+      {
+        "name": "Completed",
+        "value": 45
+      },
+      {
+        "name": "In Progress",
+        "value": 30
+      },
+      {
+        "name": "Pending",
+        "value": 15
+      },
+      {
+        "name": "Overdue",
+        "value": 10
+      }
+    ]
+  },
+  "projects": [
+    {
+      "id": "project-1",
+      "name": "Website Redesign",
+      "description": "Redesigning the company website with modern UI/UX principles",
+      "status": "active",
+      "category": "Design",
+      "progress": 65,
+      "priority": "high",
+      "tasks": {
+        "completed": 12,
+        "total": 20
+      },
+      "deadline": "2023-08-15"
+    },
+    {
+      "id": "project-2",
+      "name": "Mobile App Development",
+      "description": "Developing a new mobile app for iOS and Android platforms",
+      "status": "active",
+      "category": "Development",
+      "progress": 40,
+      "priority": "high",
+      "tasks": {
+        "completed": 8,
+        "total": 25
+      },
+      "deadline": "2023-09-30"
+    },
+    {
+      "id": "project-3",
+      "name": "Marketing Campaign",
+      "description": "Q3 digital marketing campaign for the new product line",
+      "status": "planned",
+      "category": "Marketing",
+      "progress": 10,
+      "priority": "medium",
+      "tasks": {
+        "completed": 2,
+        "total": 18
+      },
+      "deadline": "2023-10-15"
+    },
+    {
+      "id": "project-4",
+      "name": "Database Migration",
+      "description": "Migrating from legacy database to new cloud-based solution",
+      "status": "completed",
+      "category": "Infrastructure",
+      "progress": 100,
+      "priority": "low",
+      "tasks": {
+        "completed": 15,
+        "total": 15
+      },
+      "deadline": "2023-07-15"
+    },
+    {
+      "id": "project-5",
+      "name": "Security Audit",
+      "description": "Comprehensive security audit and penetration testing",
+      "status": "active",
+      "category": "Security",
+      "progress": 75,
+      "priority": "high",
+      "tasks": {
+        "completed": 9,
+        "total": 12
+      },
+      "deadline": "2023-08-05"
+    },
+    {
+      "id": "project-6",
+      "name": "Content Strategy",
+      "description": "Developing content strategy for social media channels",
+      "status": "planned",
+      "category": "Marketing",
+      "progress": 0,
+      "priority": "medium",
+      "tasks": {
+        "completed": 0,
+        "total": 10
+      },
+      "deadline": "2023-08-30"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task-1",
+      "title": "Design homepage wireframes",
+      "description": "Create wireframes for the homepage redesign",
+      "status": "completed",
+      "priority": "high",
+      "assignee": {
+        "name": "Sarah Johnson",
+        "avatar": "SJ"
+      },
+      "project": "Website Redesign",
+      "dueDate": "2023-07-20",
+      "tags": ["design", "wireframe"]
+    },
+    {
+      "id": "task-2",
+      "title": "Implement authentication system",
+      "description": "Build user authentication and authorization system",
+      "status": "in-progress",
+      "priority": "high",
+      "assignee": {
+        "name": "John Doe",
+        "avatar": "JD"
+      },
+      "project": "Mobile App Development",
+      "dueDate": "2023-08-05",
+      "tags": ["development", "security"]
+    },
+    {
+      "id": "task-3",
+      "title": "Create marketing assets",
+      "description": "Design and create assets for the marketing campaign",
+      "status": "pending",
+      "priority": "medium",
+      "assignee": {
+        "name": "Mike Wilson",
+        "avatar": "MW"
+      },
+      "project": "Marketing Campaign",
+      "dueDate": "2023-08-10",
+      "tags": ["marketing", "design"]
+    },
+    {
+      "id": "task-4",
+      "title": "Database schema optimization",
+      "description": "Optimize database schema for better performance",
+      "status": "completed",
+      "priority": "low",
+      "assignee": {
+        "name": "Emily Chen",
+        "avatar": "EC"
+      },
+      "project": "Database Migration",
+      "dueDate": "2023-07-05",
+      "tags": ["database", "performance"]
+    },
+    {
+      "id": "task-5",
+      "title": "User testing",
+      "description": "Conduct user testing sessions for the new interface",
+      "status": "in-progress",
+      "priority": "medium",
+      "assignee": {
+        "name": "Sarah Johnson",
+        "avatar": "SJ"
+      },
+      "project": "Website Redesign",
+      "dueDate": "2023-08-12",
+      "tags": ["testing", "user experience"]
+    }
+  ],
+  "users": [
+    {
+      "id": "user-1",
+      "name": "John Doe",
+      "email": "john@example.com",
+      "role": "Administrator",
+      "status": "active",
+      "avatar": "JD",
+      "department": "Engineering",
+      "joinDate": "2022-01-15"
+    },
+    {
+      "id": "user-2",
+      "name": "Sarah Johnson",
+      "email": "sarah@example.com",
+      "role": "Designer",
+      "status": "active",
+      "avatar": "SJ",
+      "department": "Design",
+      "joinDate": "2022-02-10"
+    },
+    {
+      "id": "user-3",
+      "name": "Mike Wilson",
+      "email": "mike@example.com",
+      "role": "Marketing Specialist",
+      "status": "active",
+      "avatar": "MW",
+      "department": "Marketing",
+      "joinDate": "2022-03-22"
+    },
+    {
+      "id": "user-4",
+      "name": "Emily Chen",
+      "email": "emily@example.com",
+      "role": "Developer",
+      "status": "active",
+      "avatar": "EC",
+      "department": "Engineering",
+      "joinDate": "2022-01-05"
+    },
+    {
+      "id": "user-5",
+      "name": "Alex Rodriguez",
+      "email": "alex@example.com",
+      "role": "Product Manager",
+      "status": "inactive",
+      "avatar": "AR",
+      "department": "Product",
+      "joinDate": "2021-11-18"
+    }
+  ],
+  "reports": {
+    "releases": [
+      {
+        "id": "release-1",
+        "version": "1.0.0",
+        "name": "Initial Release",
+        "description": "First public release of the platform",
+        "releaseDate": "2023-01-15",
+        "status": "completed",
+        "features": 15,
+        "bugfixes": 8,
+        "commits": 124,
+        "contributors": ["user-1", "user-2", "user-3"],
+        "developmentTime": 45,
+        "manager": "user-1",
+        "changes": [
+          { "type": "feature", "title": "User authentication", "scope": "core" },
+          { "type": "feature", "title": "Dashboard layout", "scope": "UI" },
+          { "type": "bugfix", "title": "Login page redirect", "scope": "auth" }
+        ]
+      },
+      {
+        "id": "release-2",
+        "version": "1.1.0",
+        "name": "Feature Update",
+        "description": "New features and improvements",
+        "releaseDate": "2023-03-10",
+        "status": "completed",
+        "features": 12,
+        "bugfixes": 14,
+        "commits": 98,
+        "contributors": ["user-1", "user-4"],
+        "developmentTime": 32,
+        "manager": "user-4",
+        "changes": [
+          { "type": "feature", "title": "Advanced filtering", "scope": "data" },
+          { "type": "improvement", "title": "Performance optimizations", "scope": "backend" },
+          { "type": "bugfix", "title": "Chart rendering issues", "scope": "UI" }
+        ]
+      },
+      {
+        "id": "release-3",
+        "version": "1.2.0",
+        "name": "Enhancement Release",
+        "description": "Performance enhancements and new capabilities",
+        "releaseDate": "2023-05-22",
+        "status": "completed",
+        "features": 8,
+        "bugfixes": 11,
+        "commits": 76,
+        "contributors": ["user-1", "user-2", "user-5"],
+        "developmentTime": 28,
+        "manager": "user-1",
+        "changes": [
+          { "type": "feature", "title": "Export to multiple formats", "scope": "data" },
+          { "type": "improvement", "title": "Mobile responsiveness", "scope": "UI" },
+          { "type": "bugfix", "title": "Date formatting issues", "scope": "core" }
+        ]
+      },
+      {
+        "id": "release-4",
+        "version": "1.3.0",
+        "name": "Major Update",
+        "description": "Significant new features and interface improvements",
+        "releaseDate": "2023-08-15",
+        "status": "in-progress",
+        "features": 20,
+        "bugfixes": 16,
+        "commits": 112,
+        "contributors": ["user-1", "user-3", "user-4", "user-5"],
+        "developmentTime": 40,
+        "manager": "user-1",
+        "changes": [
+          { "type": "feature", "title": "Theme customization", "scope": "UI" },
+          { "type": "feature", "title": "API version 2", "scope": "backend" },
+          { "type": "improvement", "title": "Security enhancements", "scope": "core" }
+        ]
+      }
+    ],
+    "velocity": {
+      "sprints": [
+        {
+          "id": "sprint-1",
+          "name": "Sprint 1",
+          "startDate": "2023-01-01",
+          "endDate": "2023-01-14",
+          "completedPoints": 42,
+          "committedPoints": 50
+        },
+        {
+          "id": "sprint-2",
+          "name": "Sprint 2",
+          "startDate": "2023-01-15",
+          "endDate": "2023-01-28",
+          "completedPoints": 38,
+          "committedPoints": 45
+        },
+        {
+          "id": "sprint-3",
+          "name": "Sprint 3",
+          "startDate": "2023-01-29",
+          "endDate": "2023-02-11",
+          "completedPoints": 47,
+          "committedPoints": 50
+        },
+        {
+          "id": "sprint-4",
+          "name": "Sprint 4",
+          "startDate": "2023-02-12",
+          "endDate": "2023-02-25",
+          "completedPoints": 52,
+          "committedPoints": 55
+        },
+        {
+          "id": "sprint-5",
+          "name": "Sprint 5",
+          "startDate": "2023-02-26",
+          "endDate": "2023-03-11",
+          "completedPoints": 58,
+          "committedPoints": 60
+        },
+        {
+          "id": "sprint-6",
+          "name": "Sprint 6",
+          "startDate": "2023-03-12",
+          "endDate": "2023-03-25",
+          "completedPoints": 61,
+          "committedPoints": 65
+        }
+      ]
+    },
+    "metrics": {
+      "releaseFrequency": {
+        "monthly": 1.5,
+        "quarterly": 4.5,
+        "changeFromLastQuarter": 12.5
+      },
+      "releaseQuality": {
+        "defectRate": 0.05,
+        "rollbackRate": 0.02,
+        "changeFromLastQuarter": -15.0
+      },
+      "developmentEfficiency": {
+        "averageCycleTime": 15.2,
+        "averageFeatureCount": 8.5,
+        "changeFromLastQuarter": 8.0
+      }
+    }
+  },
+  "analytics": {
+    "overview": {
+      "projectCompletion": [
+        { "month": "Jan", "value": 65 },
+        { "month": "Feb", "value": 72 },
+        { "month": "Mar", "value": 78 },
+        { "month": "Apr", "value": 74 },
+        { "month": "May", "value": 85 },
+        { "month": "Jun", "value": 82 }
+      ],
+      "taskDistribution": {
+        "development": 35,
+        "design": 25,
+        "marketing": 15,
+        "research": 10,
+        "other": 15
+      },
+      "teamPerformance": [
+        { "name": "Engineering", "tasks": 120, "completed": 95 },
+        { "name": "Design", "tasks": 84, "completed": 72 },
+        { "name": "Marketing", "tasks": 56, "completed": 48 },
+        { "name": "Product", "tasks": 65, "completed": 60 }
+      ],
+      "timeTracking": {
+        "development": 450,
+        "meetings": 120,
+        "planning": 80,
+        "research": 100,
+        "other": 50
+      }
+    }
+  },
+  "organization": {
+    "name": "Acme Inc.",
+    "tagline": "Building the future",
+    "members": {
+      "total": 28,
+      "active": 24,
+      "inactive": 4
+    },
+    "departments": [
+      {
+        "id": "dept-1",
+        "name": "Engineering",
+        "memberCount": 12,
+        "lead": "user-1"
+      },
+      {
+        "id": "dept-2",
+        "name": "Design",
+        "memberCount": 6,
+        "lead": "user-2"
+      },
+      {
+        "id": "dept-3",
+        "name": "Marketing",
+        "memberCount": 5,
+        "lead": "user-3"
+      },
+      {
+        "id": "dept-4",
+        "name": "Product",
+        "memberCount": 3,
+        "lead": "user-5"
+      },
+      {
+        "id": "dept-5",
+        "name": "Operations",
+        "memberCount": 2,
+        "lead": null
+      }
+    ],
+    "integrations": [
+      {
+        "id": "integration-1",
+        "name": "GitHub",
+        "description": "Code repository integration",
+        "isConnected": true,
+        "lastSynced": "2023-07-15"
+      },
+      {
+        "id": "integration-2",
+        "name": "Slack",
+        "description": "Team communication integration",
+        "isConnected": true,
+        "lastSynced": "2023-07-20"
+      },
+      {
+        "id": "integration-3",
+        "name": "Google Workspace",
+        "description": "Email and document integration",
+        "isConnected": false
+      },
+      {
+        "id": "integration-4",
+        "name": "Jira",
+        "description": "Issue tracking integration",
+        "isConnected": true,
+        "lastSynced": "2023-07-18"
+      }
+    ]
+  },
+  "settings": {
+    "categories": [
+      {
+        "id": "general",
+        "name": "General",
+        "icon": "Settings"
+      },
+      {
+        "id": "account",
+        "name": "Account",
+        "icon": "User"
+      },
+      {
+        "id": "notifications",
+        "name": "Notifications",
+        "icon": "Bell"
+      },
+      {
+        "id": "integrations",
+        "name": "Integrations",
+        "icon": "GitBranch"
+      },
+      {
+        "id": "appearance",
+        "name": "Appearance",
+        "icon": "Layers"
+      }
+    ],
+    "integrations": [
+      {
+        "id": "integration-1",
+        "name": "GitHub",
+        "description": "Connect your GitHub repositories",
+        "isConnected": true,
+        "lastSynced": "2023-07-15"
+      },
+      {
+        "id": "integration-2",
+        "name": "Slack",
+        "description": "Get notifications in your Slack channels",
+        "isConnected": true,
+        "lastSynced": "2023-07-20"
+      },
+      {
+        "id": "integration-3",
+        "name": "Google Workspace",
+        "description": "Integrate with Gmail and Google Drive",
+        "isConnected": false
+      },
+      {
+        "id": "integration-4",
+        "name": "Jira",
+        "description": "Sync issues with Jira",
+        "isConnected": true,
+        "lastSynced": "2023-07-18"
+      },
+      {
+        "id": "integration-5",
+        "name": "Figma",
+        "description": "View and comment on Figma designs",
+        "isConnected": false
+      }
+    ]
+  }
+} 

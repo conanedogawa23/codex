@@ -45,7 +45,7 @@ import { Label } from "@/components/ui/label"
 import { formatDate } from "@/lib/utils"
 
 // Import mock data
-import mockData from "@/data/mock-data.json"
+import mockData from "@/lib/mock-data.json"
 
 export default function TasksPage() {
   const { tasks: allTasks, users, projects } = mockData
@@ -69,10 +69,10 @@ export default function TasksPage() {
     if (priorityFilter !== "all" && task.priority !== priorityFilter) return false
 
     // Project filter
-    if (projectFilter !== "all" && task.projectId !== projectFilter) return false
+    if (projectFilter !== "all" && task.project !== projectFilter) return false
 
     // Assignee filter
-    if (assigneeFilter !== "all" && task.assignedTo !== assigneeFilter) return false
+    if (assigneeFilter !== "all" && task.assignee.name !== assigneeFilter) return false
 
     // Search filter
     if (searchQuery && !task.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
@@ -306,9 +306,13 @@ export default function TasksPage() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="all">All Projects</SelectItem>
-                          {projects.map(project => (
-                            <SelectItem key={project.id} value={project.id}>{project.name}</SelectItem>
-                          ))}
+                          {tasks
+                            .map(task => task.project)
+                            .filter((value, index, self) => self.indexOf(value) === index)
+                            .map(project => (
+                              <SelectItem key={project} value={project}>{project}</SelectItem>
+                            ))
+                          }
                         </SelectContent>
                       </Select>
                     </div>
@@ -324,9 +328,13 @@ export default function TasksPage() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="all">All Assignees</SelectItem>
-                          {users.map(user => (
-                            <SelectItem key={user.id} value={user.id}>{user.name}</SelectItem>
-                          ))}
+                          {tasks
+                            .map(task => task.assignee.name)
+                            .filter((value, index, self) => self.indexOf(value) === index)
+                            .map(name => (
+                              <SelectItem key={name} value={name}>{name}</SelectItem>
+                            ))
+                          }
                         </SelectContent>
                       </Select>
                     </div>
@@ -414,112 +422,108 @@ export default function TasksPage() {
               <div>
                 {tasks.length > 0 ? (
                   tasks.map((task, index) => {
-                    const assignedUser = getUserById(task.assignedTo);
-                    const project = getProjectById(task.projectId);
+                    const assignedUser = getUserById(task.assignee.id);
+                    const project = getProjectById(task.project);
 
                     return (
-                      <div key={task.id}>
-                        {index > 0 && <Separator />}
-                        {/* Mobile view */}
-                        <div className="block md:hidden p-4">
-                          <div className="flex justify-between items-start mb-3 gap-3">
-                            <div className="flex items-start gap-3 min-w-0">
-                              <div className="mt-1 shrink-0">
-                                {getStatusIcon(task.status)}
+                      <div
+                        key={task.id}
+                        className={`
+                          p-4 border-b last:border-b-0 hover:bg-muted/40 transition-colors
+                          ${index % 2 === 0 ? 'bg-background' : 'bg-muted/20'}
+                        `}
+                      >
+                        <div className="flex items-start gap-4">
+                          {/* Task Status Icon */}
+                          <div className="mt-1">
+                            {getStatusIcon(task.status)}
+                          </div>
+
+                          {/* Task Content */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                              <h3 className="font-medium truncate">{task.title}</h3>
+                              <div className="flex items-center gap-2">
+                                <Badge className={getStatusColor(task.status)}>
+                                  {task.status === 'completed' ? 'Completed' :
+                                    task.status === 'in-progress' ? 'In Progress' : 'To Do'}
+                                </Badge>
+                                <Badge className={getPriorityColor(task.priority)}>
+                                  {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
+                                </Badge>
                               </div>
-                              <div className="min-w-0">
-                                <div className="font-medium text-sm sm:text-base line-clamp-1">{task.title}</div>
-                                <div className="text-xs text-muted-foreground line-clamp-2 mt-1">{task.description}</div>
-                                <div className="flex flex-wrap gap-2 mt-2">
-                                  <Badge className={getStatusColor(task.status)}>{task.status}</Badge>
-                                  <Badge className={getPriorityColor(task.priority)}>{task.priority}</Badge>
+                            </div>
+
+                            <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                              {task.description}
+                            </p>
+
+                            <div className="flex flex-wrap items-center gap-3 mt-3">
+                              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                <span>Project:</span>
+                                <span className="font-medium">{task.project}</span>
+                              </div>
+                              {task.dueDate && (
+                                <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                  <span>Due:</span>
+                                  <span className={`font-medium ${isPastDue(task.dueDate) ? 'text-red-600' : ''}`}>
+                                    {formatTaskDate(task.dueDate)}
+                                  </span>
+                                </div>
+                              )}
+                              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                <span>Assignee:</span>
+                                <div className="flex items-center gap-1">
+                                  <Avatar className="h-5 w-5">
+                                    <AvatarFallback className="text-[10px]">
+                                      {task.assignee.avatar}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                  <span className="font-medium">{task.assignee.name}</span>
                                 </div>
                               </div>
                             </div>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                                  <MoreHorizontal className="h-4 w-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem>
-                                  <Edit className="h-4 w-4 mr-2" />
-                                  <span>Edit</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem className="text-red-600">
-                                  <Trash2 className="h-4 w-4 mr-2" />
-                                  <span>Delete</span>
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </div>
-                          <div className="grid grid-cols-2 gap-y-2 text-sm">
-                            <div>
-                              <span className="text-xs text-muted-foreground">Project</span>
-                              <div className="font-medium truncate">{project?.name}</div>
-                            </div>
-                            <div>
-                              <span className="text-xs text-muted-foreground">Assignee</span>
-                              <div className="flex items-center gap-2">
-                                <Avatar className="h-5 w-5">
-                                  <AvatarImage src={assignedUser?.avatar} />
-                                  <AvatarFallback className="text-[10px]">{assignedUser ? getInitials(assignedUser.name) : 'UN'}</AvatarFallback>
-                                </Avatar>
-                                <span className="font-medium truncate">{assignedUser?.name}</span>
-                              </div>
-                            </div>
-                            <div className="col-span-2">
-                              <span className="text-xs text-muted-foreground">Due Date</span>
-                              <div className={`font-medium ${isPastDue(task.dueDate) ? 'text-red-600' : ''}`}>{formatTaskDate(task.dueDate)}</div>
-                            </div>
-                          </div>
-                        </div>
 
-                        {/* Desktop view */}
-                        <div className="hidden md:grid md:grid-cols-12 md:items-center py-3 px-4">
-                          <div className="col-span-5 flex items-center gap-3 min-w-0">
-                            <div>
-                              {getStatusIcon(task.status)}
-                            </div>
-                            <div className="min-w-0">
-                              <div className="font-medium line-clamp-1">{task.title}</div>
-                              <div className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{task.description}</div>
-                            </div>
+                            {/* Task Tags */}
+                            {task.tags && task.tags.length > 0 && (
+                              <div className="flex flex-wrap gap-1 mt-3">
+                                {task.tags.map(tag => (
+                                  <Badge
+                                    key={tag}
+                                    variant="outline"
+                                    className="bg-background/80 text-xs py-0 h-5"
+                                  >
+                                    {tag}
+                                  </Badge>
+                                ))}
+                              </div>
+                            )}
                           </div>
-                          <div className="col-span-2 truncate">
-                            <span className="text-sm font-medium">{project?.name}</span>
-                          </div>
-                          <div className="col-span-1">
-                            <Badge className={getPriorityColor(task.priority)}>{task.priority}</Badge>
-                          </div>
-                          <div className="col-span-2">
-                            <div className="flex items-center gap-2">
-                              <Avatar className="h-6 w-6">
-                                <AvatarImage src={assignedUser?.avatar} />
-                                <AvatarFallback>{assignedUser ? getInitials(assignedUser.name) : 'UN'}</AvatarFallback>
-                              </Avatar>
-                              <span className="text-sm font-medium truncate">{assignedUser?.name}</span>
-                            </div>
-                          </div>
-                          <div className="col-span-1">
-                            <span className={`text-sm ${isPastDue(task.dueDate) ? 'text-red-600 font-medium' : ''}`}>{formatTaskDate(task.dueDate)}</span>
-                          </div>
-                          <div className="col-span-1 text-right">
+
+                          {/* Actions */}
+                          <div>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
                                   <MoreHorizontal className="h-4 w-4" />
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
                                 <DropdownMenuItem>
                                   <Edit className="h-4 w-4 mr-2" />
-                                  <span>Edit</span>
+                                  Edit Task
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="text-red-600">
+                                <DropdownMenuItem>
+                                  <CheckCircle2 className="h-4 w-4 mr-2" />
+                                  Mark as Completed
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  <Clock className="h-4 w-4 mr-2" />
+                                  Set as In Progress
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="text-destructive">
                                   <Trash2 className="h-4 w-4 mr-2" />
-                                  <span>Delete</span>
+                                  Delete Task
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>

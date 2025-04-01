@@ -8,7 +8,7 @@ import { ChartContainer } from "@/components/ui/chart"
 import { BarChart, PieChart, Bar, Pie, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Cell } from "recharts"
 
 // Import mock data
-import mockData from "@/data/mock-data.json"
+import mockData from "@/lib/mock-data.json"
 
 export default function Home() {
   // Use the mock data from our JSON file
@@ -76,14 +76,14 @@ export default function Home() {
             <CardTitle>Project Status</CardTitle>
           </CardHeader>
           <CardContent>
-            <ChartContainer 
+            <ChartContainer
               className="h-[300px]"
               config={{
-                completed: { 
-                  theme: { light: "hsl(var(--chart-1))", dark: "hsl(var(--chart-1))" } 
+                completed: {
+                  theme: { light: "hsl(var(--chart-1))", dark: "hsl(var(--chart-1))" }
                 },
-                inProgress: { 
-                  theme: { light: "hsl(var(--chart-2))", dark: "hsl(var(--chart-2))" } 
+                inProgress: {
+                  theme: { light: "hsl(var(--chart-2))", dark: "hsl(var(--chart-2))" }
                 }
               }}
             >
@@ -104,7 +104,7 @@ export default function Home() {
             <CardTitle>Tasks Overview</CardTitle>
           </CardHeader>
           <CardContent>
-            <ChartContainer 
+            <ChartContainer
               className="h-[300px]"
               config={{
                 "0": { theme: { light: "hsl(var(--chart-1))", dark: "hsl(var(--chart-1))" } },
