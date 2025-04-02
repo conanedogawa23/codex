@@ -60,6 +60,11 @@
               "id": "reports-velocity",
               "label": "Velocity",
               "href": "/reports/velocity"
+            },
+            {
+              "id": "reports-cost-analysis",
+              "label": "Cost Analysis",
+              "href": "/reports/cost-analysis"
             }
           ]
         },
@@ -633,6 +638,135 @@
           "endDate": "2023-03-25",
           "completedPoints": 61,
           "committedPoints": 65
+        }
+      ]
+    },
+    "costAnalysis": {
+      "costComparison": [
+        {
+          "name": "Project A",
+          "estimated": 50000,
+          "actual": 20000
+        },
+        {
+          "name": "Project B",
+          "estimated": 50000,
+          "actual": 20000
+        },
+        {
+          "name": "Project C",
+          "estimated": 50000,
+          "actual": 20000
+        },
+        {
+          "name": "Project D",
+          "estimated": 50000,
+          "actual": 20000
+        },
+        {
+          "name": "Project E",
+          "estimated": 50000,
+          "actual": 20000
+        }
+      ],
+      "overrunReasons": [
+        {
+          "name": "Resource Mismanagement",
+          "value": 50
+        },
+        {
+          "name": "Unexpected Delays",
+          "value": 20
+        },
+        {
+          "name": "Market Price Changes",
+          "value": 15
+        },
+        {
+          "name": "Scope Creep",
+          "value": 15
+        }
+      ],
+      "projectDetails": [
+        {
+          "name": "E-Commerce Platform",
+          "estimatedBudget": "50,000",
+          "actualCost": "20,000",
+          "costPerHour": "50",
+          "resourcesUtilized": "1200",
+          "costOverruns": "0 - Completed under budget"
+        },
+        {
+          "name": "Mobile Banking App",
+          "estimatedBudget": "50,000",
+          "actualCost": "20,000",
+          "costPerHour": "30",
+          "resourcesUtilized": "53",
+          "costOverruns": "5,000 KWD - Additional features added"
+        },
+        {
+          "name": "AI Chatbot Integration",
+          "estimatedBudget": "50,000",
+          "actualCost": "20,000",
+          "costPerHour": "43",
+          "resourcesUtilized": "54",
+          "costOverruns": "5,000 KWD - Additional features added"
+        },
+        {
+          "name": "Health Tracker App",
+          "estimatedBudget": "50,000",
+          "actualCost": "20,000",
+          "costPerHour": "23",
+          "resourcesUtilized": "64",
+          "costOverruns": "5,000 KWD - Additional features added"
+        },
+        {
+          "name": "CRM System",
+          "estimatedBudget": "50,000",
+          "actualCost": "20,000",
+          "costPerHour": "42",
+          "resourcesUtilized": "66",
+          "costOverruns": "5,000 KWD - Additional features added"
+        },
+        {
+          "name": "Learning Management",
+          "estimatedBudget": "50,000",
+          "actualCost": "20,000",
+          "costPerHour": "32",
+          "resourcesUtilized": "23",
+          "costOverruns": "0 - Completed under budget"
+        },
+        {
+          "name": "CRM System",
+          "estimatedBudget": "50,000",
+          "actualCost": "20,000",
+          "costPerHour": "22",
+          "resourcesUtilized": "32",
+          "costOverruns": "0 - Completed under budget"
+        },
+        {
+          "name": "Learning Management",
+          "estimatedBudget": "50,000",
+          "actualCost": "20,000",
+          "costPerHour": "10",
+          "resourcesUtilized": "77",
+          "costOverruns": "0 - Completed under budget"
+        },
+        {
+          "name": "CRM System",
+          "estimatedBudget": "50,000",
+          "actualCost": "20,000",
+          "costPerHour": "12",
+          "resourcesUtilized": "78",
+          "costOverruns": "0 - Completed under budget"
+        },
+        {
+          "name": "AI Chatbot Integration",
+          "estimatedBudget": "50,000",
+          "actualCost": "20,000",
+          "costPerHour": "15",
+          "resourcesUtilized": "89",
+          "costOverruns": "0 - Completed under budget"
         }
       ]
     },
