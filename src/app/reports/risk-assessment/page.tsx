@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search, ChevronLeft, ChevronRight } from "lucide-react"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
-import { ChartContainer } from "@/components/ui/chart"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import {
     PieChart,
     Pie,
@@ -20,9 +20,9 @@ import {
     ResponsiveContainer,
     Legend
 } from "recharts"
-import { BreadcrumbIcons } from "@/components/ui/custom-breadcrumb"
-import { PageLayout } from "@/components/layout/page-layout"
-import { formatDate } from "@/lib/date-utils"
+import { SidebarLayout } from "@/components/layout/sidebar-layout"
+import { Breadcrumb } from "@/components/ui/breadcrumbs"
+import { Badge } from "@/components/ui/badge"
 
 // Define risk status types for styling
 type RiskStatus = "Open" | "Mitigated" | "Resolved"
@@ -73,58 +73,53 @@ const generateRiskData = () => {
 // Generate chart data for risk status distribution
 const generateRiskStatusData = () => {
     return [
-        { name: "Open", value: 3, color: "#5856D6" },
-        { name: "Mitigated", value: 4, color: "#FE9802" },
-        { name: "Resolved", value: 3, color: "#00B290" }
+        { name: "Open", value: 3 },
+        { name: "Mitigated", value: 4 },
+        { name: "Resolved", value: 3 }
     ]
 }
 
 // Generate chart data for risk severity levels
 const generateRiskSeverityData = () => {
     return [
-        { name: "High", value: 40, color: "#5856D6" },
-        { name: "Medium", value: 20, color: "#FE9802" },
-        { name: "Low", value: 20, color: "#00B290" },
-        { name: "Critical", value: 20, color: "#F7524A" }
+        { name: "High", value: 40 },
+        { name: "Medium", value: 20 },
+        { name: "Low", value: 20 },
+        { name: "Critical", value: 20 }
     ]
 }
 
-// Component for rendering risk status badges
-const RiskStatusBadge = ({ status }: { status: RiskStatus }) => {
-    const statusStyles = {
-        Open: "bg-[rgba(88,86,214,0.08)] text-[#5856D6]",
-        Mitigated: "bg-[rgba(254,152,2,0.08)] text-[#FE9802]",
-        Resolved: "bg-[rgba(0,178,144,0.08)] text-[#00B290]"
+// Helper to get status variant
+const getStatusVariant = (status: RiskStatus) => {
+    switch (status) {
+        case "Open": return "default"
+        case "Mitigated": return "warning"
+        case "Resolved": return "success"
     }
-
-    return (
-        <div className={`px-2 py-1 rounded text-xs font-medium inline-flex items-center ${statusStyles[status]}`}>
-            {status}
-        </div>
-    )
 }
 
-// Component for rendering severity level badges
-const SeverityLevelBadge = ({ level }: { level: SeverityLevel }) => {
-    const levelStyles = {
-        High: "bg-[rgba(88,86,214,0.08)] text-[#5856D6]",
-        Medium: "bg-[rgba(254,152,2,0.08)] text-[#FE9802]",
-        Low: "bg-[rgba(0,178,144,0.08)] text-[#00B290]",
-        Critical: "bg-[rgba(247,82,74,0.08)] text-[#F7524A]"
+// Helper to get severity variant
+const getSeverityVariant = (level: SeverityLevel) => {
+    switch (level) {
+        case "Critical": return "destructive"
+        case "High": return "destructive"
+        case "Medium": return "warning"
+        case "Low": return "success"
     }
-
-    return (
-        <div className={`px-2 py-1 rounded text-xs font-medium inline-flex items-center ${levelStyles[level]}`}>
-            {level}
-        </div>
-    )
 }
+
+
+const breadcrumbs: Breadcrumb[] = [
+    { label: "Dashboard", href: "/" },
+    { label: "Reports", href: "/reports" },
+    { label: "Risk Assessment", href: "/reports/risk-assessment", isCurrent: true },
+]
 
 // Main page component
 export default function RiskAssessmentPage() {
     const [searchQuery, setSearchQuery] = useState("")
     const [currentPage, setCurrentPage] = useState(1)
-    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [rowsPerPage] = useState(10)
 
     // Get risk data
     const risks = generateRiskData()
@@ -153,103 +148,81 @@ export default function RiskAssessmentPage() {
 
     // Render RiskStatusDistribution chart
     const RiskStatusChart = () => (
-        <div className="flex items-center justify-center h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                    data={riskStatusData}
-                    layout="vertical"
-                    margin={{ top: 20, right: 30, left: 20, bottom: 30 }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
-                    <XAxis type="number" domain={[0, 60]} tickCount={7} />
-                    <YAxis
-                        type="category"
-                        dataKey="name"
-                        axisLine={false}
-                        tickLine={false}
-                    />
-                    <Tooltip />
-                    <Legend />
-                    <Bar
-                        dataKey="value"
-                        name="Number of Risks"
-                        radius={[0, 4, 4, 0]}
-                    >
-                        {riskStatusData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                    </Bar>
-                </BarChart>
-            </ResponsiveContainer>
-        </div>
+        <ChartContainer
+            className="h-[300px] w-full"
+            config={{
+                Open: { label: "Open", color: "#6666FF" },
+                Mitigated: { label: "Mitigated", color: "#4287f5" },
+                Resolved: { label: "Resolved", color: "#7986cb" },
+            }}
+        >
+            <BarChart data={riskStatusData} layout="vertical" accessibilityLayer>
+                <CartesianGrid horizontal={false} />
+                <YAxis
+                    dataKey="name"
+                    type="category"
+                    tickLine={false}
+                    tickMargin={10}
+                    axisLine={false}
+                />
+                <XAxis dataKey="value" type="number" hide />
+                <ChartTooltip
+                    content={<ChartTooltipContent hideLabel />}
+                />
+                <Bar dataKey="value" layout="vertical" radius={5}>
+                    {riskStatusData.map((entry, index) => (
+                        <Cell key={entry.name} fill={`var(--color-${entry.name})`} />
+                    ))}
+                </Bar>
+            </BarChart>
+        </ChartContainer>
     )
 
     // Render RiskSeverityLevels chart
     const RiskSeverityChart = () => (
-        <div className="flex items-center justify-center h-[300px]">
+        <ChartContainer
+            className="h-[300px] w-full"
+            config={{
+                High: { label: "High", color: "#ff4444" },
+                Medium: { label: "Medium", color: "#ff9800" },
+                Low: { label: "Low", color: "#4caf50" },
+                Critical: { label: "Critical", color: "#f44336" },
+            }}
+        >
             <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                    <Pie
-                        data={riskSeverityData}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="value"
-                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    >
+                    <ChartTooltip
+                        content={<ChartTooltipContent nameKey="name" hideLabel />}
+                    />
+                    <Pie data={riskSeverityData} dataKey="value" nameKey="name" innerRadius={60}>
                         {riskSeverityData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
+                            <Cell
+                                key={entry.name}
+                                fill={`var(--color-${entry.name})`}
+                            />
                         ))}
                     </Pie>
-                    <Tooltip formatter={(value) => [`${value}%`, 'Percentage']} />
                     <Legend />
                 </PieChart>
             </ResponsiveContainer>
-        </div>
+        </ChartContainer>
     )
 
     return (
-        <PageLayout
-            title="Risk Assessment Report"
-            breadcrumbs={[
-                {
-                    icon: BreadcrumbIcons.Dashboard,
-                    label: "Dashboard",
-                    href: "/"
-                },
-                {
-                    icon: BreadcrumbIcons.Reports,
-                    label: "Risk Management",
-                    href: "/reports"
-                },
-                {
-                    icon: BreadcrumbIcons.Project,
-                    label: "Risk Assessment Report",
-                    isActive: true
-                }
-            ]}
-        >
+        <SidebarLayout breadcrumbs={breadcrumbs}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                {/* Risk Status Distribution Chart */}
-                <Card className="w-full">
+                <Card>
                     <CardHeader>
-                        <CardTitle className="text-base font-medium">
-                            Risk Status Distribution
-                        </CardTitle>
+                        <CardTitle>Risk Status Distribution</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <RiskStatusChart />
                     </CardContent>
                 </Card>
 
-                {/* Risk Severity Levels Chart */}
-                <Card className="w-full">
+                <Card>
                     <CardHeader>
-                        <CardTitle className="text-base font-medium">
-                            Risk Severity Levels
-                        </CardTitle>
+                        <CardTitle>Risk Severity Levels</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <RiskSeverityChart />
@@ -257,96 +230,75 @@ export default function RiskAssessmentPage() {
                 </Card>
             </div>
 
-            {/* Risk Data Table */}
-            <Card className="w-full">
-                <div className="flex items-center justify-between p-6 border-b">
-                    <div className="relative w-full max-w-sm">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                        <Input
-                            placeholder="Search"
-                            className="pl-9 pr-4 py-2 h-10 rounded-md"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
+            <Card>
+                <CardHeader>
+                    <div className="flex justify-between items-center">
+                        <CardTitle>Risk Details</CardTitle>
+                        <div className="relative w-72">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                                placeholder="Search risks..."
+                                className="pl-10"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </div>
                     </div>
-                    <Button
-                        size="sm"
-                        variant="outline"
-                        className="h-10 px-4"
-                    >
-                        <ChevronLeft className="h-4 w-4" />
-                    </Button>
-                </div>
-
-                <div className="overflow-x-auto">
+                </CardHeader>
+                <CardContent>
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="font-bold">Risk ID</TableHead>
-                                <TableHead className="font-bold">Description</TableHead>
-                                <TableHead className="font-bold">Severity Level</TableHead>
-                                <TableHead className="font-bold">Impact</TableHead>
-                                <TableHead className="font-bold">Mitigation Plan</TableHead>
-                                <TableHead className="font-bold">Status</TableHead>
+                                <TableHead>Risk ID</TableHead>
+                                <TableHead>Description</TableHead>
+                                <TableHead>Severity</TableHead>
+                                <TableHead>Impact</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Mitigation Plan</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {currentRisks.map((risk, index) => (
+                            {currentRisks.map((risk) => (
                                 <TableRow key={risk.id}>
-                                    <TableCell className="font-medium">{risk.id}</TableCell>
+                                    <TableCell>{risk.id}</TableCell>
                                     <TableCell>{risk.description}</TableCell>
                                     <TableCell>
-                                        <SeverityLevelBadge level={risk.severityLevel as SeverityLevel} />
+                                        <Badge variant={getSeverityVariant(risk.severityLevel)}>{risk.severityLevel}</Badge>
                                     </TableCell>
                                     <TableCell>{risk.impact}</TableCell>
-                                    <TableCell>{risk.mitigationPlan}</TableCell>
                                     <TableCell>
-                                        <RiskStatusBadge status={risk.status as RiskStatus} />
+                                        <Badge variant={getStatusVariant(risk.status)}>{risk.status}</Badge>
                                     </TableCell>
+                                    <TableCell>{risk.mitigationPlan}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
-                </div>
-
-                <div className="flex items-center justify-between p-6 border-t">
-                    <div className="flex items-center gap-2">
-                        <span className="text-sm">Show row:</span>
-                        <select
-                            className="h-8 w-16 rounded-md border text-sm px-2"
-                            value={rowsPerPage}
-                            onChange={(e) => setRowsPerPage(Number(e.target.value))}
-                        >
-                            <option value={5}>5</option>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                        </select>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <Button
-                            size="sm"
-                            variant="outline"
-                            className="h-8 w-8 p-0"
-                            onClick={handlePrevPage}
-                            disabled={currentPage === 1}
-                        >
-                            <ChevronLeft className="h-4 w-4" />
-                        </Button>
-                        <span className="text-sm">
-                            {`${startIndex + 1}-${Math.min(endIndex, filteredRisks.length)} of ${filteredRisks.length}`}
-                        </span>
-                        <Button
-                            size="sm"
-                            variant="outline"
-                            className="h-8 w-8 p-0"
-                            onClick={handleNextPage}
-                            disabled={currentPage >= totalPages}
-                        >
-                            <ChevronRight className="h-4 w-4" />
-                        </Button>
-                    </div>
+                </CardContent>
+                <div className="flex justify-end items-center gap-2 p-4 border-t">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handlePrevPage}
+                        disabled={currentPage === 1}
+                    >
+                        <ChevronLeft className="h-4 w-4 mr-1" />
+                        Previous
+                    </Button>
+                    <span className="text-sm text-muted-foreground">
+                        Page {currentPage} of {totalPages}
+                    </span>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleNextPage}
+                        disabled={currentPage === totalPages}
+                    >
+                        Next
+                        <ChevronRight className="h-4 w-4 ml-1" />
+                    </Button>
                 </div>
             </Card>
-        </PageLayout>
+        </SidebarLayout>
     )
 } 

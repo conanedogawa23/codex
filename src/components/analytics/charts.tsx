@@ -132,11 +132,11 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
               className="h-[250px] xs:h-[300px] sm:h-[400px] w-full max-w-full overflow-hidden"
               config={{
                 value: {
-                  theme: { light: "#5856D6", dark: "#5856D6" }
+                  label: "Completion Rate (%)",
+                  color: "#6666FF"
                 }
               }}
             >
-              { }
               <LineChart data={projectCompletion} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" tick={{ fontSize: 12 }} />
@@ -146,13 +146,10 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
                 <Line
                   type="monotone"
                   dataKey="value"
-                  name="Completion Rate (%)"
-                  stroke="#5856D6"
-                  fill="#5856D6"
+                  stroke="var(--color-value)"
                   strokeWidth={2}
                 />
               </LineChart>
-              { }
             </ChartContainer>
           </CardContent>
         </Card>
@@ -168,14 +165,15 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
               className="h-[250px] xs:h-[300px] sm:h-[400px] w-full max-w-full overflow-hidden"
               config={{
                 tasks: {
-                  theme: { light: "#5856D6", dark: "#5856D6" }
+                  label: "Total Tasks",
+                  color: "#6666FF"
                 },
                 completed: {
-                  theme: { light: "#FF6B6B", dark: "#FF6B6B" }
+                  label: "Completed Tasks",
+                  color: "#4287f5"
                 }
               }}
             >
-              { }
               <BarChart data={teamPerformance} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" tick={{ fontSize: 12 }} />
@@ -184,18 +182,15 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
                 <Legend wrapperStyle={{ fontSize: '12px' }} />
                 <Bar
                   dataKey="tasks"
-                  name="Total Tasks"
-                  fill="#5856D6"
+                  fill="var(--color-tasks)"
                   barSize={30}
                 />
                 <Bar
                   dataKey="completed"
-                  name="Completed Tasks"
-                  fill="#FF6B6B"
+                  fill="var(--color-completed)"
                   barSize={30}
                 />
               </BarChart>
-              { }
             </ChartContainer>
           </CardContent>
         </Card>
@@ -211,14 +206,13 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
               <ChartContainer
                 className="h-[250px] xs:h-[300px] sm:h-[400px] w-full max-w-full overflow-hidden"
                 config={{
-                  "0": { theme: { light: "#5856D6", dark: "#5856D6" } },
-                  "1": { theme: { light: "#FF6B6B", dark: "#FF6B6B" } },
-                  "2": { theme: { light: "#4CAF50", dark: "#4CAF50" } },
-                  "3": { theme: { light: "#FF9800", dark: "#FF9800" } },
-                  "4": { theme: { light: "#2196F3", dark: "#2196F3" } }
+                  Development: { label: "Development", color: "#6666FF" },
+                  Design: { label: "Design", color: "#4287f5" },
+                  Marketing: { label: "Marketing", color: "#7986cb" },
+                  Research: { label: "Research", color: "#4caf50" },
+                  Other: { label: "Other", color: "#ff9800" }
                 }}
               >
-                { }
                 <PieChart margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
                   <Pie
                     data={taskDistributionData}
@@ -231,15 +225,13 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
                     label={({ name, percent }: PieChartLabelProps) => `${name}: ${(percent * 100).toFixed(0)}%`}
                     labelLine={false}
                   >
-                    {taskDistributionData.map((entry, index) => {
-                      const colors = ["#5856D6", "#FF6B6B", "#4CAF50", "#FF9800", "#2196F3"];
-                      return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />;
-                    })}
+                    {taskDistributionData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={`var(--color-${entry.name})`} />
+                    ))}
                   </Pie>
                   <Tooltip />
                   <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
                 </PieChart>
-                { }
               </ChartContainer>
               <div className="flex flex-col justify-center p-2 sm:p-4">
                 {taskDistributionData.map((item, index) => (
@@ -288,11 +280,10 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
               <ChartContainer
                 className="h-[250px] xs:h-[300px] sm:h-[400px] w-full max-w-full overflow-hidden"
                 config={{
-                  "0": { theme: { light: "#5856D6", dark: "#5856D6" } },
-                  "1": { theme: { light: "#FF6B6B", dark: "#FF6B6B" } },
-                  "2": { theme: { light: "#4CAF50", dark: "#4CAF50" } },
-                  "3": { theme: { light: "#FF9800", dark: "#FF9800" } },
-                  "4": { theme: { light: "#2196F3", dark: "#2196F3" } }
+                  used: {
+                    label: "Hours Spent",
+                    color: "#6666FF"
+                  }
                 }}
               >
                 <BarChart
@@ -305,7 +296,7 @@ export default function Charts({ analyticsData }: { analyticsData: AnalyticsData
                   <YAxis dataKey="resource" type="category" tick={{ fontSize: 12 }} />
                   <Tooltip />
                   <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
-                  <Bar dataKey="used" name="Hours Spent" fill="var(--color-0)" />
+                  <Bar dataKey="used" fill="var(--color-used)" />
                 </BarChart>
               </ChartContainer>
             </div>

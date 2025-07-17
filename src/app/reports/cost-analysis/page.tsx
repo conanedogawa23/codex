@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search, ChevronLeft, ChevronRight } from "lucide-react"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
-import { ChartContainer } from "@/components/ui/chart"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import {
     BarChart,
     Bar,
@@ -20,8 +20,8 @@ import {
     Cell,
     Legend
 } from "recharts"
-import { BreadcrumbIcons } from "@/components/ui/custom-breadcrumb"
-import { PageLayout } from "@/components/layout/page-layout"
+import { SidebarLayout } from "@/components/layout/sidebar-layout"
+import { Breadcrumb } from "@/components/ui/breadcrumbs"
 
 // Import mock data
 import mockData from "@/lib/mock-data.json"
@@ -31,12 +31,16 @@ const costComparisonData = mockData.reports.costAnalysis.costComparison;
 const reasonsForOverruns = mockData.reports.costAnalysis.overrunReasons;
 const projectCostData = mockData.reports.costAnalysis.projectDetails;
 
-const COLORS = ["#5856D6", "#00B290", "#FF9500", "#F7524A"];
+const breadcrumbs: Breadcrumb[] = [
+    { label: "Dashboard", href: "/" },
+    { label: "Reports", href: "/reports" },
+    { label: "Cost Analysis", href: "/reports/cost-analysis", isCurrent: true },
+]
 
 export default function CostAnalysisPage() {
     const [searchQuery, setSearchQuery] = useState("")
     const [currentPage, setCurrentPage] = useState(1)
-    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [rowsPerPage] = useState(10)
 
     // Filter projects based on search
     const filteredProjects = projectCostData.filter(project =>
@@ -58,150 +62,98 @@ export default function CostAnalysisPage() {
     }
 
     return (
-        <PageLayout
-            title="Cost Analysis Report"
-            breadcrumbs={[
-                {
-                    icon: BreadcrumbIcons.Dashboard,
-                    label: "Dashboard",
-                    href: "/"
-                },
-                {
-                    icon: BreadcrumbIcons.Reports,
-                    label: "Project Delivery Speed",
-                    href: "/reports"
-                },
-                {
-                    icon: BreadcrumbIcons.Project,
-                    label: "Cost Analysis",
-                    isActive: true
-                }
-            ]}
-        >
+        <SidebarLayout breadcrumbs={breadcrumbs}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                {/* Estimated vs. Actual Costs Chart */}
-                <Card className="w-full">
+                <Card>
                     <CardHeader>
-                        <CardTitle className="text-base font-medium">
-                            Estimated Vs. Actual Costs per Project
-                        </CardTitle>
+                        <CardTitle>Estimated Vs. Actual Costs per Project</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <ChartContainer
-                            className="h-[250px] sm:h-[300px] w-full"
+                            className="h-[300px] w-full"
                             config={{
                                 estimated: {
-                                    theme: { light: "#5856D6", dark: "#5856D6" }
+                                    label: "Estimated",
+                                    color: "#6666FF",
                                 },
                                 actual: {
-                                    theme: { light: "#00B290", dark: "#00B290" }
-                                }
+                                    label: "Actual",
+                                    color: "#4287f5",
+                                },
                             }}
                         >
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart
-                                    data={costComparisonData}
-                                    margin={{
-                                        top: 20,
-                                        right: 30,
-                                        left: 20,
-                                        bottom: 30
-                                    }}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(3, 0, 49, 0.1)" />
-                                    <XAxis
-                                        dataKey="name"
-                                        axisLine={false}
-                                        tickLine={false}
-                                        tick={{ fontSize: 12 }}
-                                        dy={10}
-                                    />
-                                    <YAxis
-                                        axisLine={false}
-                                        tickLine={false}
-                                        tick={{ fontSize: 12 }}
-                                        tickFormatter={(value) => `${value / 1000}k`}
-                                        label={{
-                                            value: 'Cost (KWD)',
-                                            angle: -90,
-                                            position: 'insideLeft',
-                                            offset: 0,
-                                            style: { textAnchor: 'middle', fontSize: '12px' }
-                                        }}
-                                    />
-                                    <Tooltip formatter={(value) => [`${value.toLocaleString()} KWD`, '']} />
-                                    <Legend
-                                        verticalAlign="bottom"
-                                        wrapperStyle={{ paddingTop: "20px" }}
-                                    />
-                                    <Bar
-                                        dataKey="actual"
-                                        name="Actual Cost"
-                                        fill="#00B290"
-                                        radius={[4, 4, 0, 0]}
-                                        barSize={20}
-                                    />
-                                    <Bar
-                                        dataKey="estimated"
-                                        name="Estimated Cost"
-                                        fill="#5856D6"
-                                        radius={[4, 4, 0, 0]}
-                                        barSize={20}
-                                    />
-                                </BarChart>
-                            </ResponsiveContainer>
+                            <BarChart data={costComparisonData} accessibilityLayer>
+                                <CartesianGrid vertical={false} />
+                                <XAxis
+                                    dataKey="name"
+                                    tickLine={false}
+                                    tickMargin={10}
+                                    axisLine={false}
+                                />
+                                <YAxis
+                                    tickFormatter={(value) => `${value / 1000}k`}
+                                    tickLine={false}
+                                    axisLine={false}
+                                />
+                                <ChartTooltip
+                                    content={<ChartTooltipContent indicator="dot" />}
+                                />
+                                <Legend />
+                                <Bar
+                                    dataKey="actual"
+                                    fill="var(--color-actual)"
+                                    radius={8}
+                                />
+                                <Bar
+                                    dataKey="estimated"
+                                    fill="var(--color-estimated)"
+                                    radius={8}
+                                />
+                            </BarChart>
                         </ChartContainer>
                     </CardContent>
                 </Card>
 
-                {/* Reasons for Cost Overruns Chart */}
-                <Card className="w-full">
+                <Card>
                     <CardHeader>
-                        <CardTitle className="text-base font-medium">
-                            Reasons for Cost Overrunns
-                        </CardTitle>
+                        <CardTitle>Reasons for Cost Overruns</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <ChartContainer
-                            className="h-[250px] sm:h-[300px] w-full"
+                            className="h-[300px] w-full"
                             config={{
-                                mismanagement: {
-                                    theme: { light: "#5856D6", dark: "#5856D6" }
+                                "ResourceMismanagement": {
+                                    label: "Resource Mismanagement",
+                                    color: "#6666FF"
                                 },
-                                delays: {
-                                    theme: { light: "#00B290", dark: "#00B290" }
+                                "UnexpectedDelays": {
+                                    label: "Unexpected Delays",
+                                    color: "#4287f5"
                                 },
-                                price: {
-                                    theme: { light: "#FF9500", dark: "#FF9500" }
+                                "ScopeCreep": {
+                                    label: "Scope Creep",
+                                    color: "#7986cb"
                                 },
-                                scope: {
-                                    theme: { light: "#F7524A", dark: "#F7524A" }
-                                }
+                                "MarketPriceChanges": {
+                                    label: "Market Price Changes",
+                                    color: "#4caf50"
+                                },
                             }}
                         >
                             <ResponsiveContainer width="100%" height="100%">
                                 <PieChart>
-                                    <Pie
-                                        data={reasonsForOverruns}
-                                        cx="50%"
-                                        cy="50%"
-                                        labelLine={false}
-                                        outerRadius={80}
-                                        fill="#8884d8"
-                                        dataKey="value"
-                                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                                    >
+                                    <ChartTooltip
+                                        content={<ChartTooltipContent nameKey="name" hideLabel />}
+                                    />
+                                    <Pie data={reasonsForOverruns} dataKey="value" nameKey="name" innerRadius={60}>
                                         {reasonsForOverruns.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                            <Cell
+                                                key={`cell-${index}`}
+                                                fill={`var(--color-${entry.name.replace(/\s/g, "")})`}
+                                            />
                                         ))}
                                     </Pie>
-                                    <Legend
-                                        verticalAlign="bottom"
-                                        wrapperStyle={{
-                                            paddingTop: "20px",
-                                            fontSize: "12px"
-                                        }}
-                                    />
+                                    <Legend />
                                 </PieChart>
                             </ResponsiveContainer>
                         </ChartContainer>
@@ -212,7 +164,7 @@ export default function CostAnalysisPage() {
             {/* Project Cost Details Table */}
             <Card>
                 <div className="flex justify-between items-center p-3 border-b">
-                    <div></div>
+                    <CardTitle>Project Cost Details</CardTitle>
                     <div className="flex items-center gap-2">
                         <div className="relative">
                             <Search className="w-4 h-4 absolute left-2.5 top-2.5 text-muted-foreground" />
@@ -232,6 +184,15 @@ export default function CostAnalysisPage() {
                         >
                             <ChevronLeft className="h-4 w-4" />
                         </Button>
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-10 w-10"
+                            onClick={handleNextPage}
+                            disabled={currentPage === totalPages}
+                        >
+                            <ChevronRight className="h-4 w-4" />
+                        </Button>
                     </div>
                 </div>
                 <div className="overflow-x-auto">
@@ -248,66 +209,19 @@ export default function CostAnalysisPage() {
                         </TableHeader>
                         <TableBody>
                             {currentProjects.map((project, index) => (
-                                <TableRow
-                                    key={`${project.name}-${index}`}
-                                >
-                                    <TableCell className="px-4 py-4 font-medium">
-                                        {project.name}
-                                    </TableCell>
-                                    <TableCell className="px-4 py-4">
-                                        {project.estimatedBudget}
-                                    </TableCell>
-                                    <TableCell className="px-4 py-4">
-                                        {project.actualCost}
-                                    </TableCell>
-                                    <TableCell className="px-4 py-4">
-                                        {project.costPerHour}
-                                    </TableCell>
-                                    <TableCell className="px-4 py-4">
-                                        {project.resourcesUtilized}
-                                    </TableCell>
-                                    <TableCell className="px-4 py-4">
-                                        {project.costOverruns}
-                                    </TableCell>
+                                <TableRow key={index}>
+                                    <TableCell className="px-4 py-2">{project.name}</TableCell>
+                                    <TableCell className="px-4 py-2">{project.estimatedBudget.toLocaleString()}</TableCell>
+                                    <TableCell className="px-4 py-2">{project.actualCost.toLocaleString()}</TableCell>
+                                    <TableCell className="px-4 py-2">{project.costPerHour.toLocaleString()}</TableCell>
+                                    <TableCell className="px-4 py-2">{project.resourcesUtilized}</TableCell>
+                                    <TableCell className="px-4 py-2">{project.costOverruns}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </div>
-                <div className="flex justify-between items-center p-6">
-                    <div className="flex items-center gap-2">
-                        <span className="text-sm">Show row:</span>
-                        <Input
-                            className="w-16 h-8"
-                            type="number"
-                            value={rowsPerPage}
-                            onChange={(e) => setRowsPerPage(parseInt(e.target.value) || 10)}
-                            min={1}
-                        />
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={handlePrevPage}
-                            disabled={currentPage === 1}
-                        >
-                            <ChevronLeft className="h-4 w-4" />
-                        </Button>
-                        <span className="text-sm">
-                            {startIndex + 1}-{Math.min(endIndex, filteredProjects.length)} of {filteredProjects.length}
-                        </span>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={handleNextPage}
-                            disabled={currentPage >= totalPages}
-                        >
-                            <ChevronRight className="h-4 w-4" />
-                        </Button>
-                    </div>
-                </div>
             </Card>
-        </PageLayout>
+        </SidebarLayout>
     )
 } 

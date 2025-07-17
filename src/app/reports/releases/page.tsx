@@ -23,12 +23,18 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { formatDate } from "@/lib/date-utils"
-import { PageLayout } from "@/components/layout/page-layout"
-import { BreadcrumbIcons } from "@/components/ui/custom-breadcrumb"
+import { SidebarLayout } from "@/components/layout/sidebar-layout"
+import { Breadcrumb } from "@/components/ui/breadcrumbs"
 import { cn } from "@/lib/utils"
 
 // Import mock data
 import mockData from "@/lib/mock-data.json"
+
+const breadcrumbs: Breadcrumb[] = [
+  { label: "Dashboard", href: "/" },
+  { label: "Reports", href: "/reports" },
+  { label: "Releases", href: "/reports/releases", isCurrent: true },
+]
 
 export default function ReleasesReportPage() {
   // State for filters
@@ -52,29 +58,25 @@ export default function ReleasesReportPage() {
     return num > 0 ? `+${num}%` : `${num}%`
   }
 
+  // Get badge variant based on release status
+  const getStatusVariant = (status: string) => {
+    switch (status) {
+      case "completed":
+        return "success"
+      case "in-progress":
+        return "default"
+      default:
+        return "secondary"
+    }
+  }
+
   return (
-    <PageLayout
-      title="Release Reports"
-      breadcrumbs={[
-        {
-          icon: BreadcrumbIcons.Dashboard,
-          label: "Dashboard",
-          href: "/"
-        },
-        {
-          icon: BreadcrumbIcons.Reports,
-          label: "Reports",
-          href: "/reports"
-        },
-        {
-          icon: BreadcrumbIcons.Time,
-          label: "Releases",
-          isActive: true
-        }
-      ]}
-    >
+    <SidebarLayout breadcrumbs={breadcrumbs}>
       <div className="flex justify-between items-center mb-6">
-        <p className="text-muted-foreground mt-1">Track and analyze your release performance</p>
+        <div>
+          <h1 className="text-2xl font-semibold">Release Reports</h1>
+          <p className="text-muted-foreground mt-1">Track and analyze your release performance</p>
+        </div>
 
         <div className="flex items-center gap-3">
           <Button variant="outline">
@@ -120,10 +122,18 @@ export default function ReleasesReportPage() {
                   <h3 className="text-sm font-medium text-muted-foreground">Release Frequency</h3>
                   <div className="text-2xl font-bold mt-1">{metrics.releaseFrequency?.monthly}<span className="text-sm font-normal text-muted-foreground ml-1">per month</span></div>
                 </div>
-                <BarChart3 className="h-8 w-8 text-primary/20" />
+                <BarChart3 className="h-8 w-8 text-muted-foreground" />
               </div>
               <div className="flex items-center">
-                <span className={cn("text-sm font-medium", (metrics.releaseFrequency?.changeFromLastQuarter || 0) > 0 ? "text-success" : "text-destructive")}>
+                <span
+                  className="text-sm font-medium"
+                  style={{
+                    color:
+                      (metrics.releaseFrequency?.changeFromLastQuarter || 0) > 0
+                        ? "hsl(var(--success-foreground))"
+                        : "hsl(var(--destructive-foreground))",
+                  }}
+                >
                   {formatChangeNumber(metrics.releaseFrequency?.changeFromLastQuarter || 0)}
                 </span>
                 <span className="text-xs text-muted-foreground ml-2">vs last quarter</span>
@@ -136,10 +146,18 @@ export default function ReleasesReportPage() {
                   <h3 className="text-sm font-medium text-muted-foreground">Release Quality</h3>
                   <div className="text-2xl font-bold mt-1">{metrics.releaseQuality?.defectRate ? (metrics.releaseQuality.defectRate * 100).toFixed(1) : "0"}%<span className="text-sm font-normal text-muted-foreground ml-1">defect rate</span></div>
                 </div>
-                <CheckCircle2 className="h-8 w-8 text-primary/20" />
+                <CheckCircle2 className="h-8 w-8 text-muted-foreground" />
               </div>
               <div className="flex items-center">
-                <span className={cn("text-sm font-medium", (metrics.releaseQuality?.changeFromLastQuarter || 0) > 0 ? "text-destructive" : "text-success")}>
+                <span
+                  className="text-sm font-medium"
+                  style={{
+                    color:
+                      (metrics.releaseQuality?.changeFromLastQuarter || 0) > 0
+                        ? "hsl(var(--destructive-foreground))"
+                        : "hsl(var(--success-foreground))",
+                  }}
+                >
                   {formatChangeNumber(-(metrics.releaseQuality?.changeFromLastQuarter || 0))}
                 </span>
                 <span className="text-xs text-muted-foreground ml-2">vs last quarter</span>
@@ -152,10 +170,18 @@ export default function ReleasesReportPage() {
                   <h3 className="text-sm font-medium text-muted-foreground">Development Efficiency</h3>
                   <div className="text-2xl font-bold mt-1">{metrics.developmentEfficiency?.averageCycleTime?.toFixed(1)}<span className="text-sm font-normal text-muted-foreground ml-1">days</span></div>
                 </div>
-                <Clock className="h-8 w-8 text-primary/20" />
+                <Clock className="h-8 w-8 text-muted-foreground" />
               </div>
               <div className="flex items-center">
-                <span className={cn("text-sm font-medium", (metrics.developmentEfficiency?.changeFromLastQuarter || 0) > 0 ? "text-destructive" : "text-success")}>
+                <span
+                  className="text-sm font-medium"
+                  style={{
+                    color:
+                      (metrics.developmentEfficiency?.changeFromLastQuarter || 0) > 0
+                        ? "hsl(var(--destructive-foreground))"
+                        : "hsl(var(--success-foreground))",
+                  }}
+                >
                   {formatChangeNumber(-(metrics.developmentEfficiency?.changeFromLastQuarter || 0))}
                 </span>
                 <span className="text-xs text-muted-foreground ml-2">vs last quarter</span>
@@ -172,8 +198,8 @@ export default function ReleasesReportPage() {
                     <div>
                       <h2 className="text-xl font-bold">{release.name}</h2>
                       <div className="flex items-center gap-2 my-1">
-                        <Badge variant={release.status === "completed" ? "default" : "outline"}>
-                          {release.status === "completed" ? "Completed" : release.status === "in-progress" ? "In Progress" : "Planned"}
+                        <Badge variant={getStatusVariant(release.status)}>
+                          {release.status.charAt(0).toUpperCase() + release.status.slice(1)}
                         </Badge>
                         <span className="text-muted-foreground">{release.version}</span>
                       </div>
@@ -244,6 +270,6 @@ export default function ReleasesReportPage() {
           </div>
         </TabsContent>
       </Tabs>
-    </PageLayout>
+    </SidebarLayout>
   )
 } 

@@ -23,11 +23,40 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { PageLayout } from "@/components/layout/page-layout"
-import { BreadcrumbIcons } from "@/components/ui/custom-breadcrumb"
+import { SidebarLayout } from "@/components/layout/sidebar-layout"
+import { Breadcrumb } from "@/components/ui/breadcrumbs"
 
 // Import mock data
 import mockData from "@/lib/mock-data.json"
+
+const breadcrumbs: Breadcrumb[] = [
+  { label: "Dashboard", href: "/" },
+  { label: "Projects", href: "/projects", isCurrent: true },
+]
+
+// Helper to get status variant
+const getStatusVariant = (status: string) => {
+  switch (status) {
+    case "active":
+      return "success"
+    case "completed":
+      return "default"
+    default:
+      return "secondary"
+  }
+}
+
+// Helper to get priority variant
+const getPriorityVariant = (priority: string) => {
+  switch (priority) {
+    case "high":
+      return "destructive"
+    case "medium":
+      return "warning"
+    default:
+      return "default"
+  }
+}
 
 export default function ProjectsPage() {
   const { projects: allProjects } = mockData
@@ -69,24 +98,13 @@ export default function ProjectsPage() {
   const categories = Array.from(new Set(allProjects.map(project => project.category)))
 
   return (
-    <PageLayout
-      title="Projects"
-      breadcrumbs={[
-        {
-          icon: BreadcrumbIcons.Dashboard,
-          label: "Dashboard",
-          href: "/"
-        },
-        {
-          icon: BreadcrumbIcons.Project,
-          label: "Projects",
-          isActive: true
-        }
-      ]}
-    >
+    <SidebarLayout breadcrumbs={breadcrumbs}>
       <div className="flex flex-col space-y-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <p className="text-muted-foreground mt-1 hidden sm:block">Manage and track your project portfolio</p>
+          <div>
+            <h1 className="text-2xl font-semibold">Projects</h1>
+            <p className="text-muted-foreground mt-1 hidden sm:block">Manage and track your project portfolio</p>
+          </div>
 
           <div className="flex flex-wrap items-center gap-2">
             <Popover>
@@ -281,13 +299,7 @@ export default function ProjectsPage() {
                       <CardTitle className="text-base sm:text-lg line-clamp-1">{project.name}</CardTitle>
                       <CardDescription className="line-clamp-2 text-xs sm:text-sm">{project.description}</CardDescription>
                     </div>
-                    <Badge variant={
-                      project.status === "active"
-                        ? "success"
-                        : project.status === "completed"
-                          ? "default"
-                          : "secondary"
-                    }>{project.status}</Badge>
+                    <Badge variant={getStatusVariant(project.status)}>{project.status}</Badge>
                   </div>
                 </CardHeader>
                 <CardContent className="flex-1 py-3">
@@ -306,13 +318,7 @@ export default function ProjectsPage() {
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-muted-foreground">Priority:</span>
-                        <Badge variant={
-                          project.priority === "high"
-                            ? "destructive"
-                            : project.priority === "medium"
-                              ? "warning"
-                              : "default"
-                        }>
+                        <Badge variant={getPriorityVariant(project.priority)}>
                           {project.priority}
                         </Badge>
                       </div>
@@ -341,6 +347,6 @@ export default function ProjectsPage() {
           </div>
         )}
       </div>
-    </PageLayout>
+    </SidebarLayout>
   )
 } 

@@ -34,6 +34,7 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts'
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 
 // Import mock data
 import mockData from "@/lib/mock-data.json"
@@ -158,7 +159,19 @@ export default function VelocityReportPage() {
             <Card className="p-6 mb-6">
               <h3 className="font-medium mb-4">Sprint Velocity Chart</h3>
               <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
+                <ChartContainer
+                  className="w-full h-full"
+                  config={{
+                    committed: {
+                      label: "Committed Points",
+                      color: "#9999FF",
+                    },
+                    completed: {
+                      label: "Completed Points",
+                      color: "#6666FF",
+                    },
+                  }}
+                >
                   <BarChart
                     data={chartData}
                     margin={{ top: 20, right: 30, left: 20, bottom: 30 }}
@@ -192,20 +205,18 @@ export default function VelocityReportPage() {
                     <Legend wrapperStyle={{ color: "hsl(var(--muted-foreground))" }} />
                     <Bar
                       dataKey="committed"
-                      name="Committed Points"
-                      fill="hsl(var(--primary) / 0.5)"
+                      fill="var(--color-committed)"
                       radius={[4, 4, 0, 0]}
                       barSize={30}
                     />
                     <Bar
                       dataKey="completed"
-                      name="Completed Points"
-                      fill="hsl(var(--primary))"
+                      fill="var(--color-completed)"
                       radius={[4, 4, 0, 0]}
                       barSize={30}
                     />
                   </BarChart>
-                </ResponsiveContainer>
+                </ChartContainer>
               </div>
             </Card>
 

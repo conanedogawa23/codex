@@ -3,18 +3,21 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { PlusIcon, DownloadIcon, CheckCircleIcon, Clock, BarChart4, Users } from "lucide-react"
-import { ChartContainer } from "@/components/ui/chart"
-import { BarChart, PieChart, Bar, Pie, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Cell } from "recharts"
-import { PageLayout } from "@/components/layout/page-layout"
-import { BreadcrumbIcons } from "@/components/ui/custom-breadcrumb"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { BarChart, PieChart, Bar, Pie, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Cell, ResponsiveContainer } from "recharts"
+import { SidebarLayout } from "@/components/layout/sidebar-layout"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { CustomChartContainer } from "@/components/ui/chart-container"
 import { formatDate } from "@/lib/date-utils"
 import { cn } from "@/lib/utils"
 
 // Import mock data
 import mockData from "@/lib/mock-data.json"
+import { Breadcrumb } from "@/components/ui/breadcrumbs"
+
+const breadcrumbs: Breadcrumb[] = [
+  { label: "Dashboard", href: "/", isCurrent: true },
+]
 
 export default function Home() {
   // Use the mock data from our JSON file
@@ -37,17 +40,14 @@ export default function Home() {
     .slice(0, 5);
 
   return (
-    <PageLayout
-      title="Dashboard"
-      breadcrumbs={[
-        {
-          icon: BreadcrumbIcons.Dashboard,
-          label: "Dashboard",
-          isActive: true
-        }
-      ]}
-    >
+    <SidebarLayout breadcrumbs={breadcrumbs}>
       <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-semibold">Dashboard</h1>
+          <p className="text-muted-foreground mt-1">
+            Welcome back! Here's a quick overview of your projects.
+          </p>
+        </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm">
             <DownloadIcon className="h-4 w-4 mr-2" />
@@ -118,24 +118,44 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             <ChartContainer
-              className="h-[300px]"
+              className="h-[300px] w-full"
               config={{
                 completed: {
-                  theme: { light: "hsl(var(--chart-1))", dark: "hsl(var(--chart-1))" }
+                  label: "Completed",
+                  color: "#4287f5",
                 },
                 inProgress: {
-                  theme: { light: "hsl(var(--chart-2))", dark: "hsl(var(--chart-2))" }
-                }
+                  label: "In Progress",
+                  color: "#6666FF",
+                },
               }}
             >
-              <BarChart data={projectStatus}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
+              <BarChart data={projectStatus} accessibilityLayer>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="month"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <ChartTooltip
+                  content={<ChartTooltipContent indicator="dot" />}
+                />
                 <Legend />
-                <Bar dataKey="completed" name="Completed" fill="var(--color-completed)" />
-                <Bar dataKey="inProgress" name="In Progress" fill="var(--color-inProgress)" />
+                <Bar
+                  dataKey="completed"
+                  fill="var(--color-completed)"
+                  radius={8}
+                />
+                <Bar
+                  dataKey="inProgress"
+                  fill="var(--color-inProgress)"
+                  radius={8}
+                />
               </BarChart>
             </ChartContainer>
           </CardContent>
@@ -146,115 +166,120 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             <ChartContainer
-              className="h-[300px]"
+              className="h-[300px] w-full"
               config={{
-                "0": { theme: { light: "hsl(var(--chart-1))", dark: "hsl(var(--chart-1))" } },
-                "1": { theme: { light: "hsl(var(--chart-2))", dark: "hsl(var(--chart-2))" } },
-                "2": { theme: { light: "hsl(var(--chart-3))", dark: "hsl(var(--chart-3))" } },
-                "3": { theme: { light: "hsl(var(--chart-4))", dark: "hsl(var(--chart-4))" } }
+                completed: { label: "Completed", color: "#6666FF" },
+                inprogress: { label: "In Progress", color: "#4287f5" },
+                pending: { label: "Pending", color: "#7986cb" },
+                overdue: { label: "Overdue", color: "#4caf50" },
               }}
             >
-              <PieChart>
-                <Pie
-                  data={tasksOverview}
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  dataKey="value"
-                  nameKey="name"
-                  label
-                >
-                  {tasksOverview.map((entry, index) => {
-                    const colors = ["hsl(var(--chart-1))", "hsl(var(--chart-2))", "hsl(var(--chart-3))", "hsl(var(--chart-4))"];
-                    return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />;
-                  })}
-                </Pie>
-                <Legend />
-                <Tooltip />
-              </PieChart>
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <ChartTooltip
+                    content={<ChartTooltipContent nameKey="name" hideLabel />}
+                  />
+                  <Pie data={tasksOverview} dataKey="value" nameKey="name" innerRadius={60}>
+                    {tasksOverview.map((entry, index) => {
+                      const colorKey = entry.name.toLowerCase().replace(/\s+/g, "");
+                      return (
+                        <Cell
+                          key={entry.name}
+                          fill={`var(--color-${colorKey})`}
+                        />
+                      );
+                    })}
+                  </Pie>
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
             </ChartContainer>
           </CardContent>
         </Card>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <CustomChartContainer
-          title="Active Projects"
-          className="col-span-1"
-        >
-          <div className="space-y-4">
-            {activeProjects.map((project) => (
-              <div key={project.id} className="flex items-center">
-                <div className="flex-1 space-y-1">
-                  <div className="flex justify-between items-center">
-                    <div className="font-medium">{project.name}</div>
-                    <Badge variant={
-                      project.priority === "high"
-                        ? "destructive"
-                        : project.priority === "medium"
-                          ? "warning"
-                          : "default"
-                    }>
-                      {project.priority.charAt(0).toUpperCase() + project.priority.slice(1)}
-                    </Badge>
-                  </div>
-                  <div className="text-xs text-muted-foreground">{project.description}</div>
-                  <div className="w-full bg-muted h-2 rounded-full mt-2">
-                    <div
-                      className="bg-primary h-2 rounded-full"
-                      style={{ width: `${project.progress}%` }}
-                    ></div>
-                  </div>
-                  <div className="flex justify-between items-center text-xs mt-1">
-                    <span>Progress: {project.progress}%</span>
-                    <span>Deadline: {formatDate(project.deadline)}</span>
+        <Card className="col-span-1">
+          <CardHeader>
+            <CardTitle>Active Projects</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {activeProjects.map((project) => (
+                <div key={project.id} className="flex items-center">
+                  <div className="flex-1 space-y-1">
+                    <div className="flex justify-between items-center">
+                      <div className="font-medium">{project.name}</div>
+                      <Badge variant={
+                        project.priority === "high"
+                          ? "destructive"
+                          : project.priority === "medium"
+                            ? "warning"
+                            : "default"
+                      }>
+                        {project.priority.charAt(0).toUpperCase() + project.priority.slice(1)}
+                      </Badge>
+                    </div>
+                    <div className="text-xs text-muted-foreground">{project.description}</div>
+                    <div className="w-full bg-muted h-2 rounded-full mt-2">
+                      <div
+                        className="bg-primary h-2 rounded-full"
+                        style={{ width: `${project.progress}%` }}
+                      ></div>
+                    </div>
+                    <div className="flex justify-between items-center text-xs mt-1">
+                      <span>Progress: {project.progress}%</span>
+                      <span>Deadline: {formatDate(project.deadline)}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </CustomChartContainer>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
-        <CustomChartContainer
-          title="Priority Tasks"
-          className="col-span-1"
-        >
-          <div className="space-y-4">
-            {priorityTasks.map((task) => (
-              <div key={task.id} className="flex items-start gap-3">
-                <div className={cn("w-2 h-2 mt-1.5 rounded-full",
-                  task.priority === "high" && "bg-destructive",
-                  task.priority === "medium" && "bg-warning",
-                  task.priority === "low" && "bg-primary"
-                )}></div>
-                <div className="flex-1 space-y-1">
-                  <div className="font-medium">{task.title}</div>
-                  <div className="text-xs text-muted-foreground line-clamp-1">{task.description}</div>
-                  <div className="flex justify-between items-center mt-1">
-                    <div className="flex items-center gap-2">
-                      <Badge variant="outline" className="text-xs">
-                        {task.project}
-                      </Badge>
-                      <Badge variant="outline" className={cn(
-                        task.status === "in-progress" && "bg-blue-100 text-blue-800 border-blue-200"
-                      )}>
-                        {task.status === "in-progress" ? "In Progress" : "To Do"}
-                      </Badge>
-                    </div>
-                    <div className="flex items-center">
-                      <Avatar className="h-6 w-6">
-                        <AvatarFallback className="text-[10px] bg-primary/10">
-                          {task.assignee.avatar}
-                        </AvatarFallback>
-                      </Avatar>
+        <Card className="col-span-1">
+          <CardHeader>
+            <CardTitle>Priority Tasks</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {priorityTasks.map((task) => (
+                <div key={task.id} className="flex items-start gap-3">
+                  <div className={cn("w-2 h-2 mt-1.5 rounded-full",
+                    task.priority === "high" && "bg-destructive",
+                    task.priority === "medium" && "bg-warning",
+                    task.priority === "low" && "bg-primary"
+                  )}></div>
+                  <div className="flex-1 space-y-1">
+                    <div className="font-medium">{task.title}</div>
+                    <div className="text-xs text-muted-foreground line-clamp-1">{task.description}</div>
+                    <div className="flex justify-between items-center mt-1">
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="text-xs">
+                          {task.project}
+                        </Badge>
+                        <Badge variant="outline" className={cn(
+                          task.status === "in-progress" && "bg-blue-100 text-blue-800 border-blue-200"
+                        )}>
+                          {task.status === "in-progress" ? "In Progress" : "To Do"}
+                        </Badge>
+                      </div>
+                      <div className="flex items-center">
+                        <Avatar className="h-6 w-6">
+                          <AvatarFallback className="text-[10px] bg-primary/10">
+                            {task.assignee.avatar}
+                          </AvatarFallback>
+                        </Avatar>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </CustomChartContainer>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
-    </PageLayout>
+    </SidebarLayout>
   )
 }

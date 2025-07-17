@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState } from "react"
@@ -92,7 +91,7 @@ export function ProjectProgress() {
                             config={{
                                 percentage: {
                                     label: "Completion",
-                                    color: "hsl(var(--primary))",
+                                    color: "#6666FF",
                                 },
                             }}
                         >
@@ -135,11 +134,11 @@ export function ProjectProgress() {
                             config={{
                                 estimated: {
                                     label: "Estimated",
-                                    color: "hsl(var(--primary) / 0.5)",
+                                    color: "#9999FF",
                                 },
                                 actual: {
                                     label: "Actual",
-                                    color: "hsl(var(--primary))",
+                                    color: "#6666FF",
                                 },
                             }}
                         >

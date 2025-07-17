@@ -36,11 +36,16 @@ import {
     Lock
 } from "lucide-react"
 import { formatDate } from "@/lib/date-utils"
-import { PageLayout } from "@/components/layout/page-layout"
-import { BreadcrumbIcons } from "@/components/ui/custom-breadcrumb"
+import { SidebarLayout } from "@/components/layout/sidebar-layout"
+import { Breadcrumb } from "@/components/ui/breadcrumbs"
 
 // Import mock data
 import mockData from "@/lib/mock-data.json"
+
+const breadcrumbs: Breadcrumb[] = [
+    { label: "Dashboard", href: "/" },
+    { label: "Organization", href: "/organization", isCurrent: true },
+]
 
 // Organization type (would typically come from an API)
 type Organization = {
@@ -151,24 +156,13 @@ export default function OrganizationPage() {
     };
 
     return (
-        <PageLayout
-            title="Organization Settings"
-            breadcrumbs={[
-                {
-                    icon: BreadcrumbIcons.Dashboard,
-                    label: "Dashboard",
-                    href: "/"
-                },
-                {
-                    icon: BreadcrumbIcons.Users,
-                    label: "Organization",
-                    isActive: true
-                }
-            ]}
-        >
+        <SidebarLayout breadcrumbs={breadcrumbs}>
             <div className="flex flex-col space-y-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <p className="text-muted-foreground mt-1">Manage your organization&apos;s settings and members</p>
+                    <div>
+                        <h1 className="text-2xl font-semibold">Organization Settings</h1>
+                        <p className="text-muted-foreground mt-1">Manage your organization's settings and members</p>
+                    </div>
                     <div className="flex items-center gap-3">
                         <Select
                             defaultValue={currentOrg.id}
@@ -252,7 +246,7 @@ export default function OrganizationPage() {
                                     value="security"
                                     className="data-[state=active]:border-primary data-[state=active]:border-b-2 data-[state=active]:shadow-none rounded-none px-4 h-12 data-[state=active]:text-foreground"
                                 >
-                                    <Lock className="h-4 w-4 mr-2" />
+                                    <ShieldCheck className="h-4 w-4 mr-2" />
                                     Security
                                 </TabsTrigger>
                             </TabsList>
@@ -731,7 +725,7 @@ export default function OrganizationPage() {
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
-                                    <Lock className="h-5 w-5" />
+                                    <ShieldCheck className="h-5 w-5" />
                                     Security Settings
                                 </CardTitle>
                                 <CardDescription>Configure your organization&apos;s security settings</CardDescription>
@@ -817,6 +811,6 @@ export default function OrganizationPage() {
                     </TabsContent>
                 </Tabs>
             </div>
-        </PageLayout>
+        </SidebarLayout>
     )
 } 

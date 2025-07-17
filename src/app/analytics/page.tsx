@@ -2,12 +2,15 @@
 
 import { Suspense } from "react"
 import { Activity, BarChart3, LineChart, PieChart } from "lucide-react"
-import { PageLayout } from "@/components/layout/page-layout"
+import { SidebarLayout } from "@/components/layout/sidebar-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BreadcrumbIcons } from "@/components/ui/custom-breadcrumb"
 import { ChartSkeleton } from "@/components/ui/chart-skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { CustomChartContainer } from "@/components/ui/chart-container"
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
 import {
   AreaChart,
   Area,
@@ -23,9 +26,15 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts'
+import { Breadcrumb } from "@/components/ui/breadcrumbs"
 
 // Import mock data
 import mockData from "@/lib/mock-data.json"
+
+const breadcrumbs: Breadcrumb[] = [
+  { label: "Dashboard", href: "/" },
+  { label: "Analytics", href: "/analytics", isCurrent: true },
+]
 
 export default function AnalyticsPage() {
   const { analytics, projects, users, tasks } = mockData
@@ -57,16 +66,14 @@ export default function AnalyticsPage() {
   const developmentTasks = taskDistribution.development;
 
   // Format pie chart data
-  const timeUtilizationData = Object.entries(analytics.overview.timeTracking).map(([key, value], index) => ({
+  const timeUtilizationData = Object.entries(analytics.overview.timeTracking).map(([key, value]) => ({
     name: key.charAt(0).toUpperCase() + key.slice(1),
-    value: value as number,
-    fill: `hsl(var(--chart-${index + 1}))`
+    value: value as number
   }));
 
-  const taskDistributionData = Object.entries(analytics.overview.taskDistribution).map(([key, value], index) => ({
+  const taskDistributionData = Object.entries(analytics.overview.taskDistribution).map(([key, value]) => ({
     name: key.charAt(0).toUpperCase() + key.slice(1),
-    value: value as number,
-    fill: `hsl(var(--chart-${index + 1}))`
+    value: value as number
   }));
 
   // Format team performance data for bar chart
@@ -77,21 +84,7 @@ export default function AnalyticsPage() {
   }));
 
   return (
-    <PageLayout
-      title="Analytics Dashboard"
-      breadcrumbs={[
-        {
-          icon: BreadcrumbIcons.Dashboard,
-          label: "Dashboard",
-          href: "/"
-        },
-        {
-          icon: BreadcrumbIcons.Charts,
-          label: "Analytics",
-          isActive: true
-        }
-      ]}
-    >
+    <SidebarLayout breadcrumbs={breadcrumbs}>
       <div className="space-y-6">
         {/* Overview Stats */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -178,79 +171,80 @@ export default function AnalyticsPage() {
                   </TabsList>
 
                   <TabsContent value="projectCompletion" className="space-y-4">
-                    <CustomChartContainer
-                      title="Project Completion Rate Over Time"
-                      icon={<LineChart className="h-4 w-4" />}
+                    <ChartContainer
+                      className="h-[350px] w-full"
+                      config={{
+                        value: {
+                          label: "Completion Rate",
+                          color: "#6666FF",
+                        },
+                      }}
                     >
-                      <div className="h-[350px]">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <AreaChart
-                            data={projectCompletionData}
-                            margin={{ top: 10, right: 30, left: 0, bottom: 30 }}
-                          >
-                            <defs>
-                              <linearGradient id="colorCompletion" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="hsl(var(--chart-1))" stopOpacity={0.8} />
-                                <stop offset="95%" stopColor="hsl(var(--chart-1))" stopOpacity={0.1} />
-                              </linearGradient>
-                            </defs>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis
-                              dataKey="month"
-                              tick={{ fontSize: 12 }}
-                              padding={{ left: 10, right: 10 }}
-                            />
-                            <YAxis
-                              domain={[0, 100]}
-                              tickFormatter={(value) => `${value}%`}
-                              tick={{ fontSize: 12 }}
-                            />
-                            <Tooltip
-                              formatter={(value) => [`${value}%`, 'Completion Rate']}
-                              labelFormatter={(label) => `Month: ${label}`}
-                            />
-                            <Legend />
-                            <Area
-                              type="monotone"
-                              dataKey="value"
-                              name="Completion Rate"
-                              stroke="hsl(var(--chart-1))"
-                              fillOpacity={1}
-                              fill="url(#colorCompletion)"
-                            />
-                          </AreaChart>
-                        </ResponsiveContainer>
-                      </div>
-                    </CustomChartContainer>
+                      <AreaChart
+                        data={projectCompletionData}
+                        margin={{ top: 10, right: 30, left: 0, bottom: 30 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis
+                          dataKey="month"
+                          tick={{ fontSize: 12 }}
+                          padding={{ left: 10, right: 10 }}
+                        />
+                        <YAxis
+                          domain={[0, 100]}
+                          tickFormatter={(value) => `${value}%`}
+                          tick={{ fontSize: 12 }}
+                        />
+                        <ChartTooltip
+                          content={<ChartTooltipContent />}
+                        />
+                        <Legend />
+                        <Area
+                          type="monotone"
+                          dataKey="value"
+                          fill="var(--color-value)"
+                          stroke="var(--color-value)"
+                          fillOpacity={0.4}
+                          strokeWidth={2}
+                        />
+                      </AreaChart>
+                    </ChartContainer>
                   </TabsContent>
 
                   <TabsContent value="teamPerformance" className="space-y-4">
-                    <CustomChartContainer
-                      title="Team Performance Analysis"
-                      icon={<BarChart3 className="h-4 w-4" />}
+                    <ChartContainer
+                      className="h-[350px] w-full"
+                      config={{
+                        completed: {
+                          label: "Completed Tasks",
+                          color: "#6666FF",
+                        },
+                        pending: {
+                          label: "Pending Tasks",
+                          color: "#4287f5",
+                        },
+                      }}
                     >
-                      <div className="h-[350px]">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart
-                            data={formattedTeamData}
-                            margin={{ top: 20, right: 30, left: 20, bottom: 30 }}
-                          >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis
-                              dataKey="name"
-                              tick={{ fontSize: 12 }}
-                            />
-                            <YAxis
-                              tick={{ fontSize: 12 }}
-                            />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="completed" name="Completed Tasks" stackId="a" fill="hsl(var(--chart-1))" />
-                            <Bar dataKey="pending" name="Pending Tasks" stackId="a" fill="hsl(var(--chart-2))" />
-                          </BarChart>
-                        </ResponsiveContainer>
-                      </div>
-                    </CustomChartContainer>
+                      <BarChart
+                        data={formattedTeamData}
+                        margin={{ top: 20, right: 30, left: 20, bottom: 30 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis
+                          dataKey="name"
+                          tick={{ fontSize: 12 }}
+                        />
+                        <YAxis
+                          tick={{ fontSize: 12 }}
+                        />
+                        <ChartTooltip
+                          content={<ChartTooltipContent />}
+                        />
+                        <Legend />
+                        <Bar dataKey="completed" stackId="a" fill="var(--color-completed)" />
+                        <Bar dataKey="pending" stackId="a" fill="var(--color-pending)" />
+                      </BarChart>
+                    </ChartContainer>
                   </TabsContent>
                 </Tabs>
               </Card>
@@ -258,67 +252,63 @@ export default function AnalyticsPage() {
           </div>
         </Tabs>
 
-        {/* Resource Utilization and Task Distribution */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <CustomChartContainer
-            title="Time Utilization"
-            icon={<PieChart className="h-4 w-4" />}
-          >
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Time Utilization</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer
+                className="h-[300px] w-full"
+                config={{
+                  Development: { label: "Development", color: "#6666FF" },
+                  Meetings: { label: "Meetings", color: "#4287f5" },
+                  Planning: { label: "Planning", color: "#7986cb" },
+                  Research: { label: "Research", color: "#4caf50" },
+                  Other: { label: "Other", color: "#ff9800" },
+                }}
+              >
                 <RechartsPieChart>
-                  <Pie
-                    data={timeUtilizationData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={true}
-                    outerRadius={100}
-                    fill="#8884d8"
-                    dataKey="value"
-                    nameKey="name"
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                  >
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Pie data={timeUtilizationData} dataKey="value" nameKey="name">
                     {timeUtilizationData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                      <Cell key={`cell-${index}`} fill={`var(--color-${entry.name})`} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => `${value} hours`} />
                   <Legend />
                 </RechartsPieChart>
-              </ResponsiveContainer>
-            </div>
-          </CustomChartContainer>
-
-          <CustomChartContainer
-            title="Task Distribution"
-            icon={<Activity className="h-4 w-4" />}
-          >
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
+              </ChartContainer>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Task Distribution</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer
+                className="h-[300px] w-full"
+                config={{
+                  Development: { label: "Development", color: "#6666FF" },
+                  Design: { label: "Design", color: "#4287f5" },
+                  Marketing: { label: "Marketing", color: "#7986cb" },
+                  Research: { label: "Research", color: "#4caf50" },
+                  Other: { label: "Other", color: "#ff9800" },
+                }}
+              >
                 <RechartsPieChart>
-                  <Pie
-                    data={taskDistributionData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={true}
-                    outerRadius={100}
-                    fill="#8884d8"
-                    dataKey="value"
-                    nameKey="name"
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                  >
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Pie data={taskDistributionData} dataKey="value" nameKey="name">
                     {taskDistributionData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                      <Cell key={`cell-${index}`} fill={`var(--color-${entry.name})`} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => `${value}%`} />
                   <Legend />
                 </RechartsPieChart>
-              </ResponsiveContainer>
-            </div>
-          </CustomChartContainer>
+              </ChartContainer>
+            </CardContent>
+          </Card>
         </div>
       </div>
-    </PageLayout>
+    </SidebarLayout>
   )
 } 
