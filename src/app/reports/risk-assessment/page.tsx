@@ -233,38 +233,38 @@ export default function RiskAssessmentPage() {
         >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 {/* Risk Status Distribution Chart */}
-                <Card className="w-full border border-[rgba(3,0,49,0.12)] shadow-sm bg-white overflow-hidden">
-                    <CardHeader className="pb-0 pt-5 px-6 border-b border-[rgba(3,0,49,0.08)]">
-                        <CardTitle className="text-base font-medium flex items-center text-[rgba(3,0,41,0.9)]">
+                <Card className="w-full">
+                    <CardHeader>
+                        <CardTitle className="text-base font-medium">
                             Risk Status Distribution
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="pt-4 px-6">
+                    <CardContent>
                         <RiskStatusChart />
                     </CardContent>
                 </Card>
 
                 {/* Risk Severity Levels Chart */}
-                <Card className="w-full border border-[rgba(3,0,49,0.12)] shadow-sm bg-white overflow-hidden">
-                    <CardHeader className="pb-0 pt-5 px-6 border-b border-[rgba(3,0,49,0.08)]">
-                        <CardTitle className="text-base font-medium flex items-center text-[rgba(3,0,41,0.9)]">
+                <Card className="w-full">
+                    <CardHeader>
+                        <CardTitle className="text-base font-medium">
                             Risk Severity Levels
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="pt-4 px-6">
+                    <CardContent>
                         <RiskSeverityChart />
                     </CardContent>
                 </Card>
             </div>
 
             {/* Risk Data Table */}
-            <Card className="w-full border border-[rgba(3,0,49,0.12)] shadow-sm bg-white overflow-hidden">
-                <div className="flex items-center justify-between p-6 border-b border-[rgba(3,0,49,0.12)]">
+            <Card className="w-full">
+                <div className="flex items-center justify-between p-6 border-b">
                     <div className="relative w-full max-w-sm">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                         <Input
                             placeholder="Search"
-                            className="pl-9 pr-4 py-2 h-10 rounded-md border border-[rgba(3,0,49,0.12)]"
+                            className="pl-9 pr-4 py-2 h-10 rounded-md"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -272,13 +272,11 @@ export default function RiskAssessmentPage() {
                     <Button
                         size="sm"
                         variant="outline"
-                        className="h-10 px-4 border border-[rgba(3,0,49,0.12)]"
+                        className="h-10 px-4"
                     >
                         <ChevronLeft className="h-4 w-4" />
                     </Button>
                 </div>
-
-                <div className="border-t border-[rgba(3,0,49,0.12)]"></div>
 
                 <div className="overflow-x-auto">
                     <Table>
@@ -294,7 +292,7 @@ export default function RiskAssessmentPage() {
                         </TableHeader>
                         <TableBody>
                             {currentRisks.map((risk, index) => (
-                                <TableRow key={risk.id} className="border-b border-[rgba(3,0,49,0.12)]">
+                                <TableRow key={risk.id}>
                                     <TableCell className="font-medium">{risk.id}</TableCell>
                                     <TableCell>{risk.description}</TableCell>
                                     <TableCell>
@@ -311,11 +309,11 @@ export default function RiskAssessmentPage() {
                     </Table>
                 </div>
 
-                <div className="flex items-center justify-between p-6 border-t border-[rgba(3,0,49,0.12)]">
+                <div className="flex items-center justify-between p-6 border-t">
                     <div className="flex items-center gap-2">
-                        <span className="text-sm text-[rgba(3,0,49,0.8)]">Show row:</span>
+                        <span className="text-sm">Show row:</span>
                         <select
-                            className="h-8 w-16 rounded-md border border-[rgba(3,0,49,0.12)] text-sm px-2"
+                            className="h-8 w-16 rounded-md border text-sm px-2"
                             value={rowsPerPage}
                             onChange={(e) => setRowsPerPage(Number(e.target.value))}
                         >
@@ -328,19 +326,19 @@ export default function RiskAssessmentPage() {
                         <Button
                             size="sm"
                             variant="outline"
-                            className="h-8 w-8 p-0 border border-[rgba(3,0,49,0.12)]"
+                            className="h-8 w-8 p-0"
                             onClick={handlePrevPage}
                             disabled={currentPage === 1}
                         >
                             <ChevronLeft className="h-4 w-4" />
                         </Button>
-                        <span className="text-sm text-[rgba(3,0,49,0.8)]">
+                        <span className="text-sm">
                             {`${startIndex + 1}-${Math.min(endIndex, filteredRisks.length)} of ${filteredRisks.length}`}
                         </span>
                         <Button
                             size="sm"
                             variant="outline"
-                            className="h-8 w-8 p-0 border border-[rgba(3,0,49,0.12)]"
+                            className="h-8 w-8 p-0"
                             onClick={handleNextPage}
                             disabled={currentPage >= totalPages}
                         >

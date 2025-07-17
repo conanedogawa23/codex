@@ -1,4 +1,4 @@
-import { PageLayout } from "@/components/layout/page-layout"
+import { SidebarLayout } from "@/components/layout/sidebar-layout"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { PlusIcon, SearchIcon, MoreHorizontal } from "lucide-react"
@@ -12,10 +12,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { formatDate } from "@/lib/date-utils"
-import { BreadcrumbIcons } from "@/components/ui/custom-breadcrumb"
 
 // Import mock data
 import mockData from "@/lib/mock-data.json"
+
+// Helper to get status variant
+const getStatusVariant = (status: string) => {
+  return status === "active" ? "default" : "destructive"
+}
+
+const breadcrumbs = [
+  { label: "Dashboard", href: "/" },
+  { label: "Users", href: "/users", isCurrent: true },
+]
 
 export default function UsersPage() {
   const { users } = mockData
@@ -61,23 +70,12 @@ export default function UsersPage() {
   };
 
   return (
-    <PageLayout
-      title="Team Members"
-      breadcrumbs={[
-        {
-          icon: BreadcrumbIcons.Dashboard,
-          label: "Dashboard",
-          href: "/"
-        },
-        {
-          icon: BreadcrumbIcons.Users,
-          label: "Users",
-          isActive: true
-        }
-      ]}
-    >
+    <SidebarLayout breadcrumbs={breadcrumbs}>
       <div className="flex justify-between items-center mb-6">
-        <p className="text-muted-foreground">Manage team members and their permissions</p>
+        <div>
+          <h1 className="text-2xl font-semibold">Team Members</h1>
+          <p className="text-muted-foreground">Manage team members and their permissions</p>
+        </div>
         <div className="flex items-center gap-4">
           <div className="relative">
             <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -140,7 +138,7 @@ export default function UsersPage() {
                   </div>
                   <div className="space-y-2">
                     <p className="text-sm text-muted-foreground">Status</p>
-                    <Badge variant={user.status === "active" ? "default" : "destructive"} className="text-xs">
+                    <Badge variant={getStatusVariant(user.status)} className="text-xs">
                       {user.status === "active" ? "Active" : "Inactive"}
                     </Badge>
                   </div>
@@ -170,6 +168,6 @@ export default function UsersPage() {
           )
         })}
       </div>
-    </PageLayout>
+    </SidebarLayout>
   )
 } 

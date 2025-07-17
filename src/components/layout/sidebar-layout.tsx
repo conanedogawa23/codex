@@ -47,6 +47,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { Breadcrumb, Breadcrumbs } from "@/components/ui/breadcrumbs"
 
 // Import mock data
 import mockData from '@/lib/mock-data.json'
@@ -94,7 +95,13 @@ function NotificationItem({ title, description, time }: NotificationItemProps) {
   )
 }
 
-export function SidebarLayout({ children }: { children: React.ReactNode }) {
+export function SidebarLayout({
+  children,
+  breadcrumbs
+}: {
+  children: React.ReactNode,
+  breadcrumbs?: Breadcrumb[]
+}) {
   const pathname = usePathname()
   const [isMobileView, setIsMobileView] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(true)
@@ -461,13 +468,13 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* Main content */}
-      <main className={`
-        flex-1 overflow-auto transition-all duration-300
-        ${sidebarCollapsed ? 'md:ml-20' : 'md:ml-64'}
-        pt-16
-      `}>
-        <div className="h-full">
-          {children}
+      <main
+        className={`flex-1 transition-all duration-300 ease-in-out pt-16 ${sidebarOpen && !isMobileView ? (sidebarCollapsed ? 'ml-20' : 'ml-64') : ''
+          }`}
+      >
+        <div className="p-4 md:p-6 lg:p-8">
+          {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
+          <div className="mt-4">{children}</div>
         </div>
       </main>
     </div>

@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { CustomChartContainer } from "@/components/ui/chart-container"
 import { formatDate } from "@/lib/date-utils"
+import { cn } from "@/lib/utils"
 
 // Import mock data
 import mockData from "@/lib/mock-data.json"
@@ -120,10 +121,10 @@ export default function Home() {
               className="h-[300px]"
               config={{
                 completed: {
-                  theme: { light: "#4ade80", dark: "#4ade80" }
+                  theme: { light: "hsl(var(--chart-1))", dark: "hsl(var(--chart-1))" }
                 },
                 inProgress: {
-                  theme: { light: "#60a5fa", dark: "#60a5fa" }
+                  theme: { light: "hsl(var(--chart-2))", dark: "hsl(var(--chart-2))" }
                 }
               }}
             >
@@ -133,8 +134,8 @@ export default function Home() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="completed" name="Completed" fill="#4ade80" />
-                <Bar dataKey="inProgress" name="In Progress" fill="#60a5fa" />
+                <Bar dataKey="completed" name="Completed" fill="var(--color-completed)" />
+                <Bar dataKey="inProgress" name="In Progress" fill="var(--color-inProgress)" />
               </BarChart>
             </ChartContainer>
           </CardContent>
@@ -147,10 +148,10 @@ export default function Home() {
             <ChartContainer
               className="h-[300px]"
               config={{
-                "0": { theme: { light: "#4ade80", dark: "#4ade80" } },
-                "1": { theme: { light: "#60a5fa", dark: "#60a5fa" } },
-                "2": { theme: { light: "#f472b6", dark: "#f472b6" } },
-                "3": { theme: { light: "#fb923c", dark: "#fb923c" } }
+                "0": { theme: { light: "hsl(var(--chart-1))", dark: "hsl(var(--chart-1))" } },
+                "1": { theme: { light: "hsl(var(--chart-2))", dark: "hsl(var(--chart-2))" } },
+                "2": { theme: { light: "hsl(var(--chart-3))", dark: "hsl(var(--chart-3))" } },
+                "3": { theme: { light: "hsl(var(--chart-4))", dark: "hsl(var(--chart-4))" } }
               }}
             >
               <PieChart>
@@ -164,7 +165,7 @@ export default function Home() {
                   label
                 >
                   {tasksOverview.map((entry, index) => {
-                    const colors = ["#4ade80", "#60a5fa", "#f472b6", "#fb923c"];
+                    const colors = ["hsl(var(--chart-1))", "hsl(var(--chart-2))", "hsl(var(--chart-3))", "hsl(var(--chart-4))"];
                     return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />;
                   })}
                 </Pie>
@@ -187,12 +188,12 @@ export default function Home() {
                 <div className="flex-1 space-y-1">
                   <div className="flex justify-between items-center">
                     <div className="font-medium">{project.name}</div>
-                    <Badge className={
+                    <Badge variant={
                       project.priority === "high"
-                        ? "bg-red-100 text-red-800 hover:bg-red-200"
+                        ? "destructive"
                         : project.priority === "medium"
-                          ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
-                          : "bg-green-100 text-green-800 hover:bg-green-200"
+                          ? "warning"
+                          : "default"
                     }>
                       {project.priority.charAt(0).toUpperCase() + project.priority.slice(1)}
                     </Badge>
@@ -221,12 +222,11 @@ export default function Home() {
           <div className="space-y-4">
             {priorityTasks.map((task) => (
               <div key={task.id} className="flex items-start gap-3">
-                <div className={`w-2 h-2 mt-1.5 rounded-full ${task.priority === "high"
-                  ? "bg-red-500"
-                  : task.priority === "medium"
-                    ? "bg-yellow-500"
-                    : "bg-green-500"
-                  }`}></div>
+                <div className={cn("w-2 h-2 mt-1.5 rounded-full",
+                  task.priority === "high" && "bg-destructive",
+                  task.priority === "medium" && "bg-warning",
+                  task.priority === "low" && "bg-primary"
+                )}></div>
                 <div className="flex-1 space-y-1">
                   <div className="font-medium">{task.title}</div>
                   <div className="text-xs text-muted-foreground line-clamp-1">{task.description}</div>
@@ -235,11 +235,9 @@ export default function Home() {
                       <Badge variant="outline" className="text-xs">
                         {task.project}
                       </Badge>
-                      <Badge variant="outline" className={
-                        task.status === "in-progress"
-                          ? "bg-blue-100 text-blue-800 border-blue-200"
-                          : "bg-gray-100 text-gray-800 border-gray-200"
-                      }>
+                      <Badge variant="outline" className={cn(
+                        task.status === "in-progress" && "bg-blue-100 text-blue-800 border-blue-200"
+                      )}>
                         {task.status === "in-progress" ? "In Progress" : "To Do"}
                       </Badge>
                     </div>

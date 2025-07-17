@@ -27,8 +27,6 @@ import {
 // Import mock data
 import mockData from "@/lib/mock-data.json"
 
-const COLORS = ['#5856D6', '#FF6B6B', '#4CAF50', '#FF9800', '#2196F3', '#673AB7'];
-
 export default function AnalyticsPage() {
   const { analytics, projects, users, tasks } = mockData
 
@@ -62,13 +60,13 @@ export default function AnalyticsPage() {
   const timeUtilizationData = Object.entries(analytics.overview.timeTracking).map(([key, value], index) => ({
     name: key.charAt(0).toUpperCase() + key.slice(1),
     value: value as number,
-    fill: COLORS[index % COLORS.length]
+    fill: `hsl(var(--chart-${index + 1}))`
   }));
 
   const taskDistributionData = Object.entries(analytics.overview.taskDistribution).map(([key, value], index) => ({
     name: key.charAt(0).toUpperCase() + key.slice(1),
     value: value as number,
-    fill: COLORS[index % COLORS.length]
+    fill: `hsl(var(--chart-${index + 1}))`
   }));
 
   // Format team performance data for bar chart
@@ -192,8 +190,8 @@ export default function AnalyticsPage() {
                           >
                             <defs>
                               <linearGradient id="colorCompletion" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#5856D6" stopOpacity={0.8} />
-                                <stop offset="95%" stopColor="#5856D6" stopOpacity={0.1} />
+                                <stop offset="5%" stopColor="hsl(var(--chart-1))" stopOpacity={0.8} />
+                                <stop offset="95%" stopColor="hsl(var(--chart-1))" stopOpacity={0.1} />
                               </linearGradient>
                             </defs>
                             <CartesianGrid strokeDasharray="3 3" />
@@ -216,7 +214,7 @@ export default function AnalyticsPage() {
                               type="monotone"
                               dataKey="value"
                               name="Completion Rate"
-                              stroke="#5856D6"
+                              stroke="hsl(var(--chart-1))"
                               fillOpacity={1}
                               fill="url(#colorCompletion)"
                             />
@@ -247,8 +245,8 @@ export default function AnalyticsPage() {
                             />
                             <Tooltip />
                             <Legend />
-                            <Bar dataKey="completed" name="Completed Tasks" stackId="a" fill="#5856D6" />
-                            <Bar dataKey="pending" name="Pending Tasks" stackId="a" fill="#CCCCF6" />
+                            <Bar dataKey="completed" name="Completed Tasks" stackId="a" fill="hsl(var(--chart-1))" />
+                            <Bar dataKey="pending" name="Pending Tasks" stackId="a" fill="hsl(var(--chart-2))" />
                           </BarChart>
                         </ResponsiveContainer>
                       </div>

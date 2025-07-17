@@ -48,6 +48,7 @@
     from {
       height: 0;
     }
+
     to {
       height: var(--radix-accordion-content-height);
     }
@@ -57,6 +58,7 @@
     from {
       height: var(--radix-accordion-content-height);
     }
+
     to {
       height: 0;
     }
@@ -90,6 +92,12 @@
 
   --destructive: #f44336;
   --destructive-foreground: #ffffff;
+
+  --warning: #ff9800;
+  --warning-foreground: #ffffff;
+
+  --success: #4caf50;
+  --success-foreground: #ffffff;
 
   --border: #e0e0e0;
   --input: #cccccc;
@@ -138,6 +146,12 @@
   --destructive: #f44336;
   --destructive-foreground: #ffffff;
 
+  --warning: #ff9800;
+  --warning-foreground: #ffffff;
+
+  --success: #4caf50;
+  --success-foreground: #ffffff;
+
   --border: rgba(255, 255, 255, 0.15);
   --input: rgba(255, 255, 255, 0.15);
   --ring: #8282FF;
@@ -164,47 +178,53 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
-  
+
   /* Smooth scrolling and improved mobile behavior */
   html {
     scroll-behavior: smooth;
   }
-  
+
   /* Ensure proper overflow handling */
-  body, #__next, main {
+  body,
+  #__next,
+  main {
     overflow-x: hidden;
   }
-  
+
   /* Custom scrollbar styling */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
-  
+
   ::-webkit-scrollbar-track {
     background: transparent;
   }
-  
+
   ::-webkit-scrollbar-thumb {
     background: hsl(var(--muted-foreground) / 0.3);
     border-radius: 3px;
   }
-  
+
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--muted-foreground) / 0.5);
   }
-  
+
   /* Improve mobile touch targets */
   @media (max-width: 768px) {
-    button, a, [role="button"] {
+
+    button,
+    a,
+    [role="button"] {
       min-height: 44px;
       min-width: 44px;
     }
   }
-  
+
   /* Better focus visible states */
   .focus-visible:focus-visible {
     outline: 2px solid hsl(var(--ring));

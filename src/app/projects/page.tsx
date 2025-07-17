@@ -68,32 +68,6 @@ export default function ProjectsPage() {
   // Get unique categories for filter
   const categories = Array.from(new Set(allProjects.map(project => project.category)))
 
-  const getStatusBadgeColor = (status: string) => {
-    switch (status) {
-      case "active":
-        return "bg-green-100 text-green-800 border-green-200 hover:bg-green-200"
-      case "completed":
-        return "bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-200"
-      case "planned":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-200"
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200"
-    }
-  }
-
-  const getPriorityBadgeColor = (priority: string) => {
-    switch (priority) {
-      case "high":
-        return "bg-red-100 text-red-800 border-red-200 hover:bg-red-200"
-      case "medium":
-        return "bg-orange-100 text-orange-800 border-orange-200 hover:bg-orange-200"
-      case "low":
-        return "bg-green-100 text-green-800 border-green-200 hover:bg-green-200"
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200"
-    }
-  }
-
   return (
     <PageLayout
       title="Projects"
@@ -307,7 +281,13 @@ export default function ProjectsPage() {
                       <CardTitle className="text-base sm:text-lg line-clamp-1">{project.name}</CardTitle>
                       <CardDescription className="line-clamp-2 text-xs sm:text-sm">{project.description}</CardDescription>
                     </div>
-                    <Badge className={`${getStatusBadgeColor(project.status)}`}>{project.status}</Badge>
+                    <Badge variant={
+                      project.status === "active"
+                        ? "success"
+                        : project.status === "completed"
+                          ? "default"
+                          : "secondary"
+                    }>{project.status}</Badge>
                   </div>
                 </CardHeader>
                 <CardContent className="flex-1 py-3">
@@ -326,7 +306,13 @@ export default function ProjectsPage() {
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-muted-foreground">Priority:</span>
-                        <Badge className={getPriorityBadgeColor(project.priority)}>
+                        <Badge variant={
+                          project.priority === "high"
+                            ? "destructive"
+                            : project.priority === "medium"
+                              ? "warning"
+                              : "default"
+                        }>
                           {project.priority}
                         </Badge>
                       </div>

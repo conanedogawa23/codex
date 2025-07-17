@@ -20,10 +20,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { formatDate } from "@/lib/date-utils"
-import { PageLayout } from "@/components/layout/page-layout"
-import { BreadcrumbIcons } from "@/components/ui/custom-breadcrumb"
+import { SidebarLayout } from "@/components/layout/sidebar-layout"
 import {
   BarChart,
   Bar,
@@ -37,6 +37,24 @@ import {
 
 // Import mock data
 import mockData from "@/lib/mock-data.json"
+
+// Helper to determine trend variant
+const getTrendVariant = (trend: "up" | "down" | "stable") => {
+  switch (trend) {
+    case "up":
+      return "success"
+    case "down":
+      return "destructive"
+    default:
+      return "default"
+  }
+}
+
+const breadcrumbs = [
+  { label: "Dashboard", href: "/" },
+  { label: "Reports", href: "/reports" },
+  { label: "Velocity", href: "/reports/velocity", isCurrent: true },
+]
 
 export default function VelocityReportPage() {
   // State for filtering
@@ -73,28 +91,12 @@ export default function VelocityReportPage() {
   }))
 
   return (
-    <PageLayout
-      title="Sprint Velocity"
-      breadcrumbs={[
-        {
-          icon: BreadcrumbIcons.Dashboard,
-          label: "Dashboard",
-          href: "/"
-        },
-        {
-          icon: BreadcrumbIcons.Reports,
-          label: "Reports",
-          href: "/reports"
-        },
-        {
-          icon: BreadcrumbIcons.Time,
-          label: "Sprint Velocity",
-          isActive: true
-        }
-      ]}
-    >
+    <SidebarLayout breadcrumbs={breadcrumbs}>
       <div className="flex justify-between items-center mb-6">
-        <p className="text-muted-foreground mt-1">Track team performance across sprints</p>
+        <div>
+          <h1 className="text-2xl font-semibold">Sprint Velocity</h1>
+          <p className="text-muted-foreground mt-1">Track team performance across sprints</p>
+        </div>
 
         <div className="flex items-center gap-3">
           <Button variant="outline">
@@ -137,21 +139,12 @@ export default function VelocityReportPage() {
                 <h3 className="text-sm font-medium text-muted-foreground mb-1">Average Completed</h3>
                 <div className="text-3xl font-bold">{avgCompleted} <span className="text-sm font-normal text-muted-foreground">story points</span></div>
                 <div className="flex items-center mt-2">
-                  {completionTrend === "up" && (
-                    <div className="text-green-600 flex items-center text-sm">
-                      <ArrowUp className="h-3 w-3 mr-1" /> Trending up
-                    </div>
-                  )}
-                  {completionTrend === "down" && (
-                    <div className="text-red-600 flex items-center text-sm">
-                      <ArrowDown className="h-3 w-3 mr-1" /> Trending down
-                    </div>
-                  )}
-                  {completionTrend === "stable" && (
-                    <div className="text-gray-600 flex items-center text-sm">
-                      <Minus className="h-3 w-3 mr-1" /> Stable
-                    </div>
-                  )}
+                  <Badge variant={getTrendVariant(completionTrend)}>
+                    {completionTrend === "up" && <ArrowUp className="h-3 w-3 mr-1" />}
+                    {completionTrend === "down" && <ArrowDown className="h-3 w-3 mr-1" />}
+                    {completionTrend === "stable" && <Minus className="h-3 w-3 mr-1" />}
+                    Trending {completionTrend}
+                  </Badge>
                 </div>
               </Card>
 
@@ -174,33 +167,40 @@ export default function VelocityReportPage() {
                     <XAxis
                       dataKey="name"
                       tick={{ fontSize: 12 }}
+                      stroke="hsl(var(--muted-foreground))"
                     />
                     <YAxis
                       tick={{ fontSize: 12 }}
+                      stroke="hsl(var(--muted-foreground))"
                       domain={[0, Math.ceil(maxValue * 1.1)]}
                       label={{
                         value: 'Story Points',
                         angle: -90,
                         position: 'insideLeft',
-                        style: { textAnchor: 'middle' }
+                        style: { textAnchor: 'middle', fill: "hsl(var(--muted-foreground))" }
                       }}
                     />
                     <Tooltip
                       formatter={(value) => [`${value} points`, '']}
                       labelFormatter={(label) => `Sprint: ${label}`}
+                      contentStyle={{
+                        backgroundColor: "hsl(var(--card))",
+                        borderColor: "hsl(var(--border))",
+                        color: "hsl(var(--card-foreground))"
+                      }}
                     />
-                    <Legend />
+                    <Legend wrapperStyle={{ color: "hsl(var(--muted-foreground))" }} />
                     <Bar
                       dataKey="committed"
                       name="Committed Points"
-                      fill="#93c5fd"
+                      fill="hsl(var(--primary) / 0.5)"
                       radius={[4, 4, 0, 0]}
                       barSize={30}
                     />
                     <Bar
                       dataKey="completed"
                       name="Completed Points"
-                      fill="#3b82f6"
+                      fill="hsl(var(--primary))"
                       radius={[4, 4, 0, 0]}
                       barSize={30}
                     />
@@ -248,7 +248,7 @@ export default function VelocityReportPage() {
             <Card className="p-6">
               <div className="grid grid-cols-1 gap-4">
                 {sprintsToDisplay.map(sprint => (
-                  <div key={sprint.id} className="p-4 border rounded">
+                  <div key={sprint.id} className="p-4 border rounded-lg">
                     <div className="flex justify-between mb-2">
                       <h3 className="font-semibold">{sprint.name}</h3>
                       <p className="text-sm text-muted-foreground">
@@ -271,9 +271,9 @@ export default function VelocityReportPage() {
 
                       {/* Simple progress bar */}
                       <div className="flex-1 ml-4">
-                        <div className="w-full bg-gray-100 rounded-full h-4">
+                        <div className="w-full bg-muted rounded-full h-4">
                           <div
-                            className="bg-blue-600 h-4 rounded-full"
+                            className="bg-primary h-4 rounded-full"
                             style={{ width: `${(sprint.completedPoints / sprint.committedPoints) * 100}%` }}
                           ></div>
                         </div>
@@ -307,6 +307,6 @@ export default function VelocityReportPage() {
           </TabsContent>
         </Tabs>
       </div>
-    </PageLayout>
+    </SidebarLayout>
   )
 } 

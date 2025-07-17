@@ -25,6 +25,7 @@ import {
 import { formatDate } from "@/lib/date-utils"
 import { PageLayout } from "@/components/layout/page-layout"
 import { BreadcrumbIcons } from "@/components/ui/custom-breadcrumb"
+import { cn } from "@/lib/utils"
 
 // Import mock data
 import mockData from "@/lib/mock-data.json"
@@ -49,11 +50,6 @@ export default function ReleasesReportPage() {
   // Format change number with + for positive values
   const formatChangeNumber = (num: number) => {
     return num > 0 ? `+${num}%` : `${num}%`
-  }
-
-  // Get change color
-  const getChangeColor = (num: number) => {
-    return num > 0 ? 'text-green-600' : 'text-red-600'
   }
 
   return (
@@ -127,7 +123,7 @@ export default function ReleasesReportPage() {
                 <BarChart3 className="h-8 w-8 text-primary/20" />
               </div>
               <div className="flex items-center">
-                <span className={`text-sm font-medium ${getChangeColor(metrics.releaseFrequency?.changeFromLastQuarter || 0)}`}>
+                <span className={cn("text-sm font-medium", (metrics.releaseFrequency?.changeFromLastQuarter || 0) > 0 ? "text-success" : "text-destructive")}>
                   {formatChangeNumber(metrics.releaseFrequency?.changeFromLastQuarter || 0)}
                 </span>
                 <span className="text-xs text-muted-foreground ml-2">vs last quarter</span>
@@ -143,7 +139,7 @@ export default function ReleasesReportPage() {
                 <CheckCircle2 className="h-8 w-8 text-primary/20" />
               </div>
               <div className="flex items-center">
-                <span className={`text-sm font-medium ${getChangeColor(-(metrics.releaseQuality?.changeFromLastQuarter || 0))}`}>
+                <span className={cn("text-sm font-medium", (metrics.releaseQuality?.changeFromLastQuarter || 0) > 0 ? "text-destructive" : "text-success")}>
                   {formatChangeNumber(-(metrics.releaseQuality?.changeFromLastQuarter || 0))}
                 </span>
                 <span className="text-xs text-muted-foreground ml-2">vs last quarter</span>
@@ -159,7 +155,7 @@ export default function ReleasesReportPage() {
                 <Clock className="h-8 w-8 text-primary/20" />
               </div>
               <div className="flex items-center">
-                <span className={`text-sm font-medium ${getChangeColor(-(metrics.developmentEfficiency?.changeFromLastQuarter || 0))}`}>
+                <span className={cn("text-sm font-medium", (metrics.developmentEfficiency?.changeFromLastQuarter || 0) > 0 ? "text-destructive" : "text-success")}>
                   {formatChangeNumber(-(metrics.developmentEfficiency?.changeFromLastQuarter || 0))}
                 </span>
                 <span className="text-xs text-muted-foreground ml-2">vs last quarter</span>

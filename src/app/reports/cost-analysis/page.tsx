@@ -80,13 +80,13 @@ export default function CostAnalysisPage() {
         >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 {/* Estimated vs. Actual Costs Chart */}
-                <Card className="w-full border border-[rgba(3,0,49,0.12)] shadow-sm bg-white overflow-hidden">
-                    <CardHeader className="pb-0 pt-5 px-6 border-b border-[rgba(3,0,49,0.08)]">
-                        <CardTitle className="text-base font-medium flex items-center text-[rgba(3,0,41,0.9)]">
+                <Card className="w-full">
+                    <CardHeader>
+                        <CardTitle className="text-base font-medium">
                             Estimated Vs. Actual Costs per Project
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="pt-4 px-6">
+                    <CardContent>
                         <ChartContainer
                             className="h-[250px] sm:h-[300px] w-full"
                             config={{
@@ -126,7 +126,7 @@ export default function CostAnalysisPage() {
                                             angle: -90,
                                             position: 'insideLeft',
                                             offset: 0,
-                                            style: { textAnchor: 'middle', fontSize: '12px', fill: 'rgba(3, 0, 49, 0.8)' }
+                                            style: { textAnchor: 'middle', fontSize: '12px' }
                                         }}
                                     />
                                     <Tooltip formatter={(value) => [`${value.toLocaleString()} KWD`, '']} />
@@ -155,13 +155,13 @@ export default function CostAnalysisPage() {
                 </Card>
 
                 {/* Reasons for Cost Overruns Chart */}
-                <Card className="w-full border border-[rgba(3,0,49,0.12)] shadow-sm bg-white overflow-hidden">
-                    <CardHeader className="pb-0 pt-5 px-6 border-b border-[rgba(3,0,49,0.08)]">
-                        <CardTitle className="text-base font-medium flex items-center text-[rgba(3,0,41,0.9)]">
+                <Card className="w-full">
+                    <CardHeader>
+                        <CardTitle className="text-base font-medium">
                             Reasons for Cost Overrunns
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="pt-4 px-6">
+                    <CardContent>
                         <ChartContainer
                             className="h-[250px] sm:h-[300px] w-full"
                             config={{
@@ -210,15 +210,15 @@ export default function CostAnalysisPage() {
             </div>
 
             {/* Project Cost Details Table */}
-            <Card className="bg-[#F4F8FD] rounded-lg mb-6">
-                <div className="flex justify-between items-center p-3 border-b border-[rgba(3,0,49,0.12)]">
+            <Card>
+                <div className="flex justify-between items-center p-3 border-b">
                     <div></div>
                     <div className="flex items-center gap-2">
                         <div className="relative">
-                            <Search className="w-4 h-4 absolute left-2.5 top-2.5 text-gray-500" />
+                            <Search className="w-4 h-4 absolute left-2.5 top-2.5 text-muted-foreground" />
                             <Input
                                 placeholder="Search"
-                                className="pl-8 h-10 w-[220px] rounded-md border-[rgba(3,0,49,0.12)]"
+                                className="pl-8 h-10 w-[220px] rounded-md"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
@@ -226,47 +226,47 @@ export default function CostAnalysisPage() {
                         <Button
                             variant="outline"
                             size="icon"
-                            className="h-10 w-10 border-[rgba(3,0,49,0.12)]"
+                            className="h-10 w-10"
+                            onClick={handlePrevPage}
+                            disabled={currentPage === 1}
                         >
                             <ChevronLeft className="h-4 w-4" />
                         </Button>
                     </div>
                 </div>
-                <div className="border-b border-[rgba(3,0,49,0.12)]"></div>
                 <div className="overflow-x-auto">
                     <Table>
                         <TableHeader>
-                            <TableRow className="border-b border-[rgba(3,0,49,0.12)]">
-                                <TableHead className="px-4 py-6 font-bold text-[rgba(3,0,41,0.8)]">Project name</TableHead>
-                                <TableHead className="px-4 py-6 font-bold text-[rgba(3,0,41,0.8)]">Estimated budget (KWD)</TableHead>
-                                <TableHead className="px-4 py-6 font-bold text-[rgba(3,0,41,0.8)]">Actual cost (KWD)</TableHead>
-                                <TableHead className="px-4 py-6 font-bold text-[rgba(3,0,41,0.8)]">Cost per developer/hour</TableHead>
-                                <TableHead className="px-4 py-6 font-bold text-[rgba(3,0,41,0.8)]">Total resources utilized</TableHead>
-                                <TableHead className="px-4 py-6 font-bold text-[rgba(3,0,41,0.8)]">Cost overruns and reasons</TableHead>
+                            <TableRow>
+                                <TableHead className="px-4 py-6 font-bold">Project name</TableHead>
+                                <TableHead className="px-4 py-6 font-bold">Estimated budget (KWD)</TableHead>
+                                <TableHead className="px-4 py-6 font-bold">Actual cost (KWD)</TableHead>
+                                <TableHead className="px-4 py-6 font-bold">Cost per developer/hour</TableHead>
+                                <TableHead className="px-4 py-6 font-bold">Total resources utilized</TableHead>
+                                <TableHead className="px-4 py-6 font-bold">Cost overruns and reasons</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {currentProjects.map((project, index) => (
                                 <TableRow
                                     key={`${project.name}-${index}`}
-                                    className="border-b border-[rgba(3,0,49,0.12)]"
                                 >
-                                    <TableCell className="px-4 py-4 font-medium text-[rgba(3,0,49,0.8)]">
+                                    <TableCell className="px-4 py-4 font-medium">
                                         {project.name}
                                     </TableCell>
-                                    <TableCell className="px-4 py-4 text-[rgba(3,0,49,0.8)]">
+                                    <TableCell className="px-4 py-4">
                                         {project.estimatedBudget}
                                     </TableCell>
-                                    <TableCell className="px-4 py-4 text-[rgba(3,0,49,0.8)]">
+                                    <TableCell className="px-4 py-4">
                                         {project.actualCost}
                                     </TableCell>
-                                    <TableCell className="px-4 py-4 text-[rgba(3,0,49,0.8)]">
+                                    <TableCell className="px-4 py-4">
                                         {project.costPerHour}
                                     </TableCell>
-                                    <TableCell className="px-4 py-4 text-[rgba(3,0,49,0.8)]">
+                                    <TableCell className="px-4 py-4">
                                         {project.resourcesUtilized}
                                     </TableCell>
-                                    <TableCell className="px-4 py-4 text-[rgba(3,0,49,0.8)]">
+                                    <TableCell className="px-4 py-4">
                                         {project.costOverruns}
                                     </TableCell>
                                 </TableRow>
@@ -276,7 +276,7 @@ export default function CostAnalysisPage() {
                 </div>
                 <div className="flex justify-between items-center p-6">
                     <div className="flex items-center gap-2">
-                        <span className="text-sm text-[rgba(3,0,49,0.8)]">Show row:</span>
+                        <span className="text-sm">Show row:</span>
                         <Input
                             className="w-16 h-8"
                             type="number"
@@ -294,7 +294,7 @@ export default function CostAnalysisPage() {
                         >
                             <ChevronLeft className="h-4 w-4" />
                         </Button>
-                        <span className="text-sm text-[rgba(3,0,49,0.8)]">
+                        <span className="text-sm">
                             {startIndex + 1}-{Math.min(endIndex, filteredProjects.length)} of {filteredProjects.length}
                         </span>
                         <Button

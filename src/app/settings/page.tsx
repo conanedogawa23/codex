@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { PageLayout } from "@/components/layout/page-layout"
+import { SidebarLayout } from "@/components/layout/sidebar-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Label } from "@/components/ui/label"
@@ -13,7 +13,6 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Slider } from "@/components/ui/slider"
-import { BreadcrumbIcons } from "@/components/ui/custom-breadcrumb"
 import {
   Sun,
   Moon,
@@ -38,6 +37,7 @@ import { formatDate } from "@/lib/date-utils"
 
 // Import mock data
 import mockData from "@/lib/mock-data.json"
+import { cn } from "@/lib/utils"
 
 // Create mock settings data
 const mockSettings = {
@@ -84,14 +84,28 @@ const mockSettings = {
   ]
 };
 
+const colorPalette = [
+  { name: 'Sky', color: 'bg-sky-500' },
+  { name: 'Blue', color: 'bg-blue-500' },
+  { name: 'Rose', color: 'bg-rose-500' },
+  { name: 'Green', color: 'bg-green-500' },
+  { name: 'Purple', color: 'bg-purple-500' },
+  { name: 'Yellow', color: 'bg-yellow-500' }
+]
+
+const breadcrumbs = [
+  { label: "Dashboard", href: "/" },
+  { label: "Settings", href: "/settings", isCurrent: true },
+]
+
 export default function SettingsPage() {
   const { app } = mockData;
   const settings = mockSettings;
   const { notifications, display, privacy, integrations } = settings;
 
   const [activeTheme, setActiveTheme] = useState(display.theme)
-  const [primaryColor, setPrimaryColor] = useState("#0284c7")
-  const [accentColor, setAccentColor] = useState("#f97316")
+  const [primaryColor, setPrimaryColor] = useState("bg-sky-500")
+  const [accentColor, setAccentColor] = useState("bg-yellow-500")
   const [unsavedChanges, setUnsavedChanges] = useState(false)
 
   const handleThemeChange = (value: string) => {
@@ -113,24 +127,13 @@ export default function SettingsPage() {
   }
 
   return (
-    <PageLayout
-      title="Settings"
-      breadcrumbs={[
-        {
-          icon: BreadcrumbIcons.Dashboard,
-          label: "Dashboard",
-          href: "/"
-        },
-        {
-          icon: BreadcrumbIcons.Users,
-          label: "Settings",
-          isActive: true
-        }
-      ]}
-    >
+    <SidebarLayout breadcrumbs={breadcrumbs}>
       <div className="flex flex-col space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <p className="text-muted-foreground">Manage your account settings and preferences</p>
+          <div>
+            <h1 className="text-2xl font-semibold">Settings</h1>
+            <p className="text-muted-foreground">Manage your account settings and preferences</p>
+          </div>
           <Button
             className="gap-2"
             disabled={!unsavedChanges}
@@ -249,12 +252,13 @@ export default function SettingsPage() {
                     <Input id="new-password" type="password" />
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="confirm-password">Confirm Password</Label>
+                    <Label htmlFor="confirm-password">Confirm New Password</Label>
                     <Input id="confirm-password" type="password" />
                   </div>
                 </CardContent>
-                <CardFooter>
-                  <Button variant="outline" className="w-full">Change Password</Button>
+                <CardFooter className="flex justify-between items-center">
+                  <Button variant="destructive" className="w-1/3">Delete Account</Button>
+                  <Button variant="outline" className="w-1/2">Change Password</Button>
                 </CardFooter>
               </Card>
             </div>
@@ -262,126 +266,94 @@ export default function SettingsPage() {
 
           {/* Appearance Tab */}
           <TabsContent value="appearance" className="pt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Palette className="h-5 w-5" />
-                  Theme Settings
-                </CardTitle>
-                <CardDescription>Customize the appearance of the application</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Color Mode</h3>
+            <div className="grid gap-6 md:grid-cols-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Theme</CardTitle>
+                  <CardDescription>Select a theme for the application</CardDescription>
+                </CardHeader>
+                <CardContent>
                   <RadioGroup
-                    defaultValue={display.theme}
-                    value={activeTheme}
+                    defaultValue={activeTheme}
                     onValueChange={handleThemeChange}
-                    className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2"
+                    className="grid grid-cols-3 gap-4"
                   >
                     <div>
-                      <RadioGroupItem value="light" id="theme-light" className="peer sr-only" />
+                      <RadioGroupItem value="light" id="light" className="peer sr-only" />
                       <Label
-                        htmlFor="theme-light"
-                        className="flex flex-col items-center justify-between rounded-lg border-2 border-muted bg-background p-6 hover:bg-accent/10 peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                        htmlFor="light"
+                        className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                       >
-                        <Sun className="h-12 w-12 mb-3 text-orange-500" />
-                        <span className="font-medium">Light</span>
-                        <span className="text-xs text-muted-foreground mt-1">Bright theme for day use</span>
+                        <Sun className="h-6 w-6 mb-2" />
+                        Light
                       </Label>
                     </div>
                     <div>
-                      <RadioGroupItem value="dark" id="theme-dark" className="peer sr-only" />
+                      <RadioGroupItem value="dark" id="dark" className="peer sr-only" />
                       <Label
-                        htmlFor="theme-dark"
-                        className="flex flex-col items-center justify-between rounded-lg border-2 border-muted bg-background p-6 hover:bg-accent/10 peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                        htmlFor="dark"
+                        className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                       >
-                        <Moon className="h-12 w-12 mb-3 text-blue-600" />
-                        <span className="font-medium">Dark</span>
-                        <span className="text-xs text-muted-foreground mt-1">Dark theme for night use</span>
+                        <Moon className="h-6 w-6 mb-2" />
+                        Dark
                       </Label>
                     </div>
                     <div>
-                      <RadioGroupItem value="system" id="theme-system" className="peer sr-only" />
+                      <RadioGroupItem value="system" id="system" className="peer sr-only" />
                       <Label
-                        htmlFor="theme-system"
-                        className="flex flex-col items-center justify-between rounded-lg border-2 border-muted bg-background p-6 hover:bg-accent/10 peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                        htmlFor="system"
+                        className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                       >
-                        <Laptop className="h-12 w-12 mb-3 text-gray-500" />
-                        <span className="font-medium">System</span>
-                        <span className="text-xs text-muted-foreground mt-1">Follow system preference</span>
+                        <Laptop className="h-6 w-6 mb-2" />
+                        System
                       </Label>
                     </div>
                   </RadioGroup>
-                </div>
+                </CardContent>
+              </Card>
 
-                <Separator />
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Color Palette</h3>
-                  <div className="grid gap-6 md:grid-cols-2">
-                    <div className="space-y-3">
-                      <Label>Primary Color</Label>
-                      <div className="flex items-center gap-3">
-                        <Input
-                          type="color"
-                          value={primaryColor}
-                          onChange={(e) => handleColorChange('primary', e.target.value)}
-                          className="w-14 h-10 p-1"
-                        />
-                        <Input
-                          value={primaryColor.toUpperCase()}
-                          onChange={(e) => handleColorChange('primary', e.target.value)}
-                          className="font-mono uppercase"
-                        />
-                      </div>
-                      <div className="h-10 rounded-md" style={{ backgroundColor: primaryColor }} />
-                    </div>
-                    <div className="space-y-3">
-                      <Label>Accent Color</Label>
-                      <div className="flex items-center gap-3">
-                        <Input
-                          type="color"
-                          value={accentColor}
-                          onChange={(e) => handleColorChange('accent', e.target.value)}
-                          className="w-14 h-10 p-1"
-                        />
-                        <Input
-                          value={accentColor.toUpperCase()}
-                          onChange={(e) => handleColorChange('accent', e.target.value)}
-                          className="font-mono uppercase"
-                        />
-                      </div>
-                      <div className="h-10 rounded-md" style={{ backgroundColor: accentColor }} />
+              <Card>
+                <CardHeader>
+                  <CardTitle>Color Scheme</CardTitle>
+                  <CardDescription>Choose your primary and accent colors</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div>
+                    <Label className="mb-2 block">Primary Color</Label>
+                    <div className="flex gap-2">
+                      {colorPalette.map(p => (
+                        <Button
+                          key={p.name}
+                          variant={'outline'}
+                          className={cn('h-8 w-8 rounded-full p-0', primaryColor === p.color && 'border-2 border-primary')}
+                          onClick={() => handleColorChange('primary', p.color)}
+                        >
+                          <span className={cn('h-5 w-5 rounded-full', p.color)} />
+                        </Button>
+                      ))}
                     </div>
                   </div>
-                </div>
-
-                <Separator />
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-medium">UI Density</h3>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <Label className="font-medium">Compact</Label>
-                        <p className="text-sm text-muted-foreground">Less padding, more content</p>
-                      </div>
-                      <Label className="font-medium">Comfortable</Label>
+                  <div>
+                    <Label className="mb-2 block">Accent Color</Label>
+                    <div className="flex gap-2">
+                      {colorPalette.map(p => (
+                        <Button
+                          key={p.name}
+                          variant={'outline'}
+                          className={cn('h-8 w-8 rounded-full p-0', accentColor === p.color && 'border-2 border-primary')}
+                          onClick={() => handleColorChange('accent', p.color)}
+                        >
+                          <span className={cn('h-5 w-5 rounded-full', p.color)} />
+                        </Button>
+                      ))}
                     </div>
-                    <Slider
-                      defaultValue={[50]}
-                      max={100}
-                      step={1}
-                      className="w-full"
-                      onValueChange={() => setUnsavedChanges(true)}
-                    />
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
+          {/* Notifications Tab */}
           <TabsContent value="notifications" className="pt-6">
             <Card>
               <CardHeader>
@@ -741,6 +713,6 @@ export default function SettingsPage() {
           </TabsContent>
         </Tabs>
       </div>
-    </PageLayout>
+    </SidebarLayout>
   )
 } 
