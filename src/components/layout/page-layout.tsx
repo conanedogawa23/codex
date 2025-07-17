@@ -11,8 +11,8 @@ interface PageLayoutProps {
 export function PageLayout({ children, title, breadcrumbs }: PageLayoutProps) {
     return (
         <SidebarLayout>
-            <div className="min-h-screen flex flex-col bg-[#F6F6FB]">
-                <div className="w-full max-w-[1600px] mx-auto px-6 py-6">
+            <div className="min-h-screen bg-[#F6F6FB]">
+                <div className="w-full max-w-[1600px] mx-auto px-4 md:px-6 py-6">
                     {/* Breadcrumb navigation */}
                     {breadcrumbs && breadcrumbs.length > 0 && (
                         <div className="mb-4">
@@ -24,7 +24,9 @@ export function PageLayout({ children, title, breadcrumbs }: PageLayoutProps) {
                     <h1 className="text-xl sm:text-2xl md:text-[28px] font-medium text-[rgba(3,0,41,0.9)] mb-6">{title}</h1>
 
                     {/* Page content */}
-                    {children}
+                    <div className="w-full">
+                        {children}
+                    </div>
                 </div>
             </div>
         </SidebarLayout>

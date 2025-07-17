@@ -183,23 +183,23 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
       {/* Overlay for mobile */}
       {isMobileView && sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-40 md:hidden"
+          className="fixed inset-0 bg-black/50 z-30 md:hidden backdrop-blur-sm"
           onClick={() => setSidebarOpen(false)}
           aria-hidden="true"
         />
       )}
 
       {/* Simplified Header */}
-      <header className="fixed top-0 left-0 right-0 h-16 bg-background border-b z-50 flex items-center px-4 md:px-6">
-        <div className="flex items-center justify-between w-full">
+      <header className="fixed top-0 left-0 right-0 h-16 bg-background/95 backdrop-blur-sm border-b z-50 flex items-center">
+        <div className="flex items-center justify-between w-full px-4 md:px-6">
           <div className="flex items-center gap-4">
-            {/* Mobile menu toggle button with higher z-index */}
+            {/* Mobile menu toggle button */}
             <Button
               id="sidebar-toggle"
               variant="ghost"
               size="icon"
               onClick={toggleSidebar}
-              className="md:hidden z-50"
+              className="md:hidden z-50 h-10 w-10"
               aria-label="Toggle menu"
             >
               {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -207,7 +207,7 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
 
             {/* Logo */}
             <div className="flex items-center gap-2">
-              <Link href="/">
+              <Link href="/" className="flex items-center">
                 <Image
                   src="/images/innovation-logo.svg"
                   alt="INNOVATION EN"
@@ -220,7 +220,7 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Global Search - Moved to the right side */}
+            {/* Global Search */}
             <div className="hidden md:flex relative">
               <div className="relative flex items-center">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -305,158 +305,156 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      {/* Enhanced Sidebar with Collapse Toggle at the Bottom */}
+      {/* Enhanced Sidebar */}
       <aside
         id="mobile-sidebar"
         className={`
-          fixed left-0 top-0 bottom-0 bg-background border-r 
-          pt-16 transition-all duration-300 ease-in-out
-          ${isMobileView ? (sidebarOpen ? 'translate-x-0 z-50' : '-translate-x-full z-40') : 'translate-x-0 z-10'}
-          ${sidebarCollapsed ? 'md:w-20' : 'md:w-64'}
-          md:translate-x-0 md:z-0 md:pt-16
-          shadow-lg
+          fixed left-0 top-16 bottom-0 bg-background/95 backdrop-blur-sm border-r 
+          transition-all duration-300 ease-in-out z-40
+          ${isMobileView ?
+            (sidebarOpen ? 'translate-x-0 w-72' : '-translate-x-full w-72') :
+            (sidebarCollapsed ? 'w-20' : 'w-64')
+          }
+          ${!isMobileView ? 'translate-x-0' : ''}
         `}
-        style={{
-          width: isMobileView ? '280px' : sidebarCollapsed ? '80px' : '256px',
-          overflowY: 'auto',
-          height: '100vh'
-        }}
       >
-        <div className={`flex flex-col h-full overflow-y-auto ${sidebarCollapsed ? 'px-2' : 'px-4'} py-4`}>
-          {/* Search bar on mobile */}
-          {isMobileView && (
-            <div className="mb-4 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search tasks, projects, users..."
-                className="pl-9 w-full h-9 bg-muted/40 border-muted"
-              />
-            </div>
-          )}
+        <div className="flex flex-col h-full overflow-hidden">
+          <div className={`flex-1 overflow-y-auto ${sidebarCollapsed ? 'px-2' : 'px-4'} py-4`}>
+            {/* Search bar on mobile */}
+            {isMobileView && (
+              <div className="mb-4 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search tasks, projects, users..."
+                  className="pl-9 w-full h-9 bg-muted/40 border-muted"
+                />
+              </div>
+            )}
 
-          <nav className="space-y-1 overflow-y-auto">
-            {/* Main Menu */}
-            <div className={`mb-3 ${sidebarCollapsed ? 'pl-0 text-center' : 'pl-3'}`}>
-              {!sidebarCollapsed && <p className="text-xs uppercase tracking-wider font-semibold text-muted-foreground mb-2">{navigation.mainMenu.title}</p>}
-              {sidebarCollapsed && <div className="h-5"></div>}
-            </div>
+            <nav className="space-y-1">
+              {/* Main Menu */}
+              <div className={`mb-3 ${sidebarCollapsed ? 'text-center' : 'pl-3'}`}>
+                {!sidebarCollapsed && <p className="text-xs uppercase tracking-wider font-semibold text-muted-foreground mb-2">{navigation.mainMenu.title}</p>}
+                {sidebarCollapsed && <div className="h-4"></div>}
+              </div>
 
-            {/* Render main menu items */}
-            {navigation.mainMenu.items.map((item) => (
-              item.dropdown ? (
-                <div key={item.id}>
-                  <button
-                    onClick={() => toggleDropdown(item.id)}
-                    className={`
-                      flex items-center w-full gap-3 px-3 py-2.5 rounded-md text-sm font-medium
-                      ${pathname?.startsWith(item.href) ? 'text-primary' : 'text-muted-foreground'} 
-                      hover:bg-muted hover:text-foreground transition-colors
-                      ${sidebarCollapsed ? 'justify-center' : 'justify-between'}
-                    `}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="flex-shrink-0">
-                        {getIconByName(item.icon)}
-                      </span>
-                      {!sidebarCollapsed && <span>{item.label}</span>}
-                    </div>
-                    {!sidebarCollapsed && (
-                      <ChevronDown
-                        className={`h-4 w-4 transition-transform ${activeDropdown === item.id ? 'rotate-180' : ''}`}
-                      />
+              {/* Render main menu items */}
+              {navigation.mainMenu.items.map((item) => (
+                item.dropdown ? (
+                  <div key={item.id}>
+                    <button
+                      onClick={() => toggleDropdown(item.id)}
+                      className={`
+                        flex items-center w-full gap-3 px-3 py-2.5 rounded-md text-sm font-medium
+                        ${pathname?.startsWith(item.href) ? 'text-primary' : 'text-muted-foreground'} 
+                        hover:bg-muted hover:text-foreground transition-colors
+                        ${sidebarCollapsed ? 'justify-center' : 'justify-between'}
+                      `}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="flex-shrink-0">
+                          {getIconByName(item.icon)}
+                        </span>
+                        {!sidebarCollapsed && <span>{item.label}</span>}
+                      </div>
+                      {!sidebarCollapsed && (
+                        <ChevronDown
+                          className={`h-4 w-4 transition-transform ${activeDropdown === item.id ? 'rotate-180' : ''}`}
+                        />
+                      )}
+                    </button>
+
+                    {activeDropdown === item.id && !sidebarCollapsed && item.items && (
+                      <div className="mt-1 ml-10 space-y-1">
+                        {item.items.map((subItem) => (
+                          <Link
+                            key={subItem.id}
+                            href={subItem.href}
+                            className={`
+                              flex items-center gap-3 px-3 py-2 rounded-md text-sm
+                              ${pathname === subItem.href ? 'text-primary font-medium' : 'text-muted-foreground'}
+                              hover:bg-muted hover:text-foreground transition-colors
+                            `}
+                          >
+                            <span>{subItem.label}</span>
+                          </Link>
+                        ))}
+                      </div>
                     )}
-                  </button>
+                  </div>
+                ) : (
+                  <EnhancedNavItem
+                    key={item.id}
+                    href={item.href}
+                    icon={getIconByName(item.icon)}
+                    label={item.label}
+                    isActive={pathname === item.href}
+                    badge={item.badge}
+                    collapsed={sidebarCollapsed}
+                  />
+                )
+              ))}
 
-                  {activeDropdown === item.id && !sidebarCollapsed && item.items && (
-                    <div className="mt-1 ml-10 space-y-1">
-                      {item.items.map((subItem) => (
-                        <Link
-                          key={subItem.id}
-                          href={subItem.href}
-                          className={`
-                            flex items-center gap-3 px-3 py-2 rounded-md text-sm
-                            ${pathname === subItem.href ? 'text-primary font-medium' : 'text-muted-foreground'}
-                            hover:bg-muted hover:text-foreground transition-colors
-                          `}
-                        >
-                          <span>{subItem.label}</span>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ) : (
+              {/* Management Section */}
+              <div className={`mt-6 mb-3 ${sidebarCollapsed ? 'text-center' : 'pl-3'}`}>
+                {!sidebarCollapsed && <p className="text-xs uppercase tracking-wider font-semibold text-muted-foreground mb-2">{navigation.managementMenu.title}</p>}
+                {sidebarCollapsed && <div className="border-t mx-4 my-4"></div>}
+              </div>
+
+              {/* Render management menu items */}
+              {navigation.managementMenu.items.map((item) => (
                 <EnhancedNavItem
                   key={item.id}
                   href={item.href}
                   icon={getIconByName(item.icon)}
                   label={item.label}
                   isActive={pathname === item.href}
-                  badge={item.badge}
                   collapsed={sidebarCollapsed}
                 />
-              )
-            ))}
+              ))}
+            </nav>
 
-            {/* Management Section */}
-            <div className={`mt-6 mb-3 ${sidebarCollapsed ? 'pl-0 text-center' : 'pl-3'}`}>
-              {!sidebarCollapsed && <p className="text-xs uppercase tracking-wider font-semibold text-muted-foreground mb-2">{navigation.managementMenu.title}</p>}
-              {sidebarCollapsed && <div className="border-t mb-6 mt-6"></div>}
-            </div>
-
-            {/* Render management menu items */}
-            {navigation.managementMenu.items.map((item) => (
-              <EnhancedNavItem
-                key={item.id}
-                href={item.href}
-                icon={getIconByName(item.icon)}
-                label={item.label}
-                isActive={pathname === item.href}
-                collapsed={sidebarCollapsed}
-              />
-            ))}
-          </nav>
-
-          {/* Footer */}
-          <div className={`mt-auto pt-4 border-t ${sidebarCollapsed ? 'text-center' : ''}`}>
-            {!sidebarCollapsed && (
-              <div className="px-3 mb-4">
-                <div className="bg-muted/50 rounded-lg p-3">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Activity className="h-5 w-5 text-primary" />
-                    <span className="font-medium">{usage.title}</span>
-                  </div>
-                  <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div
-                      className="bg-primary h-full rounded-full"
-                      style={{ width: `${usage.percentage}%` }}
-                    ></div>
-                  </div>
-                  <div className="mt-2 text-xs text-muted-foreground">
-                    {usage.percentage}% of your usage for {usage.period}
+            {/* Footer */}
+            <div className={`border-t bg-background/95 ${sidebarCollapsed ? 'text-center px-2' : 'px-4'} py-4`}>
+              {!sidebarCollapsed && (
+                <div className="mb-4">
+                  <div className="bg-muted/50 rounded-lg p-3">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Activity className="h-5 w-5 text-primary" />
+                      <span className="font-medium">{usage.title}</span>
+                    </div>
+                    <div className="h-2 bg-muted rounded-full overflow-hidden">
+                      <div
+                        className="bg-primary h-full rounded-full transition-all duration-300"
+                        style={{ width: `${usage.percentage}%` }}
+                      ></div>
+                    </div>
+                    <div className="mt-2 text-xs text-muted-foreground">
+                      {usage.percentage}% of your usage for {usage.period}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            <div className="flex items-center justify-end px-3 mb-2">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={toggleSidebarCollapse}
-                      className="h-9 w-9"
-                    >
-                      <PanelLeft className={`h-4 w-4 ${sidebarCollapsed ? 'rotate-180' : ''}`} />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right">
-                    <p>{sidebarCollapsed ? 'Expand' : 'Collapse'} sidebar</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <div className="flex items-center justify-end">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={toggleSidebarCollapse}
+                        className="h-9 w-9 hover:bg-muted"
+                      >
+                        <PanelLeft className={`h-4 w-4 transition-transform duration-200 ${sidebarCollapsed ? 'rotate-180' : ''}`} />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                      <p>{sidebarCollapsed ? 'Expand' : 'Collapse'} sidebar</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
             </div>
           </div>
         </div>
@@ -464,10 +462,13 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
 
       {/* Main content */}
       <main className={`
-        flex-1 overflow-auto pt-16 px-4 md:px-6 py-6 transition-all duration-300
+        flex-1 overflow-auto transition-all duration-300
         ${sidebarCollapsed ? 'md:ml-20' : 'md:ml-64'}
+        pt-16
       `}>
-        {children}
+        <div className="h-full">
+          {children}
+        </div>
       </main>
     </div>
   )

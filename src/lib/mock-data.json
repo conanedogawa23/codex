@@ -65,6 +65,19 @@
               "id": "reports-cost-analysis",
               "label": "Cost Analysis",
               "href": "/reports/cost-analysis"
+            },
+            {
+              "id": "reports-risk-management",
+              "label": "Risk Management",
+              "href": "/reports/risk-assessment",
+              "dropdown": true,
+              "items": [
+                {
+                  "id": "reports-risk-assessment",
+                  "label": "Risk Assessment",
+                  "href": "/reports/risk-assessment"
+                }
+              ]
             }
           ]
         },
