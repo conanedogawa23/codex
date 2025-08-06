@@ -67,6 +67,19 @@
               "href": "/reports/cost-analysis"
             },
             {
+              "id": "reports-customer-experience",
+              "label": "Customer Experience",
+              "href": "/reports/customer-feedback",
+              "dropdown": true,
+              "items": [
+                {
+                  "id": "reports-customer-feedback",
+                  "label": "Customer Feedback",
+                  "href": "/reports/customer-feedback"
+                }
+              ]
+            },
+            {
               "id": "reports-risk-management",
               "label": "Risk Management",
               "href": "/reports/risk-assessment",
