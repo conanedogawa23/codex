@@ -80,6 +80,16 @@
               ]
             },
             {
+              "id": "reports-task-status",
+              "label": "Task Status",
+              "href": "/reports/task-status"
+            },
+            {
+              "id": "reports-resource-allocation",
+              "label": "Resource Allocation",
+              "href": "/reports/resource-allocation"
+            },
+            {
               "id": "reports-risk-management",
               "label": "Risk Management",
               "href": "/reports/risk-assessment",
@@ -335,89 +345,184 @@
   ],
   "tasks": [
     {
-      "id": "task-1",
-      "title": "Design homepage wireframes",
-      "description": "Create wireframes for the homepage redesign",
-      "status": "completed",
+      "id": "task-12",
+      "taskNumber": "#12",
+      "title": "Login Dev",
+      "description": "Develop login functionality",
+      "status": "to-do",
       "priority": "high",
       "assignee": {
-        "name": "Sarah Johnson",
-        "avatar": "SJ"
+        "name": "Alex Polo",
+        "avatar": "AP"
       },
       "project": "Website Redesign",
-      "dueDate": "2023-07-20",
-      "tags": [
-        "design",
-        "wireframe"
-      ]
+      "dueDate": "2023-08-20",
+      "estimatedHours": 12,
+      "loggedHours": 4,
+      "dependencies": "None",
+      "tags": ["development", "authentication"]
     },
     {
-      "id": "task-2",
-      "title": "Implement authentication system",
-      "description": "Build user authentication and authorization system",
-      "status": "in-progress",
-      "priority": "high",
-      "assignee": {
-        "name": "John Doe",
-        "avatar": "JD"
-      },
-      "project": "Mobile App Development",
-      "dueDate": "2023-08-05",
-      "tags": [
-        "development",
-        "security"
-      ]
-    },
-    {
-      "id": "task-3",
-      "title": "Create marketing assets",
-      "description": "Design and create assets for the marketing campaign",
-      "status": "pending",
-      "priority": "medium",
-      "assignee": {
-        "name": "Mike Wilson",
-        "avatar": "MW"
-      },
-      "project": "Marketing Campaign",
-      "dueDate": "2023-08-10",
-      "tags": [
-        "marketing",
-        "design"
-      ]
-    },
-    {
-      "id": "task-4",
-      "title": "Database schema optimization",
-      "description": "Optimize database schema for better performance",
-      "status": "completed",
+      "id": "task-43",
+      "taskNumber": "#43",
+      "title": "Project Submission",
+      "description": "Complete project submission requirements",
+      "status": "to-do",
       "priority": "low",
       "assignee": {
-        "name": "Emily Chen",
-        "avatar": "EC"
+        "name": "Alex Polo",
+        "avatar": "AP"
       },
-      "project": "Database Migration",
-      "dueDate": "2023-07-05",
-      "tags": [
-        "database",
-        "performance"
-      ]
+      "project": "Marketing Campaign",
+      "dueDate": "2023-08-25",
+      "estimatedHours": 12,
+      "loggedHours": 4,
+      "dependencies": "None",
+      "tags": ["management", "documentation"]
     },
     {
-      "id": "task-5",
-      "title": "User testing",
-      "description": "Conduct user testing sessions for the new interface",
+      "id": "task-15",
+      "taskNumber": "#15",
+      "title": "Login Dev",
+      "description": "Additional login development tasks",
       "status": "in-progress",
       "priority": "medium",
       "assignee": {
-        "name": "Sarah Johnson",
-        "avatar": "SJ"
+        "name": "Alex Polo",
+        "avatar": "AP"
       },
       "project": "Website Redesign",
-      "dueDate": "2023-08-12",
-      "tags": [
-        "testing",
-        "user experience"
-      ]
+      "dueDate": "2023-08-22",
+      "estimatedHours": 12,
+      "loggedHours": 4,
+      "dependencies": "None",
+      "tags": ["development", "authentication"]
+    },
+    {
+      "id": "task-16",
+      "taskNumber": "#16",
+      "title": "Database Creation Digital catalogs",
+      "description": "Create database structure for digital catalogs",
+      "status": "in-progress",
+      "priority": "high",
+      "assignee": {
+        "name": "Alex Polo",
+        "avatar": "AP"
+      },
+      "project": "Database Migration",
+      "dueDate": "2023-08-18",
+      "estimatedHours": 12,
+      "loggedHours": 4,
+      "dependencies": "None",
+      "tags": ["database", "development"]
+    },
+    {
+      "id": "task-18",
+      "taskNumber": "#18",
+      "title": "Login Dev",
+      "description": "Login development continuation",
+      "status": "in-progress",
+      "priority": "medium",
+      "assignee": {
+        "name": "Alex Polo",
+        "avatar": "AP"
+      },
+      "project": "Website Redesign",
+      "dueDate": "2023-08-24",
+      "estimatedHours": 12,
+      "loggedHours": 4,
+      "dependencies": "None",
+      "tags": ["development", "authentication"]
+    },
+    {
+      "id": "task-19",
+      "taskNumber": "#19",
+      "title": "Sprint 1",
+      "description": "Complete Sprint 1 objectives",
+      "status": "to-do",
+      "priority": "low",
+      "assignee": {
+        "name": "Alex Polo",
+        "avatar": "AP"
+      },
+      "project": "Mobile App Development",
+      "dueDate": "2023-08-30",
+      "estimatedHours": 12,
+      "loggedHours": 4,
+      "dependencies": "None",
+      "tags": ["sprint", "planning"]
+    },
+    {
+      "id": "task-20",
+      "taskNumber": "#20",
+      "title": "Sprint 2",
+      "description": "Complete Sprint 2 objectives",
+      "status": "in-progress",
+      "priority": "medium",
+      "assignee": {
+        "name": "Alex Polo",
+        "avatar": "AP"
+      },
+      "project": "Mobile App Development",
+      "dueDate": "2023-09-15",
+      "estimatedHours": 12,
+      "loggedHours": 4,
+      "dependencies": "None",
+      "tags": ["sprint", "planning"]
+    },
+    {
+      "id": "task-21",
+      "taskNumber": "#21",
+      "title": "Sprint 3",
+      "description": "Complete Sprint 3 objectives",
+      "status": "completed",
+      "priority": "medium",
+      "assignee": {
+        "name": "Alex Polo",
+        "avatar": "AP"
+      },
+      "project": "Mobile App Development",
+      "dueDate": "2023-09-30",
+      "estimatedHours": 12,
+      "loggedHours": 4,
+      "dependencies": "None",
+      "tags": ["sprint", "planning"]
+    },
+    {
+      "id": "task-22",
+      "taskNumber": "#22",
+      "title": "Sprint 4",
+      "description": "Complete Sprint 4 objectives",
+      "status": "completed",
+      "priority": "medium",
+      "assignee": {
+        "name": "Alex Polo",
+        "avatar": "AP"
+      },
+      "project": "Mobile App Development",
+      "dueDate": "2023-10-15",
+      "estimatedHours": 12,
+      "loggedHours": 4,
+      "dependencies": "None",
+      "tags": ["sprint", "planning"]
+    },
+    {
+      "id": "task-23",
+      "taskNumber": "#23",
+      "title": "Sprint 5",
+      "description": "Complete Sprint 5 objectives",
+      "status": "blocked",
+      "priority": "low",
+      "assignee": {
+        "name": "Alex Polo",
+        "avatar": "AP"
+      },
+      "project": "Mobile App Development",
+      "dueDate": "2023-10-30",
+      "estimatedHours": 12,
+      "loggedHours": 4,
+      "dependencies": "None",
+      "tags": ["sprint", "planning"]
     }
   ],
   "users": [
@@ -477,12 +582,17 @@
       {
         "id": "release-1",
         "version": "1.0.0",
-        "name": "Initial Release",
+        "name": "Release 1",
         "description": "First public release of the platform",
-        "releaseDate": "2023-01-15",
+        "releaseDate": "12/09/2024",
+        "plannedReleaseDate": "12/09/2024",
         "status": "completed",
         "features": 15,
+        "featuresDelivered": 6,
         "bugfixes": 8,
+        "knownIssues": 2,
+        "regressionTestingStatus": "Completed",
+        "deploymentSuccessRate": 85,
         "commits": 124,
         "contributors": [
           "user-1",
@@ -512,12 +622,17 @@
       {
         "id": "release-2",
         "version": "1.1.0",
-        "name": "Feature Update",
+        "name": "Release 2",
         "description": "New features and improvements",
-        "releaseDate": "2023-03-10",
+        "releaseDate": "31/12/2024",
+        "plannedReleaseDate": "12/09/2024",
         "status": "completed",
         "features": 12,
+        "featuresDelivered": 6,
         "bugfixes": 14,
+        "knownIssues": 1,
+        "regressionTestingStatus": "Completed",
+        "deploymentSuccessRate": 92,
         "commits": 98,
         "contributors": [
           "user-1",
@@ -546,12 +661,17 @@
       {
         "id": "release-3",
         "version": "1.2.0",
-        "name": "Enhancement Release",
+        "name": "Release 3",
         "description": "Performance enhancements and new capabilities",
-        "releaseDate": "2023-05-22",
+        "releaseDate": "31/12/2024",
+        "plannedReleaseDate": "12/09/2024",
         "status": "completed",
         "features": 8,
+        "featuresDelivered": 6,
         "bugfixes": 11,
+        "knownIssues": 3,
+        "regressionTestingStatus": "In Progress",
+        "deploymentSuccessRate": 78,
         "commits": 76,
         "contributors": [
           "user-1",
@@ -581,12 +701,17 @@
       {
         "id": "release-4",
         "version": "1.3.0",
-        "name": "Major Update",
+        "name": "Release 4",
         "description": "Significant new features and interface improvements",
-        "releaseDate": "2023-08-15",
+        "releaseDate": "31/12/2024",
+        "plannedReleaseDate": "12/09/2024",
         "status": "in-progress",
         "features": 20,
+        "featuresDelivered": 6,
         "bugfixes": 16,
+        "knownIssues": 2,
+        "regressionTestingStatus": "In Progress",
+        "deploymentSuccessRate": 65,
         "commits": 112,
         "contributors": [
           "user-1",
@@ -613,6 +738,146 @@
             "scope": "core"
           }
         ]
+      },
+      {
+        "id": "release-5",
+        "version": "1.4.0",
+        "name": "Release 5",
+        "description": "Additional features and bug fixes",
+        "releaseDate": "31/12/2024",
+        "plannedReleaseDate": "12/09/2024",
+        "status": "completed",
+        "features": 18,
+        "featuresDelivered": 6,
+        "bugfixes": 12,
+        "knownIssues": 4,
+        "regressionTestingStatus": "Completed",
+        "deploymentSuccessRate": 88,
+        "commits": 89,
+        "contributors": [
+          "user-1",
+          "user-2"
+        ],
+        "developmentTime": 35,
+        "manager": "user-2",
+        "changes": []
+      },
+      {
+        "id": "release-6",
+        "version": "1.5.0",
+        "name": "Release 6",
+        "description": "Performance improvements and new integrations",
+        "releaseDate": "31/12/2024",
+        "plannedReleaseDate": "12/09/2024",
+        "status": "completed",
+        "features": 14,
+        "featuresDelivered": 6,
+        "bugfixes": 9,
+        "knownIssues": 1,
+        "regressionTestingStatus": "Completed",
+        "deploymentSuccessRate": 95,
+        "commits": 67,
+        "contributors": [
+          "user-3",
+          "user-4"
+        ],
+        "developmentTime": 30,
+        "manager": "user-3",
+        "changes": []
+      },
+      {
+        "id": "release-7",
+        "version": "1.6.0",
+        "name": "Release 7",
+        "description": "User experience enhancements",
+        "releaseDate": "31/12/2024",
+        "plannedReleaseDate": "12/09/2024",
+        "status": "completed",
+        "features": 10,
+        "featuresDelivered": 6,
+        "bugfixes": 7,
+        "knownIssues": 1,
+        "regressionTestingStatus": "Completed",
+        "deploymentSuccessRate": 72,
+        "commits": 54,
+        "contributors": [
+          "user-1",
+          "user-5"
+        ],
+        "developmentTime": 25,
+        "manager": "user-1",
+        "changes": []
+      },
+      {
+        "id": "release-8",
+        "version": "1.7.0",
+        "name": "Release 8",
+        "description": "Security updates and optimizations",
+        "releaseDate": "31/12/2024",
+        "plannedReleaseDate": "12/09/2024",
+        "status": "in-progress",
+        "features": 16,
+        "featuresDelivered": 6,
+        "bugfixes": 11,
+        "knownIssues": 2,
+        "regressionTestingStatus": "In Progress",
+        "deploymentSuccessRate": 56,
+        "commits": 73,
+        "contributors": [
+          "user-2",
+          "user-4"
+        ],
+        "developmentTime": 33,
+        "manager": "user-2",
+        "changes": []
+      },
+      {
+        "id": "release-9",
+        "version": "1.8.0",
+        "name": "Release 9",
+        "description": "New dashboard features",
+        "releaseDate": "31/12/2024",
+        "plannedReleaseDate": "12/09/2024",
+        "status": "in-progress",
+        "features": 22,
+        "featuresDelivered": 6,
+        "bugfixes": 13,
+        "knownIssues": 2,
+        "regressionTestingStatus": "In Progress",
+        "deploymentSuccessRate": 83,
+        "commits": 95,
+        "contributors": [
+          "user-1",
+          "user-3",
+          "user-5"
+        ],
+        "developmentTime": 38,
+        "manager": "user-3",
+        "changes": []
+      },
+      {
+        "id": "release-10",
+        "version": "1.9.0",
+        "name": "Release 10",
+        "description": "Advanced analytics and reporting",
+        "releaseDate": "31/12/2024",
+        "plannedReleaseDate": "12/09/2024",
+        "status": "planned",
+        "features": 19,
+        "featuresDelivered": 6,
+        "bugfixes": 8,
+        "knownIssues": 1,
+        "regressionTestingStatus": "In Progress",
+        "deploymentSuccessRate": 67,
+        "commits": 81,
+        "contributors": [
+          "user-1",
+          "user-2",
+          "user-4"
+        ],
+        "developmentTime": 36,
+        "manager": "user-1",
+        "changes": []
       }
     ],
     "velocity": {
@@ -812,6 +1077,201 @@
         "averageFeatureCount": 8.5,
         "changeFromLastQuarter": 8.0
       }
+    },
+    "releaseStatusMetrics": {
+      "barChartData": [
+        {
+          "name": "Planned Release Date",
+          "value": 15
+        },
+        {
+          "name": "Actual Release Date",
+          "value": 20
+        },
+        {
+          "name": "Features Delivered",
+          "value": 25
+        },
+        {
+          "name": "Known Issues",
+          "value": 18
+        }
+      ],
+      "deploymentSuccess": {
+        "successRate": 80,
+        "failureRate": 20
+      }
+    },
+    "taskStatus": {
+      "overview": [
+        {
+          "status": "To DO",
+          "count": 15
+        },
+        {
+          "status": "In Progress",
+          "count": 22
+        },
+        {
+          "status": "Completed",
+          "count": 28
+        },
+        {
+          "status": "Blocked",
+          "count": 20
+        }
+      ],
+      "distribution": [
+        {
+          "name": "To do",
+          "value": 40,
+          "color": "#5856D6"
+        },
+        {
+          "name": "In Progress",
+          "value": 20,
+          "color": "#FE9802"
+        },
+        {
+          "name": "Completed",
+          "value": 20,
+          "color": "#00B290"
+        },
+        {
+          "name": "Blocked",
+          "value": 20,
+          "color": "#F7524A"
+        }
+      ]
+    },
+    "resourceAllocation": {
+      "hoursLoggedByResource": [
+        {
+          "name": "Development A",
+          "hours": 15
+        },
+        {
+          "name": "Development B",
+          "hours": 22
+        },
+        {
+          "name": "Development C",
+          "hours": 28
+        },
+        {
+          "name": "Development D",
+          "hours": 20
+        }
+      ],
+      "allocationStatus": [
+        {
+          "name": "Optimally Allocated",
+          "value": 50,
+          "color": "#5856d6"
+        },
+        {
+          "name": "Under-utilised",
+          "value": 20,
+          "color": "#00b290"
+        },
+        {
+          "name": "Over allocated",
+          "value": 30,
+          "color": "#f7524a"
+        }
+      ],
+      "resources": [
+        {
+          "id": "res-1",
+          "name": "Alex Rodriguez",
+          "type": "Resource",
+          "taskAllocation": "Develop API for payment gateway",
+          "hoursLogged": 54,
+          "availabilityPercentage": 100,
+          "status": "under-utilised"
+        },
+        {
+          "id": "res-2",
+          "name": "Sarah Chen",
+          "type": "Developer",
+          "taskAllocation": "UI design for dashboard",
+          "hoursLogged": 54,
+          "availabilityPercentage": 45,
+          "status": "under-utilised"
+        },
+        {
+          "id": "res-3",
+          "name": "Mike Johnson",
+          "type": "Resource",
+          "taskAllocation": "Database optimization",
+          "hoursLogged": 54,
+          "availabilityPercentage": 90,
+          "status": "under-utilised"
+        },
+        {
+          "id": "res-4",
+          "name": "Emily Davis",
+          "type": "Developer",
+          "taskAllocation": "Feature development for chat app",
+          "hoursLogged": 54,
+          "availabilityPercentage": 100,
+          "status": "over-allocated"
+        },
+        {
+          "id": "res-5",
+          "name": "David Wilson",
+          "type": "Resource",
+          "taskAllocation": "Feature development for chat app",
+          "hoursLogged": 54,
+          "availabilityPercentage": 50,
+          "status": "under-utilised"
+        },
+        {
+          "id": "res-6",
+          "name": "Lisa Thompson",
+          "type": "Developer",
+          "taskAllocation": "Database optimization",
+          "hoursLogged": 54,
+          "availabilityPercentage": 45,
+          "status": "over-allocated"
+        },
+        {
+          "id": "res-7",
+          "name": "John Miller",
+          "type": "Resource",
+          "taskAllocation": "Testing and QA for module X",
+          "hoursLogged": 54,
+          "availabilityPercentage": 50,
+          "status": "under-utilised"
+        },
+        {
+          "id": "res-8",
+          "name": "Anna Garcia",
+          "type": "Developer",
+          "taskAllocation": "Create automation scripts",
+          "hoursLogged": 54,
+          "availabilityPercentage": 60,
+          "status": "over-allocated"
+        },
+        {
+          "id": "res-9",
+          "name": "Tom Brown",
+          "type": "Resource",
+          "taskAllocation": "Code review and mentoring",
+          "hoursLogged": 54,
+          "availabilityPercentage": 70,
+          "status": "over-allocated"
+        },
+        {
+          "id": "res-10",
+          "name": "Jessica Lee",
+          "type": "Resource",
+          "taskAllocation": "Feature development for chat app",
+          "hoursLogged": 54,
+          "availabilityPercentage": 80,
+          "status": "over-allocated"
+        }
+      ]
     }
   },
   "analytics": {

@@ -1,18 +1,18 @@
 "use client"
 
 import { SidebarLayout } from "@/components/layout/sidebar-layout";
-import { ReleaseStatusReport } from "@/components/reports/releases/release-status-report";
+import { ResourceAllocationReport } from "./resource-allocation-report";
 
 const breadcrumbs = [
     { label: "Dashboard", href: "/" },
     { label: "Reports", href: "/reports" },
-    { label: "Releases", href: "/reports/releases", isCurrent: true },
+    { label: "Resource Allocation", href: "/reports/resource-allocation", isCurrent: true },
 ]
 
-export default function ReleasesPage() {
+export default function ResourceAllocationPage() {
     return (
         <SidebarLayout breadcrumbs={breadcrumbs}>
-            <ReleaseStatusReport />
+            <ResourceAllocationReport />
         </SidebarLayout>
     )
 }
