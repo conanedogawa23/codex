@@ -14,7 +14,8 @@ import {
   AlertCircle,
   Calendar,
   ChevronDown,
-  CheckSquare
+  CheckSquare,
+  Code2
 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -97,7 +98,7 @@ export default function TasksPage() {
     // Status filter
     if (statusFilter === "completed" && task.status !== "completed") return false
     if (statusFilter === "in-progress" && task.status !== "in-progress") return false
-    if (statusFilter === "todo" && task.status !== "todo") return false
+    if (statusFilter === "todo" && task.status !== "to-do") return false
 
     // Priority filter
     if (priorityFilter !== "all" && task.priority !== priorityFilter) return false
@@ -158,6 +159,44 @@ export default function TasksPage() {
       year: 'numeric'
     });
   }
+
+  // Function to open Kiro IDE for a specific task
+  const openInKiro = (taskId: string, taskTitle: string) => {
+    const projectPath = "/Users/saran/codex_proj/codex_plugin_v2";
+
+    try {
+      // Try using Kiro's URL scheme with the specific project path
+      const kiroUrl = `kiro://open?path=${encodeURIComponent(projectPath)}`;
+      window.location.href = kiroUrl;
+    } catch (error) {
+      console.warn('Failed to open Kiro via URL scheme, trying alternative method', error);
+
+      // Fallback: Show instructions with the specific project path
+      const message = `To open this task in Kiro IDE:
+
+1. Open Terminal/Command Line
+2. Run: kiro "${projectPath}"
+
+Task: ${taskTitle} (${taskId})
+
+This will open the codex_plugin_v2 project where you can work on the task.`;
+
+      // Create a more user-friendly dialog with copy option
+      const shouldCopy = confirm(message + '\n\nWould you like to copy the command to your clipboard?');
+
+      if (shouldCopy) {
+        const commandToCopy = `kiro "${projectPath}"`;
+
+        try {
+          navigator.clipboard.writeText(commandToCopy);
+          alert(`Command copied to clipboard: ${commandToCopy}\n\nPaste it in your terminal.`);
+        } catch (clipboardError) {
+          console.error('Failed to copy to clipboard:', clipboardError);
+          alert(`Please manually copy this command:\n${commandToCopy}`);
+        }
+      }
+    }
+  };
 
   return (
     <SidebarLayout breadcrumbs={breadcrumbs}>
@@ -319,21 +358,21 @@ export default function TasksPage() {
         <Tabs defaultValue="all" className="w-full">
           <TabsList>
             <TabsTrigger value="all">All Tasks <Badge className="ml-2">{tasks.length}</Badge></TabsTrigger>
-            <TabsTrigger value="todo">To-do <Badge variant="secondary" className="ml-2">{tasks.filter(t => t.status === 'todo').length}</Badge></TabsTrigger>
+            <TabsTrigger value="todo">To-do <Badge variant="secondary" className="ml-2">{tasks.filter(t => t.status === 'to-do').length}</Badge></TabsTrigger>
             <TabsTrigger value="in-progress">In Progress <Badge variant="default" className="ml-2">{tasks.filter(t => t.status === 'in-progress').length}</Badge></TabsTrigger>
             <TabsTrigger value="completed">Completed <Badge variant="success" className="ml-2">{tasks.filter(t => t.status === 'completed').length}</Badge></TabsTrigger>
           </TabsList>
           <TabsContent value="all" className="mt-4">
-            <TaskListView tasks={tasks} />
+            <TaskListView tasks={tasks} onOpenInKiro={openInKiro} />
           </TabsContent>
           <TabsContent value="todo" className="mt-4">
-            <TaskListView tasks={tasks.filter(task => task.status === 'todo')} />
+            <TaskListView tasks={tasks.filter(task => task.status === 'to-do')} onOpenInKiro={openInKiro} />
           </TabsContent>
           <TabsContent value="in-progress" className="mt-4">
-            <TaskListView tasks={tasks.filter(task => task.status === 'in-progress')} />
+            <TaskListView tasks={tasks.filter(task => task.status === 'in-progress')} onOpenInKiro={openInKiro} />
           </TabsContent>
           <TabsContent value="completed" className="mt-4">
-            <TaskListView tasks={tasks.filter(task => task.status === 'completed')} />
+            <TaskListView tasks={tasks.filter(task => task.status === 'completed')} onOpenInKiro={openInKiro} />
           </TabsContent>
         </Tabs>
       </div>
@@ -341,11 +380,20 @@ export default function TasksPage() {
   );
 }
 
-const TaskListView = ({ tasks }: { tasks: typeof mockData.tasks }) => {
+const TaskListView = ({
+  tasks,
+  onOpenInKiro
+}: {
+  tasks: typeof mockData.tasks,
+  onOpenInKiro: (taskId: string, taskTitle: string) => void
+}) => {
   const isPastDue = (dateString: string) => {
     const dueDate = new Date(dateString);
     const today = new Date();
-    return dueDate < today && new Date(dateString).setHours(0, 0, 0, 0) < today.setHours(0, 0, 0, 0);
+    // Compare dates at midnight to avoid time-of-day issues
+    dueDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    return dueDate < today;
   };
 
   return (
@@ -371,6 +419,14 @@ const TaskListView = ({ tasks }: { tasks: typeof mockData.tasks }) => {
                   <div className="flex items-center gap-2">
                     <Badge variant={getPriorityVariant(task.priority)}>{task.priority}</Badge>
                     <Badge variant={getStatusVariant(task.status)}>{task.status}</Badge>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => onOpenInKiro(task.id, task.title)}
+                      title="Open in Kiro IDE"
+                    >
+                      <Code2 className="h-4 w-4" />
+                    </Button>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon">

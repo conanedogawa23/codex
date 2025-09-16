@@ -8,10 +8,10 @@
       "gradientTo": "purple-700"
     },
     "user": {
-      "name": "John Doe",
-      "email": "john@example.com",
+      "name": "Bala K",
+      "email": "b.Subramanyam@oginnovation.com",
       "avatar": {
-        "initials": "JD",
+        "initials": "BK",
         "image": "/images/avatar.jpg"
       }
     }
@@ -270,7 +270,7 @@
         "completed": 12,
         "total": 20
       },
-      "deadline": "2023-08-15"
+      "deadline": "2026-08-15"
     },
     {
       "id": "project-2",
@@ -284,7 +284,7 @@
         "completed": 8,
         "total": 25
       },
-      "deadline": "2023-09-30"
+      "deadline": "2026-09-30"
     },
     {
       "id": "project-3",
@@ -298,7 +298,7 @@
         "completed": 2,
         "total": 18
       },
-      "deadline": "2023-10-15"
+      "deadline": "2026-10-15"
     },
     {
       "id": "project-4",
@@ -312,7 +312,7 @@
         "completed": 15,
         "total": 15
       },
-      "deadline": "2023-07-15"
+      "deadline": "2026-07-15"
     },
     {
       "id": "project-5",
@@ -326,7 +326,7 @@
         "completed": 9,
         "total": 12
       },
-      "deadline": "2023-08-05"
+      "deadline": "2026-08-05"
     },
     {
       "id": "project-6",
@@ -340,189 +340,239 @@
         "completed": 0,
         "total": 10
       },
-      "deadline": "2023-08-30"
+      "deadline": "2026-08-30"
+    },
+    {
+      "id": "project-7",
+      "name": "SCRUM Platform",
+      "description": "Comprehensive engineering excellence platform with microservices architecture, advanced analytics, and AI integration",
+      "status": "active",
+      "category": "Platform Development",
+      "progress": 58,
+      "priority": "high",
+      "tasks": {
+        "completed": 3,
+        "total": 12
+      },
+      "deadline": "2026-02-15"
     }
   ],
   "tasks": [
     {
-      "id": "task-12",
-      "taskNumber": "#12",
-      "title": "Login Dev",
-      "description": "Develop login functionality",
+      "id": "10021",
+      "taskNumber": "SCRUM-12",
+      "title": "DevOps & Deployment Pipeline",
+      "description": "Implement comprehensive DevOps practices with automated deployment, monitoring, and incident management including CI/CD pipeline, infrastructure as code, and observability.",
+      "status": "to-do",
+      "priority": "medium",
+      "assignee": {
+        "name": "Bala Subramanyam",
+        "avatar": "BS"
+      },
+      "project": "SCRUM Platform",
+      "dueDate": "2026-01-15",
+      "estimatedHours": 80,
+      "loggedHours": 12,
+      "dependencies": "None",
+      "tags": ["devops", "deployment", "infrastructure"]
+    },
+    {
+      "id": "10020",
+      "taskNumber": "SCRUM-11",
+      "title": "API Development & Integration Layer",
+      "description": "Build comprehensive API layer with extensive integration capabilities for external systems including REST, GraphQL, and microservices architecture.",
+      "status": "to-do",
+      "priority": "medium",
+      "assignee": {
+        "name": "Bala Subramanyam",
+        "avatar": "BS"
+      },
+      "project": "SCRUM Platform",
+      "dueDate": "2026-01-10",
+      "estimatedHours": 65,
+      "loggedHours": 8,
+      "dependencies": "None",
+      "tags": ["api", "integration", "microservices"]
+    },
+    {
+      "id": "10019",
+      "taskNumber": "SCRUM-10",
+      "title": "Authentication & Security Framework",
+      "description": "Implement comprehensive authentication and security framework with enterprise-grade security features including JWT, RBAC, and multi-factor authentication.",
       "status": "to-do",
       "priority": "high",
       "assignee": {
-        "name": "Alex Polo",
-        "avatar": "AP"
+        "name": "Bala Subramanyam",
+        "avatar": "BS"
       },
-      "project": "Website Redesign",
-      "dueDate": "2023-08-20",
-      "estimatedHours": 12,
-      "loggedHours": 4,
+      "project": "SCRUM Platform",
+      "dueDate": "2026-03-20",
+      "estimatedHours": 55,
+      "loggedHours": 15,
       "dependencies": "None",
-      "tags": ["development", "authentication"]
+      "tags": ["authentication", "security", "jwt"]
     },
     {
-      "id": "task-43",
-      "taskNumber": "#43",
-      "title": "Project Submission",
-      "description": "Complete project submission requirements",
+      "id": "10018",
+      "taskNumber": "SCRUM-9",
+      "title": "ConfigCentral & System Administration",
+      "description": "Build centralized configuration management and system administration capabilities with real-time settings updates and comprehensive admin console.",
       "status": "to-do",
-      "priority": "low",
-      "assignee": {
-        "name": "Alex Polo",
-        "avatar": "AP"
-      },
-      "project": "Marketing Campaign",
-      "dueDate": "2023-08-25",
-      "estimatedHours": 12,
-      "loggedHours": 4,
-      "dependencies": "None",
-      "tags": ["management", "documentation"]
-    },
-    {
-      "id": "task-15",
-      "taskNumber": "#15",
-      "title": "Login Dev",
-      "description": "Additional login development tasks",
-      "status": "in-progress",
       "priority": "medium",
       "assignee": {
-        "name": "Alex Polo",
-        "avatar": "AP"
+        "name": "Bala Subramanyam",
+        "avatar": "BS"
       },
-      "project": "Website Redesign",
-      "dueDate": "2023-08-22",
-      "estimatedHours": 12,
-      "loggedHours": 4,
+      "project": "SCRUM Platform",
+      "dueDate": "2026-02-05",
+      "estimatedHours": 42,
+      "loggedHours": 6,
       "dependencies": "None",
-      "tags": ["development", "authentication"]
+      "tags": ["configuration", "admin", "system"]
     },
     {
-      "id": "task-16",
-      "taskNumber": "#16",
-      "title": "Database Creation Digital catalogs",
-      "description": "Create database structure for digital catalogs",
+      "id": "10017",
+      "taskNumber": "SCRUM-8",
+      "title": "OrganizationHub & Multi-tenancy",
+      "description": "Implement multi-organization support with comprehensive tenant isolation and cross-organization collaboration features.",
       "status": "in-progress",
       "priority": "high",
       "assignee": {
-        "name": "Alex Polo",
-        "avatar": "AP"
+        "name": "Bala Subramanyam",
+        "avatar": "BS"
       },
-      "project": "Database Migration",
-      "dueDate": "2023-08-18",
-      "estimatedHours": 12,
-      "loggedHours": 4,
+      "project": "SCRUM Platform",
+      "dueDate": "2026-06-30",
+      "estimatedHours": 70,
+      "loggedHours": 25,
       "dependencies": "None",
-      "tags": ["database", "development"]
+      "tags": ["multi-tenancy", "organization", "collaboration"]
     },
     {
-      "id": "task-18",
-      "taskNumber": "#18",
-      "title": "Login Dev",
-      "description": "Login development continuation",
+      "id": "10016",
+      "taskNumber": "SCRUM-7",
+      "title": "TeamSync Management & Collaboration",
+      "description": "Develop comprehensive user and team management system with advanced collaboration features including real-time communication and activity tracking.",
       "status": "in-progress",
       "priority": "medium",
       "assignee": {
-        "name": "Alex Polo",
-        "avatar": "AP"
+        "name": "Bala Subramanyam",
+        "avatar": "BS"
       },
-      "project": "Website Redesign",
-      "dueDate": "2023-08-24",
-      "estimatedHours": 12,
-      "loggedHours": 4,
+      "project": "SCRUM Platform",
+      "dueDate": "2026-01-05",
+      "estimatedHours": 48,
+      "loggedHours": 18,
       "dependencies": "None",
-      "tags": ["development", "authentication"]
+      "tags": ["team-management", "collaboration", "real-time"]
     },
     {
-      "id": "task-19",
-      "taskNumber": "#19",
-      "title": "Sprint 1",
-      "description": "Complete Sprint 1 objectives",
+      "id": "10015",
+      "taskNumber": "SCRUM-6",
+      "title": "ProjectPulse Reporting System",
+      "description": "Build comprehensive reporting system for project performance, team productivity, and process efficiency analysis with advanced analytics.",
       "status": "to-do",
-      "priority": "low",
+      "priority": "medium",
       "assignee": {
-        "name": "Alex Polo",
-        "avatar": "AP"
+        "name": "Bala Subramanyam",
+        "avatar": "BS"
       },
-      "project": "Mobile App Development",
-      "dueDate": "2023-08-30",
-      "estimatedHours": 12,
-      "loggedHours": 4,
+      "project": "SCRUM Platform",
+      "dueDate": "2026-02-15",
+      "estimatedHours": 58,
+      "loggedHours": 3,
       "dependencies": "None",
-      "tags": ["sprint", "planning"]
+      "tags": ["reporting", "analytics", "performance"]
     },
     {
-      "id": "task-20",
-      "taskNumber": "#20",
-      "title": "Sprint 2",
-      "description": "Complete Sprint 2 objectives",
+      "id": "10014",
+      "taskNumber": "SCRUM-5",
+      "title": "MCP Integration & AI Features",
+      "description": "Implement comprehensive Model Context Protocol (MCP) integration for enhanced AI capabilities across the platform with GitHub integration.",
       "status": "in-progress",
-      "priority": "medium",
+      "priority": "high",
       "assignee": {
-        "name": "Alex Polo",
-        "avatar": "AP"
+        "name": "Bala Subramanyam",
+        "avatar": "BS"
       },
-      "project": "Mobile App Development",
-      "dueDate": "2023-09-15",
-      "estimatedHours": 12,
-      "loggedHours": 4,
+      "project": "SCRUM Platform",
+      "dueDate": "2025-09-01",
+      "estimatedHours": 75,
+      "loggedHours": 32,
       "dependencies": "None",
-      "tags": ["sprint", "planning"]
+      "tags": ["mcp", "ai", "integration"]
     },
     {
-      "id": "task-21",
-      "taskNumber": "#21",
-      "title": "Sprint 3",
-      "description": "Complete Sprint 3 objectives",
+      "id": "10013",
+      "taskNumber": "SCRUM-4",
+      "title": "DORA Metrics Implementation",
+      "description": "Implement the four key DORA metrics for software delivery performance measurement and analysis with real-time dashboards.",
+      "status": "completed",
+      "priority": "high",
+      "assignee": {
+        "name": "Bala Subramanyam",
+        "avatar": "BS"
+      },
+      "project": "SCRUM Platform",
+      "dueDate": "2025-08-30",
+      "estimatedHours": 38,
+      "loggedHours": 38,
+      "dependencies": "None",
+      "tags": ["dora", "metrics", "performance"]
+    },
+    {
+      "id": "10012",
+      "taskNumber": "SCRUM-3",
+      "title": "TaskBoard Management System",
+      "description": "Implement comprehensive task management with detailed tracking, workflows, and collaboration features including Kanban boards and automation.",
       "status": "completed",
       "priority": "medium",
       "assignee": {
-        "name": "Alex Polo",
-        "avatar": "AP"
+        "name": "Bala Subramanyam",
+        "avatar": "BS"
       },
-      "project": "Mobile App Development",
-      "dueDate": "2023-09-30",
-      "estimatedHours": 12,
-      "loggedHours": 4,
+      "project": "SCRUM Platform",
+      "dueDate": "2025-11-15",
+      "estimatedHours": 52,
+      "loggedHours": 52,
       "dependencies": "None",
-      "tags": ["sprint", "planning"]
+      "tags": ["task-management", "kanban", "workflow"]
     },
     {
-      "id": "task-22",
-      "taskNumber": "#22",
-      "title": "Sprint 4",
-      "description": "Complete Sprint 4 objectives",
+      "id": "10011",
+      "taskNumber": "SCRUM-2",
+      "title": "Executive Dashboard & Analytics Platform",
+      "description": "Build a comprehensive executive dashboard providing high-level overview of projects, metrics, and activities with real-time updates.",
+      "status": "in-progress",
+      "priority": "high",
+      "assignee": {
+        "name": "Bala Subramanyam",
+        "avatar": "BS"
+      },
+      "project": "SCRUM Platform",
+      "dueDate": "2025-12-10",
+      "estimatedHours": 45,
+      "loggedHours": 28,
+      "dependencies": "None",
+      "tags": ["dashboard", "analytics", "executive"]
+    },
+    {
+      "id": "10010",
+      "taskNumber": "SCRUM-1",
+      "title": "Core Platform Architecture & Infrastructure",
+      "description": "Implement the core microservices architecture for the Codex Engineering Excellence Platform with service discovery and fault tolerance.",
       "status": "completed",
-      "priority": "medium",
+      "priority": "high",
       "assignee": {
-        "name": "Alex Polo",
-        "avatar": "AP"
+        "name": "Bala Subramanyam",
+        "avatar": "BS"
       },
-      "project": "Mobile App Development",
-      "dueDate": "2023-10-15",
-      "estimatedHours": 12,
-      "loggedHours": 4,
+      "project": "SCRUM Platform",
+      "dueDate": "2025-07-31",
+      "estimatedHours": 95,
+      "loggedHours": 95,
       "dependencies": "None",
-      "tags": ["sprint", "planning"]
-    },
-    {
-      "id": "task-23",
-      "taskNumber": "#23",
-      "title": "Sprint 5",
-      "description": "Complete Sprint 5 objectives",
-      "status": "blocked",
-      "priority": "low",
-      "assignee": {
-        "name": "Alex Polo",
-        "avatar": "AP"
-      },
-      "project": "Mobile App Development",
-      "dueDate": "2023-10-30",
-      "estimatedHours": 12,
-      "loggedHours": 4,
-      "dependencies": "None",
-      "tags": ["sprint", "planning"]
+      "tags": ["architecture", "microservices", "infrastructure"]
     }
   ],
   "users": [
@@ -575,6 +625,16 @@
       "avatar": "AR",
       "department": "Product",
       "joinDate": "2021-11-18"
+    },
+    {
+      "id": "user-6",
+      "name": "Bala Subramanyam",
+      "email": "b.subramanyam@oginnovation.com",
+      "role": "Platform Architect",
+      "status": "active",
+      "avatar": "BS",
+      "department": "Engineering",
+      "joinDate": "2023-01-15"
     }
   ],
   "reports": {

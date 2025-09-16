@@ -39,6 +39,9 @@ import { formatDate } from "@/lib/date-utils"
 import mockData from "@/lib/mock-data.json"
 import { cn } from "@/lib/utils"
 
+// Import dialog component
+import { EnvironmentVariablesDialog, type EnvironmentVariable } from "@/components/dialogs/environment-variables-dialog"
+
 // Create mock settings data
 const mockSettings = {
   notifications: {
@@ -108,6 +111,37 @@ export default function SettingsPage() {
   const [accentColor, setAccentColor] = useState("bg-yellow-500")
   const [unsavedChanges, setUnsavedChanges] = useState(false)
 
+  // Environment Variables Dialog State
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [selectedIntegration, setSelectedIntegration] = useState<string>("")
+  const [environmentVariables, setEnvironmentVariables] = useState<Record<string, EnvironmentVariable[]>>({
+    "GitHub": [
+      { id: "1", name: "GITHUB_TOKEN", value: "ghp_xxxxxxxxxxxxxxxxxxxx" },
+      { id: "2", name: "GITHUB_REPO", value: "username/repository" }
+    ],
+    "Slack": [
+      { id: "3", name: "SLACK_BOT_TOKEN", value: "xoxb-xxxxxxxxxxxxxxxxxx" },
+      { id: "4", name: "SLACK_CHANNEL", value: "#general" }
+    ],
+    "Figma": [],
+    "Zoom": [
+      { id: "5", name: "ZOOM_API_KEY", value: "xxxxxxxxxxxxxxxxxxxxxxx" }
+    ],
+    "Google Suite": [
+      { id: "6", name: "GOOGLE_CLIENT_ID", value: "xxxxxxxxx.apps.googleusercontent.com" },
+      { id: "7", name: "GOOGLE_CLIENT_SECRET", value: "GOCSPX-xxxxxxxxxxxxxxxxxxxxxxxx" }
+    ]
+  })
+
+  // Integration Connection State
+  const [integrationConnections, setIntegrationConnections] = useState<Record<string, boolean>>({
+    "Slack": true,
+    "GitHub": true,
+    "Figma": false,
+    "Zoom": true,
+    "Google Suite": true
+  })
+
   const handleThemeChange = (value: string) => {
     setActiveTheme(value)
     setUnsavedChanges(true)
@@ -123,6 +157,37 @@ export default function SettingsPage() {
   }
 
   const handleSwitchChange = () => {
+    setUnsavedChanges(true)
+  }
+
+  // Environment Variables Dialog Handlers
+  const handleConfigureIntegration = (integrationName: string) => {
+    setSelectedIntegration(integrationName)
+    setDialogOpen(true)
+  }
+
+  const handleSaveEnvironmentVariables = (variables: EnvironmentVariable[]) => {
+    setEnvironmentVariables(prev => ({
+      ...prev,
+      [selectedIntegration]: variables
+    }))
+    setUnsavedChanges(true)
+  }
+
+  // Integration Connection Handlers
+  const handleConnectIntegration = (integrationName: string) => {
+    setIntegrationConnections(prev => ({
+      ...prev,
+      [integrationName]: true
+    }))
+    setUnsavedChanges(true)
+  }
+
+  const handleDisconnectIntegration = (integrationName: string) => {
+    setIntegrationConnections(prev => ({
+      ...prev,
+      [integrationName]: false
+    }))
     setUnsavedChanges(true)
   }
 
@@ -677,16 +742,37 @@ export default function SettingsPage() {
                         </div>
                       </div>
                       <div className="flex items-center gap-3 ml-auto">
-                        {integration.isConnected ? (
+                        {integrationConnections[integration.name] ? (
                           <>
                             <Badge variant="outline" className="bg-primary/10 text-primary hover:bg-primary/20 border-0">
                               Connected
                             </Badge>
-                            <Button variant="outline" size="sm">Configure</Button>
-                            <Button variant="ghost" size="sm">Disconnect</Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleConfigureIntegration(integration.name)}
+                            >
+                              Configure
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDisconnectIntegration(integration.name)}
+                            >
+                              Disconnect
+                            </Button>
                           </>
                         ) : (
-                          <Button>Connect</Button>
+                          <>
+                            <Badge variant="outline" className="bg-muted text-muted-foreground hover:bg-muted border-0">
+                              Disconnected
+                            </Badge>
+                            <Button
+                              onClick={() => handleConnectIntegration(integration.name)}
+                            >
+                              Connect
+                            </Button>
+                          </>
                         )}
                       </div>
                     </div>
@@ -713,6 +799,15 @@ export default function SettingsPage() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Environment Variables Configuration Dialog */}
+      <EnvironmentVariablesDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        serviceName={selectedIntegration}
+        initialVariables={environmentVariables[selectedIntegration] || []}
+        onSave={handleSaveEnvironmentVariables}
+      />
     </SidebarLayout>
   )
 } 
