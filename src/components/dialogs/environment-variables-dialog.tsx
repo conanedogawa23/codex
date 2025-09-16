@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Plus, Trash2 } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
+import mockData from "@/lib/mock-data.json"
 
 export interface EnvironmentVariable {
     id: string
@@ -23,6 +24,11 @@ interface EnvironmentVariablesDialogProps {
     onSave?: (variables: EnvironmentVariable[]) => void
 }
 
+// Type for integration placeholders
+type IntegrationPlaceholders = {
+    [key: string]: Array<{ name: string; value: string }>
+}
+
 export function EnvironmentVariablesDialog({
     open,
     onOpenChange,
@@ -35,6 +41,15 @@ export function EnvironmentVariablesDialog({
             ? initialVariables
             : [{ id: crypto.randomUUID(), name: "", value: "" }]
     )
+
+    // Reset variables when serviceName or initialVariables change
+    useEffect(() => {
+        setVariables(
+            initialVariables.length > 0
+                ? initialVariables
+                : [{ id: crypto.randomUUID(), name: "", value: "" }]
+        )
+    }, [serviceName, initialVariables])
 
     const addVariable = () => {
         setVariables(prev => [
@@ -77,6 +92,24 @@ export function EnvironmentVariablesDialog({
         onOpenChange(false)
     }
 
+    // Get placeholder for a specific variable
+    const getVariablePlaceholder = (variable: EnvironmentVariable, field: 'name' | 'value'): string => {
+        const currentIndex = variables.findIndex(v => v.id === variable.id)
+        const mockDataTyped = mockData as typeof mockData & { integrationPlaceholders: IntegrationPlaceholders }
+        const suggestions = mockDataTyped.integrationPlaceholders?.[serviceName] || []
+
+        if (currentIndex >= 0 && currentIndex < suggestions.length) {
+            return suggestions[currentIndex][field]
+        }
+
+        // Fallback placeholders
+        if (field === 'name') {
+            return `${serviceName.toUpperCase().replace(/\s+/g, '_')}_VARIABLE`
+        } else {
+            return "your_value_here"
+        }
+    }
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-2xl">
@@ -112,7 +145,7 @@ export function EnvironmentVariablesDialog({
                                             </Label>
                                             <Input
                                                 id={`name-${variable.id}`}
-                                                placeholder="VARIABLE_NAME"
+                                                placeholder={getVariablePlaceholder(variable, 'name')}
                                                 value={variable.name}
                                                 onChange={(e) => updateVariable(variable.id, 'name', e.target.value)}
                                                 className="font-mono text-sm"
@@ -136,7 +169,7 @@ export function EnvironmentVariablesDialog({
                                             </div>
                                             <Input
                                                 id={`value-${variable.id}`}
-                                                placeholder="variable_value"
+                                                placeholder={getVariablePlaceholder(variable, 'value')}
                                                 value={variable.value}
                                                 onChange={(e) => updateVariable(variable.id, 'value', e.target.value)}
                                                 className="font-mono text-sm"
@@ -151,7 +184,7 @@ export function EnvironmentVariablesDialog({
                             {variables.length === 0 && (
                                 <div className="text-center py-8 text-muted-foreground">
                                     <p className="text-sm">No environment variables configured.</p>
-                                    <p className="text-xs mt-1">Click "Add Variable" to get started.</p>
+                                    <p className="text-xs mt-1">Click &quot;Add Variable&quot; to get started.</p>
                                 </div>
                             )}
                         </div>

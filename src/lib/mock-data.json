@@ -1533,5 +1533,93 @@
         "isConnected": false
       }
     ]
+  },
+  "integrationPlaceholders": {
+    "GitHub": [
+      {
+        "name": "GITHUB_TOKEN",
+        "value": "ghp_xxxxxxxxxxxxxxxxxxxx"
+      },
+      {
+        "name": "GITHUB_REPO",
+        "value": "username/repository"
+      },
+      {
+        "name": "GITHUB_WEBHOOK_SECRET",
+        "value": "your_webhook_secret"
+      },
+      {
+        "name": "GITHUB_APP_ID",
+        "value": "123456"
+      }
+    ],
+    "Slack": [
+      {
+        "name": "SLACK_BOT_TOKEN",
+        "value": "xoxb-xxxxxxxxxxxxxxxxxx"
+      },
+      {
+        "name": "SLACK_CHANNEL",
+        "value": "#general"
+      },
+      {
+        "name": "SLACK_WEBHOOK_URL",
+        "value": "https://hooks.slack.com/services/..."
+      },
+      {
+        "name": "SLACK_SIGNING_SECRET",
+        "value": "xxxxxxxxxxxxxxxxxxxxxxxx"
+      }
+    ],
+    "Google Workspace": [
+      {
+        "name": "GOOGLE_CLIENT_ID",
+        "value": "xxxxxxxxx.apps.googleusercontent.com"
+      },
+      {
+        "name": "GOOGLE_CLIENT_SECRET",
+        "value": "GOCSPX-xxxxxxxxxxxxxxxxxxxxxxxx"
+      },
+      {
+        "name": "GOOGLE_REFRESH_TOKEN",
+        "value": "your_refresh_token"
+      },
+      {
+        "name": "GOOGLE_WORKSPACE_DOMAIN",
+        "value": "yourdomain.com"
+      }
+    ],
+    "Jira": [
+      {
+        "name": "JIRA_API_TOKEN",
+        "value": "xxxxxxxxxxxxxxxxxxxxxxx"
+      },
+      {
+        "name": "JIRA_DOMAIN",
+        "value": "your-domain.atlassian.net"
+      },
+      {
+        "name": "JIRA_EMAIL",
+        "value": "user@example.com"
+      },
+      {
+        "name": "JIRA_PROJECT_KEY",
+        "value": "PROJ"
+      }
+    ],
+    "Figma": [
+      {
+        "name": "FIGMA_ACCESS_TOKEN",
+        "value": "figd_xxxxxxxxxxxxxxxxxxxxxxx"
+      },
+      {
+        "name": "FIGMA_TEAM_ID",
+        "value": "123456789"
+      },
+      {
+        "name": "FIGMA_FILE_KEY",
+        "value": "aBcDeFgHiJkLmNoPqRsT"
+      }
+    ]
   }
 }

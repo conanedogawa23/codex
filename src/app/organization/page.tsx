@@ -172,6 +172,10 @@ export default function OrganizationPage() {
         "Jira": [
             { id: "7", name: "JIRA_API_TOKEN", value: "xxxxxxxxxxxxxxxxxxxxxxx" },
             { id: "8", name: "JIRA_DOMAIN", value: "your-domain.atlassian.net" }
+        ],
+        "Figma": [
+            { id: "9", name: "FIGMA_ACCESS_TOKEN", value: "figd_xxxxxxxxxxxxxxxxxxxxxxx" },
+            { id: "10", name: "FIGMA_TEAM_ID", value: "123456789" }
         ]
     });
 
@@ -180,7 +184,8 @@ export default function OrganizationPage() {
         "GitHub": true,
         "Slack": true,
         "Google Workspace": false,
-        "Jira": true
+        "Jira": true,
+        "Figma": false
     });
 
     const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => (e: React.ChangeEvent<HTMLInputElement>) => {
